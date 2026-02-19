@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdScale Labs — AI Automation Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg:     #EDECEA;
+  --black:  #0A0A0A;
+  --white:  #FAFAF8;
+  --lime:   #C8FF00;
+  --mid:    #999;
+  --border: #D4D1CC;
+  --dark:   #080808;
+  --gray:   #E5E3DF;
+  --muted:  #777;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { overflow-x: hidden; }
+body {
+  background: var(--bg);
+  color: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ═══════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════ */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--black);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-follower {
+  position: fixed;
+  width: 34px; height: 34px;
+  border: 1px solid rgba(10,10,10,0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+body.hovering .cursor-follower {
+  width: 52px; height: 52px;
+  background: rgba(200,255,0,0.08);
+  border-color: rgba(10,10,10,0.4);
+}
+
+/* ═══════════════════════════════════════════
+   LOADER
+═══════════════════════════════════════════ */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 56px;
+  overflow: hidden;
+}
+.loader-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 10px;
+}
+.loader-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(120px, 20vw, 240px);
+  line-height: 0.85;
+  color: #FAFAF8;
+}
+.loader-bar-wrap {
+  width: 100%;
+  height: 1px;
+  background: #1e1e1e;
+  position: absolute;
+  bottom: 0; left: 0;
+}
+.loader-bar {
+  height: 100%;
+  background: var(--lime);
+  width: 0%;
+  transition: width 0.08s linear;
+}
+
+/* ═══════════════════════════════════════════
+   NAV — 5 COLUMN FIXED
+═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto 1fr;
+  align-items: center;
+  gap: 28px;
+  padding: 18px 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--black);
+  text-decoration: none;
+  line-height: 1.7;
+}
+.nav-logo .logo-main {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  display: block;
+}
+.nav-col-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid);
+  white-space: nowrap;
+}
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  border: 1px dashed var(--border);
+  border-radius: 100px;
+  padding: 10px 22px;
+  justify-self: center;
+}
+.nav-pill a {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  opacity: 0.65;
+  transition: opacity 0.2s;
+}
+.nav-pill a:hover { opacity: 1; }
+.nav-location {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid);
+  white-space: nowrap;
+  text-align: right;
+  justify-self: end;
+}
+.nav-location b { color: var(--black); font-weight: 400; }
+
+/* ═══════════════════════════════════════════
+   SMOOTH WRAPPER
+═══════════════════════════════════════════ */
+#smooth-wrapper {}
+#smooth-content {}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  padding-top: 72px; /* nav height */
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.hero-intro-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 48px 20px;
+}
+.hero-intro {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 520px;
+  text-align: center;
+}
+/* Hero 3D Decorative Cube */
+.hero-cube-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 0 20px;
+}
+.hero-cube-scene {
+  perspective: 1000px;
+  width: 220px;
+  height: 220px;
+  cursor: grab;
+}
+.hero-cube {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: translateZ(-110px) rotateX(-14deg) rotateY(-28deg);
+}
+.hcf {
+  position: absolute;
+  width: 220px; height: 220px;
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+.hcf-front  { transform: rotateY(0deg)    translateZ(110px); background: var(--white); }
+.hcf-back   { transform: rotateY(180deg)  translateZ(110px); background: var(--gray); }
+.hcf-right  { transform: rotateY(90deg)   translateZ(110px); background: var(--black); }
+.hcf-left   { transform: rotateY(-90deg)  translateZ(110px); background: var(--gray); }
+.hcf-top    { transform: rotateX(90deg)   translateZ(110px); background: var(--bg); }
+.hcf-bottom { transform: rotateX(-90deg)  translateZ(110px); background: var(--bg); }
+
+.hcf-label {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 30px;
+  letter-spacing: 0.03em;
+  color: var(--black);
+  text-align: center;
+  line-height: 1.05;
+}
+.hcf-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-top: 8px;
+  text-align: center;
+}
+.hcf-stat {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 56px;
+  color: var(--lime);
+  line-height: 0.9;
+  text-align: center;
+}
+.hcf-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: #666;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.hcf-services {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-align: center;
+  line-height: 2.2;
+  padding: 16px;
+}
+
+/* Hero bottom bar */
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: flex-end;
+  padding: 32px 48px 72px;
+  border-top: 1px solid var(--border);
+  margin-top: 16px;
+}
+.hero-headline {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(36px, 5.5vw, 76px);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  color: var(--black);
+}
+.hero-outlined {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.82;
+  letter-spacing: 0.01em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(10,10,10,0.18);
+  text-align: right;
+  user-select: none;
+}
+
+/* ═══════════════════════════════════════════
+   AUTOMATE / SCALE
+═══════════════════════════════════════════ */
+#automate-scale {
+  padding: 110px 48px 90px;
+  text-align: center;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.as-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 28px;
+}
+.as-mega {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(80px, 16vw, 220px);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  color: var(--black);
+  display: block;
+}
+.as-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-top: 36px;
+  line-height: 2.4;
+}
+.as-tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 20px;
+}
+
+/* ═══════════════════════════════════════════
+   OVERFLOW TEXT
+═══════════════════════════════════════════ */
+#overflow-section {
+  padding: 56px 0 72px;
+  background: var(--bg);
+  overflow: hidden;
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+.overflow-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.overflow-line {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 13vw;
+  line-height: 0.87;
+  white-space: nowrap;
+  color: var(--black);
+  display: block;
+  opacity: 0.07;
+  will-change: transform;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+}
+.overflow-line.l2 { opacity: 0.10; }
+.overflow-line.l3 { opacity: 0.14; }
+
+/* Floating symbols */
+.float-icon {
+  position: absolute;
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  color: var(--black);
+  opacity: 0.35;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Overlay card */
+.overflow-card {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+  z-index: 4;
+}
+.overflow-card-row {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 2.4;
+}
+.overflow-card-row b { color: var(--black); font-weight: 700; }
+
+.overflow-quote {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 15px;
+  text-align: center;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 48px auto 0;
+  padding: 0 48px;
+  line-height: 1.85;
+  position: relative;
+  z-index: 3;
+}
+
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
+#about {
+  padding: 140px 48px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.about-watermark {
+  position: absolute;
+  top: 50%;
+  left: -3%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 30vw;
+  line-height: 1;
+  color: var(--black);
+  opacity: 0.022;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.about-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 36px;
+}
+.about-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--black);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+.about-handwritten {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.65;
+  padding-left: 20px;
+  border-left: 2px solid var(--border);
+}
+.about-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.circle-badge {
+  position: relative;
+  width: 200px; height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.badge-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  animation: rotateBadge 14s linear infinite;
+}
+@keyframes rotateBadge {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.badge-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.badge-inner-symbol {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 4px;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 0.05em;
+  color: var(--black);
+}
+
+/* ═══════════════════════════════════════════
+   PRINCIPLES
+═══════════════════════════════════════════ */
+#principles {
+  padding: 140px 48px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.principles-watermark {
+  position: absolute;
+  top: 50%;
+  right: -4%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 30vw;
+  line-height: 1;
+  color: var(--black);
+  opacity: 0.022;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+.principles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+}
+.principles-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.principles-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 260px;
+  line-height: 1.75;
+  text-align: right;
+}
+.principles-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+.principle-item {
+  padding: 56px 44px 56px 0;
+  border-right: 1px solid var(--border);
+}
+.principle-item:last-child { border-right: none; padding-right: 0; }
+.principle-item:not(:first-child) { padding-left: 44px; }
+.principle-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--mid);
+  margin-bottom: 20px;
+  display: block;
+}
+.principle-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 54px;
+  line-height: 0.88;
+  color: var(--black);
+  margin-bottom: 18px;
+  display: block;
+  letter-spacing: 0.02em;
+}
+.principle-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   CUBE SECTION — PINNED PROJECT SHOWCASE
+═══════════════════════════════════════════ */
+#cube-section {
+  height: 100vh;
+  background: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+.cube-labels {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 48px;
+  pointer-events: none;
+}
+.cube-label-col {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1.8;
+}
+.cube-label-col b {
+  color: var(--black);
+  font-weight: 700;
+  display: block;
+  font-size: 11px;
+  margin-top: 2px;
+  transition: opacity 0.4s;
+}
+.cube-label-col.right { text-align: right; }
+
+/* CSS 3D Cube */
+.cube-scene {
+  perspective: 1200px;
+  width: 350px; height: 350px;
+}
+.cube-inner {
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transform: translateZ(-175px) rotateX(-5deg) rotateY(0deg);
+  will-change: transform;
+}
+.cf {
+  position: absolute;
+  width: 350px; height: 350px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.cf-front  { transform: rotateY(0deg)    translateZ(175px); background: var(--black); }
+.cf-back   { transform: rotateY(180deg)  translateZ(175px); background: #12122a; }
+.cf-right  { transform: rotateY(90deg)   translateZ(175px); background: var(--lime); }
+.cf-left   { transform: rotateY(-90deg)  translateZ(175px); background: var(--bg); }
+.cf-top    { transform: rotateX(90deg)   translateZ(175px); background: var(--gray); border: 1px solid var(--border); }
+.cf-bottom { transform: rotateX(-90deg)  translateZ(175px); background: var(--gray); border: 1px solid var(--border); }
+
+/* Face: Front — AdScale brand */
+.cf-front-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 38px;
+  color: var(--lime);
+  letter-spacing: 0.03em;
+  text-align: center;
+  line-height: 1.05;
+  position: relative;
+  z-index: 1;
+}
+.cf-front-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: #555;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 10px;
+  position: relative;
+  z-index: 1;
+}
+.cf-front-year {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 90px;
+  color: rgba(255,255,255,0.04);
+  position: absolute;
+  bottom: -16px; right: 8px;
+  line-height: 1;
+  user-select: none;
+}
+/* Face: Right — Stats */
+.cf-stat-big {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 80px;
+  color: var(--black);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+.cf-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  margin-top: 8px;
+  text-align: center;
+}
+.cf-stat-sub {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 30px;
+  color: rgba(0,0,0,0.35);
+  margin-top: 2px;
+  text-align: center;
+}
+/* Face: Back — Convoy */
+.cf-back-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8888cc;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.cf-back-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 40px;
+  line-height: 0.95;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+.cf-back-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.65;
+  margin-top: 14px;
+  text-align: center;
+  padding: 0 24px;
+}
+/* Face: Left — Coming Soon */
+.cf-coming-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 14px;
+  text-align: center;
+}
+.cf-coming-text {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 46px;
+  color: var(--black);
+  line-height: 0.92;
+  text-align: center;
+  opacity: 0.3;
+}
+
+/* Cube bottom description */
+.cube-desc-wrap {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+.cube-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--mid);
+  white-space: nowrap;
+  transition: opacity 0.4s ease;
+}
+
+/* ═══════════════════════════════════════════
+   SERVICES — DARK STACKED
+═══════════════════════════════════════════ */
+#services {
+  background: var(--dark);
+  padding: 110px 48px 140px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.services-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  margin-bottom: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.services-label::before,
+.services-label::after {
+  content: '';
+  flex: 1;
+  max-width: 100px;
+  height: 1px;
+  background: #1e1e1e;
+}
+.services-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.services-list li {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(60px, 10vw, 132px);
+  line-height: 0.9;
+  color: #FAFAF8;
+  letter-spacing: 0.02em;
+  cursor: default;
+  opacity: 0.82;
+  transition: color 0.3s ease, letter-spacing 0.3s ease, opacity 0.3s ease;
+}
+.services-list li:hover {
+  color: var(--lime);
+  letter-spacing: 0.06em;
+  opacity: 1;
+}
+.services-quote {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 15px;
+  color: #3a3a3a;
+  max-width: 480px;
+  margin: 80px auto 0;
+  line-height: 1.85;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER / CONTACT
+═══════════════════════════════════════════ */
+#contact {
+  background: var(--dark);
+  border-top: 1px solid #181818;
+  padding: 72px 48px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 48px;
+}
+.contact-left {}
+.contact-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  margin-bottom: 14px;
+}
+.contact-email {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(26px, 2.8vw, 40px);
+  color: #FAFAF8;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  display: block;
+  transition: color 0.3s;
+}
+.contact-email:hover { color: var(--lime); }
+
+.contact-mid {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2a2a2a;
+  text-align: center;
+  line-height: 2.2;
+}
+.contact-mid .copy {
+  display: block;
+  color: #222;
+  font-size: 9px;
+  margin-top: 20px;
+}
+
+.contact-right {
+  text-align: right;
+}
+.contact-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: #2a2a2a;
+  display: block;
+  margin-bottom: 14px;
+}
+.f-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.f-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.f-links a:hover { color: #666; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 960px) {
+  nav {
+    grid-template-columns: 1fr auto 1fr;
+    padding: 16px 24px;
+    gap: 16px;
+  }
+  .nav-col-label { display: none; }
+  .nav-location { display: none; }
+
+  .hero-bottom { grid-template-columns: 1fr; gap: 20px; }
+  .hero-outlined { display: none; }
+  .hero-intro-wrap { padding: 30px 24px 16px; }
+
+  #automate-scale { padding: 80px 24px 60px; }
+
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .principles-list { grid-template-columns: 1fr; }
+  .principle-item {
+    border-right: none;
+    padding: 36px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .principle-item:last-child { border-bottom: none; }
+  .principle-item:not(:first-child) { padding-left: 0; }
+
+  .cube-scene { width: 260px; height: 260px; }
+  .cf { width: 260px; height: 260px; }
+  .cf-front  { transform: rotateY(0deg)    translateZ(130px); }
+  .cf-back   { transform: rotateY(180deg)  translateZ(130px); }
+  .cf-right  { transform: rotateY(90deg)   translateZ(130px); }
+  .cf-left   { transform: rotateY(-90deg)  translateZ(130px); }
+  .cf-top    { transform: rotateX(90deg)   translateZ(130px); }
+  .cf-bottom { transform: rotateX(-90deg)  translateZ(130px); }
+
+  #services { padding: 80px 24px 100px; }
+  .services-list li { font-size: clamp(48px, 13vw, 80px); }
+
+  #contact {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 48px 24px;
+  }
+  .contact-right { text-align: left; }
+  .f-links { justify-content: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .overflow-line { font-size: 18vw; }
+  .as-mega { font-size: clamp(64px, 22vw, 100px); }
+  .overflow-card { display: none; }
+  nav { padding: 14px 18px; }
+  .nav-pill { gap: 14px; padding: 8px 16px; }
+  .hero-bottom { padding: 24px 24px 56px; }
+  #about, #principles { padding: 80px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- ─── LOADER ─────────────────────────────── -->
+<div id="loader">
+  <div class="loader-label">AdScale Labs — Initializing</div>
+  <div class="loader-num" id="loaderNum">0</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+</div>
+
+<!-- ─── NAV — 5 COLUMN ────────────────────── -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <span class="logo-main">AdScale Labs</span>
+    We build<br>AI Systems
+  </a>
+  <span class="nav-col-label">AI_automation</span>
+  <div class="nav-pill">
+    <a href="#hero">Home</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <span class="nav-col-label">Lead_generation</span>
+  <div class="nav-location">⊕ <b>Illinois, USA</b></div>
+</nav>
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+
+<!-- ─── HERO ──────────────────────────────── -->
+<section id="hero">
+  <div class="hero-intro-wrap">
+    <p class="hero-intro">
+      We are an AI automation agency specializing in building lead generation agents,
+      email automation, and custom AI workflows for small businesses.
+    </p>
+  </div>
+
+  <!-- Decorative 3D rotating box -->
+  <div class="hero-cube-area">
+    <div class="hero-cube-scene">
+      <div class="hero-cube">
+        <div class="hcf hcf-front">
+          <div class="hcf-label">AdScale<br>Labs</div>
+          <div class="hcf-sub">Est. 2026</div>
+        </div>
+        <div class="hcf hcf-right">
+          <div class="hcf-stat" style="font-size:38px;line-height:1.1;">24/7</div>
+          <div class="hcf-stat-label">Always Running</div>
+          <div class="hcf-sub" style="margin-top:6px;">Zero Downtime</div>
+        </div>
+        <div class="hcf hcf-back">
+          <div class="hcf-services">
+            AI AGENTS<br>LEAD SCRAPING<br>EMAIL AUTOMATION<br>WORKFLOWS
+          </div>
+        </div>
+        <div class="hcf hcf-left">
+          <div class="hcf-label" style="font-size:22px;color:var(--mid);">Illinois<br>USA</div>
+          <div class="hcf-sub">2026</div>
+        </div>
+        <div class="hcf hcf-top">
+          <div class="hcf-sub">We Build AI</div>
+        </div>
+        <div class="hcf hcf-bottom">
+          <div class="hcf-sub">adscalelabs.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-headline">
+      2026,<br>Launch<br>AdScale<br>Labs
+    </div>
+    <div class="hero-outlined">AI /<br>SCALE</div>
+  </div>
+</section>
+
+<!-- ─── AUTOMATE / SCALE ──────────────────── -->
+<section id="automate-scale">
+  <div class="as-eyebrow">We build systems that work for you</div>
+  <span class="as-mega">AUTOMATE</span>
+  <span class="as-mega">SCALE</span>
+  <div class="as-sub">
+    WE BUILD SYSTEMS THAT WORK FOR YOU<br>
+    AND YOUR BUSINESS GROWS WHILE YOU SLEEP
+  </div>
+  <div class="as-tagline">We share our results.</div>
+</section>
+
+<!-- ─── OVERFLOW TEXT ────────────────────── -->
+<section id="overflow-section">
+  <div class="overflow-inner" id="overflowInner">
+    <span class="overflow-line l3">WE BUILD AI SYSTEMS THAT WORK 24/7</span>
+    <span class="overflow-line l2">FOR YOUR BUSINESS LEADS CONVERT</span>
+    <span class="overflow-line">TO CLIENTS WHILE YOU SLEEP</span>
+    <span class="overflow-line l3">AUTOMATION IS THE FUTURE SCALE</span>
+    <span class="overflow-line l2">WITHOUT HIRING MORE STAFF</span>
+    <span class="overflow-line">WORK SMARTER NOT HARDER</span>
+    <span class="overflow-line l3">AI AUTOMATION AGENCY ILLINOIS</span>
+
+    <!-- Floating symbols -->
+    <div class="float-icon" style="top:12%;left:7%;">⊕</div>
+    <div class="float-icon" style="top:42%;right:15%;">◆</div>
+    <div class="float-icon" style="top:68%;left:13%;">▪</div>
+    <div class="float-icon" style="top:27%;right:28%;">⊕</div>
+
+    <!-- Overlay card -->
+    <div class="overflow-card">
+      <div class="overflow-card-row"><b>AI AGENTS</b></div>
+      <div class="overflow-card-row">LEAD GENERATION</div>
+      <div class="overflow-card-row">EMAIL AUTOMATION</div>
+      <div class="overflow-card-row"><b>ILLINOIS — 2026</b></div>
+    </div>
+  </div>
+  <p class="overflow-quote">
+    "The best technology is the kind that works while you're not watching."
+  </p>
+</section>
+
+<!-- ─── ABOUT ────────────────────────────── -->
+<section id="about">
+  <div class="about-watermark" id="aboutWmark">e are</div>
+  <div class="about-grid">
+    <div>
+      <div class="about-eyebrow">01 — About AdScale Labs</div>
+      <p class="about-body">
+        We want to build systems that generate real revenue. The more we automate,
+        the more our clients grow. We're not just a web agency — we build the
+        infrastructure that powers your business pipeline.
+        <br><br>
+        Every system we deploy is custom-built for your workflow, tested before you
+        pay, and maintained on our infrastructure. You focus on your business;
+        we handle the technology.
+      </p>
+      <div class="about-handwritten">
+        "We build with purpose<br>and deploy with precision."
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="circle-badge">
+        <svg class="badge-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="bp" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/>
+          </defs>
+          <text font-family="'Space Mono',monospace" font-size="10.5" fill="#999" letter-spacing="2.5">
+            <textPath href="#bp">AI_AUTOMATION · ILLINOIS · 2026 · ADSCALE · </textPath>
+          </text>
+          <circle cx="100" cy="28" r="2.5" fill="#0A0A0A"/>
+        </svg>
+        <div class="badge-inner">
+          <span class="badge-inner-symbol">⊕</span>
+          We Build<br>AI Systems
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRINCIPLES ───────────────────────── -->
+<section id="principles">
+  <div class="principles-watermark" id="principlesWmark">rinciple</div>
+  <div class="principles-header">
+    <div class="principles-eyebrow">02 — Our Principles</div>
+    <div class="principles-desc">The values we hold to in every system we build and every client we serve.</div>
+  </div>
+  <div class="principles-list">
+    <div class="principle-item">
+      <span class="principle-num">(1)</span>
+      <span class="principle-name">Transparent</span>
+      <p class="principle-body">You see the system working before you pay a single dollar. No hidden processes, no black boxes — we show you exactly how it works.</p>
+    </div>
+    <div class="principle-item">
+      <span class="principle-num">(2)</span>
+      <span class="principle-name">Efficient</span>
+      <p class="principle-body">Deployed in days, not months. We build focused systems that solve real problems quickly, without the bloat of enterprise software.</p>
+    </div>
+    <div class="principle-item">
+      <span class="principle-num">(3)</span>
+      <span class="principle-name">Scalable</span>
+      <p class="principle-body">Every system is built to grow with your business. Start with one workflow, expand to a full automation stack when you're ready.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CUBE / CAPABILITIES (PINNED) ─────────── -->
+<section id="cube-section">
+  <div class="cube-labels">
+    <div class="cube-label-col">
+      What We Build
+      <b id="cubeLabelLeft">Lead Gen Agents</b>
+    </div>
+    <div class="cube-label-col right">
+      <b id="cubeLabelRight">LEAD_GENERATION—AGENTS</b>
+    </div>
+  </div>
+
+  <div class="cube-scene">
+    <div class="cube-inner" id="cubeInner">
+      <!-- Front: Lead Gen -->
+      <div class="cf cf-front">
+        <div class="cf-front-logo" style="font-size:28px;">Lead Gen<br>Agents</div>
+        <div class="cf-front-tag">Find & qualify prospects<br>automatically, 24/7</div>
+        <div class="cf-front-year">AI</div>
+      </div>
+      <!-- Right: Email Automation -->
+      <div class="cf cf-right">
+        <div class="cf-stat-big" style="font-size:42px;line-height:1.1;">Email<br>Auto</div>
+        <div class="cf-stat-label">Automated Outreach</div>
+        <div class="cf-stat-sub">At Scale</div>
+      </div>
+      <!-- Back: Workflow Agents -->
+      <div class="cf cf-back">
+        <div class="cf-back-tag">Business Process Automation</div>
+        <div class="cf-back-name">Workflow<br>Agents</div>
+        <div class="cf-back-desc">End-to-end automation of your business pipeline, from intake to follow-up.</div>
+      </div>
+      <!-- Left: Data Pipelines -->
+      <div class="cf cf-left">
+        <div class="cf-coming-label">Data Pipelines</div>
+        <div class="cf-coming-text" style="opacity:0.8;">Collect.<br>Clean.<br>Act.</div>
+      </div>
+      <!-- Top / Bottom caps -->
+      <div class="cf cf-top"></div>
+      <div class="cf cf-bottom"></div>
+    </div>
+  </div>
+
+  <div class="cube-desc-wrap">
+    <div class="cube-desc" id="cubeDesc">Find and qualify leads automatically across thousands of sources.</div>
+  </div>
+</section>
+
+<!-- ─── SERVICES (DARK) ──────────────────── -->
+<section id="services">
+  <div class="services-label">[2026 WHAT WE DO]</div>
+  <ul class="services-list">
+    <li>AI AGENTS</li>
+    <li>LEAD SCRAPING</li>
+    <li>EMAIL AUTOMATION</li>
+    <li>WORKFLOWS</li>
+    <li>DATA PIPELINES</li>
+    <li>OUTREACH</li>
+    <li>ANALYTICS</li>
+    <li>GROWTH</li>
+  </ul>
+  <p class="services-quote">
+    "We build, deploy, and scale AI systems that work while you sleep."
+  </p>
+</section>
+
+<!-- ─── FOOTER / CONTACT ─────────────────── -->
+<footer id="contact">
+  <div class="contact-left">
+    <div class="contact-eyebrow">Get in touch</div>
+    <a href="mailto:adscalelabs@gmail.com" class="contact-email">adscalelabs@gmail.com</a>
+  </div>
+  <div class="contact-mid">
+    AI Automation Agency<br>
+    Illinois, USA<br>
+    Est. 2026
+    <span class="copy">© 2026 AdScale Labs. All rights reserved.</span>
+  </div>
+  <div class="contact-right">
+    <span class="contact-logo">AdScale Labs</span>
+    <div class="f-links">
+      <a href="#about">About</a>
+      <a href="#principles">Principles</a>
+      <a href="#services">Services</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- smooth-content -->
+</div><!-- smooth-wrapper -->
+
+<!-- ─── LIBRARIES ─────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════
+const cursorEl   = document.getElementById('cursor');
+const followerEl = document.getElementById('cursorFollower');
+let mx = 0, my = 0, fx = 0, fy = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  gsap.to(cursorEl, { x: mx, y: my, duration: 0.06, ease: 'none' });
+});
+(function animFollower() {
+  fx += (mx - fx) * 0.09;
+  fy += (my - fy) * 0.09;
+  gsap.set(followerEl, { x: fx, y: fy });
+  requestAnimationFrame(animFollower);
+})();
+document.querySelectorAll('a, button, .nav-pill a, .services-list li').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// ═══════════════════════════════════════════
+// LOADER
+// ═══════════════════════════════════════════
+let pct = 0;
+const numEl    = document.getElementById('loaderNum');
+const barEl    = document.getElementById('loaderBar');
+const loaderEl = document.getElementById('loader');
+
+// Set every animated element to its hidden "from" state
+// while the loader is still covering the screen — no flash
+function primeStates() {
+  gsap.set('.hero-intro',                           { opacity: 0, y: 32 });
+  gsap.set('.hero-cube-scene',                      { opacity: 0, y: 70 });
+  gsap.set('.hero-headline',                        { opacity: 0, y: 50 });
+  gsap.set('.hero-outlined',                        { opacity: 0, y: 30 });
+  gsap.set('.as-mega',                              { opacity: 0, y: 90 });
+  gsap.set(['.as-eyebrow', '.as-sub', '.as-tagline'], { opacity: 0, y: 24 });
+  gsap.set('.float-icon',                           { opacity: 0, y: 24 });
+  gsap.set('.overflow-card',                        { opacity: 0, x: 50 });
+  gsap.set('.overflow-quote',                       { opacity: 0, y: 24 });
+  gsap.set('.about-eyebrow',                        { opacity: 0, x: -40 });
+  gsap.set('.about-body',                           { opacity: 0, y: 44 });
+  gsap.set('.about-handwritten',                    { opacity: 0, x: -28 });
+  gsap.set('.circle-badge',                         { opacity: 0, scale: 0.78 });
+  gsap.set('.principle-item',                       { opacity: 0, y: 56 });
+  gsap.set('.services-label',                       { opacity: 0, y: 28 });
+  gsap.set('.services-list li',                     { opacity: 0, y: 64 });
+  gsap.set('.services-quote',                       { opacity: 0, y: 28 });
+  gsap.set('#contact > *',                          { opacity: 0, y: 28 });
+}
+
+const loadInterval = setInterval(() => {
+  pct += Math.floor(Math.random() * 9) + 3;
+  if (pct >= 100) {
+    pct = 100;
+    clearInterval(loadInterval);
+    primeStates();
+    setTimeout(initSite, 280);
+  }
+  numEl.textContent = pct;
+  barEl.style.width = pct + '%';
+}, 48);
+
+// ═══════════════════════════════════════════
+// INIT — runs after loader completes
+// ═══════════════════════════════════════════
+function initSite() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.to(loaderEl, {
+    yPercent: -100,
+    duration: 1.1,
+    ease: 'expo.inOut',
+    onComplete: () => {
+      loaderEl.remove();
+      setupAnimations();
+    }
+  });
+}
+
+function setupAnimations() {
+  // ── Hero entrance (no scrollTrigger — plays immediately after loader) ──
+  gsap.to('.hero-intro',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 0.4  });
+  gsap.to('.hero-cube-scene',{ opacity: 1, y: 0, duration: 1.3, ease: 'expo.out',   delay: 0.55 });
+  gsap.to('.hero-headline',  { opacity: 1, y: 0, duration: 1,   ease: 'expo.out',   delay: 0.75 });
+  gsap.to('.hero-outlined',  { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.85 });
+
+  initHeroCubeDrag();
+
+  // Hero parallax
+  gsap.to('.hero-cube-scene', {
+    y: -90, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+  });
+  gsap.to('.hero-headline', {
+    y: -40, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+
+  // ── Automate / Scale ─────────────────────
+  gsap.to('.as-mega', {
+    opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: 0.15,
+    scrollTrigger: { trigger: '#automate-scale', start: 'top bottom', once: true }
+  });
+  gsap.to(['.as-eyebrow', '.as-sub', '.as-tagline'], {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '#automate-scale', start: 'top bottom', once: true }
+  });
+
+  // ── Overflow text parallax ───────────────
+  document.querySelectorAll('.overflow-line').forEach((line, i) => {
+    gsap.fromTo(line,
+      { x: i % 2 === 0 ? '5%' : '-5%' },
+      { x: i % 2 === 0 ? '-7%' : '7%', ease: 'none',
+        scrollTrigger: { trigger: '#overflow-section', start: 'top bottom', end: 'bottom top', scrub: 1 }
+      }
+    );
+  });
+  gsap.to('.float-icon', {
+    opacity: 1, y: 0, duration: 0.6, stagger: 0.1,
+    scrollTrigger: { trigger: '#overflow-section', start: 'top bottom', once: true }
+  });
+  gsap.to('.overflow-card', {
+    opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '#overflow-section', start: 'top 80%', once: true }
+  });
+  gsap.to('.overflow-quote', {
+    opacity: 1, y: 0, duration: 0.8,
+    scrollTrigger: { trigger: '.overflow-quote', start: 'top bottom', once: true }
+  });
+
+  // ── About ────────────────────────────────
+  gsap.to('#aboutWmark', {
+    y: -90, ease: 'none',
+    scrollTrigger: { trigger: '#about', start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+  });
+  gsap.to('.about-eyebrow', {
+    opacity: 1, x: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
+  gsap.to('.about-body', {
+    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
+  gsap.to('.about-handwritten', {
+    opacity: 1, x: 0, duration: 0.8, delay: 0.15,
+    scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
+  gsap.to('.circle-badge', {
+    opacity: 1, scale: 1, duration: 1.1, ease: 'back.out(1.5)',
+    scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
+
+  // ── Principles ───────────────────────────
+  gsap.to('#principlesWmark', {
+    y: -70, ease: 'none',
+    scrollTrigger: { trigger: '#principles', start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+  });
+  gsap.to('.principle-item', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
+    scrollTrigger: { trigger: '#principles', start: 'top bottom', once: true }
+  });
+
+  // ── CUBE — pinned project showcase ───────
+  const cubeInner  = document.getElementById('cubeInner');
+  const labelLeft  = document.getElementById('cubeLabelLeft');
+  const labelRight = document.getElementById('cubeLabelRight');
+  const cubeDescEl = document.getElementById('cubeDesc');
+
+  const isMobile = window.innerWidth < 960;
+  const halfSize = isMobile ? 130 : 175;
+
+  const projects = [
+    { left: 'Lead Gen Agents',    right: 'LEAD_GENERATION—AGENTS',    desc: 'Find and qualify leads automatically across thousands of sources.'       },
+    { left: 'Email Automation',   right: 'EMAIL_AUTOMATION—AGENTS',   desc: 'Personalized outreach sequences that run 24/7 without lifting a finger.' },
+    { left: 'Workflow Agents',    right: 'WORKFLOW—AUTOMATION',       desc: 'End-to-end automation of your business pipeline, from intake to close.'  },
+    { left: 'Data Pipelines',     right: 'DATA_PIPELINES—AI',         desc: 'Collect, clean, and act on business data automatically in real time.'    }
+  ];
+
+  let lastIdx = -1;
+  function setProject(idx) {
+    if (idx === lastIdx) return;
+    lastIdx = idx;
+    const p = projects[idx];
+    gsap.to([labelLeft, labelRight, cubeDescEl], {
+      opacity: 0, duration: 0.18,
+      onComplete() {
+        labelLeft.textContent  = p.left;
+        labelRight.textContent = p.right;
+        cubeDescEl.textContent = p.desc;
+        gsap.to([labelLeft, labelRight, cubeDescEl], { opacity: 1, duration: 0.28 });
+      }
+    });
+  }
+
+  ScrollTrigger.create({
+    trigger: '#cube-section',
+    start:   'top top',
+    end:     '+=3000',
+    pin:     true,
+    scrub:   1,
+    onUpdate(self) {
+      const deg   = self.progress * 1080;
+      const angle = deg % 360;
+      cubeInner.style.transform = `translateZ(-${halfSize}px) rotateX(-5deg) rotateY(${deg}deg)`;
+      let idx = 0;
+      if      (angle < 45 || angle >= 315) idx = 0;
+      else if (angle < 135)                idx = 1;
+      else if (angle < 225)                idx = 2;
+      else                                 idx = 3;
+      setProject(idx);
+    }
+  });
+
+  // ── Services ─────────────────────────────
+  gsap.to('.services-label', {
+    opacity: 1, y: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#services', start: 'top bottom', once: true }
+  });
+  gsap.to('.services-list li', {
+    opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.07,
+    scrollTrigger: { trigger: '#services', start: 'top bottom', once: true }
+  });
+  gsap.to('.services-quote', {
+    opacity: 1, y: 0, duration: 0.8, delay: 0.3,
+    scrollTrigger: { trigger: '.services-quote', start: 'top bottom', once: true }
+  });
+
+  // ── Contact ──────────────────────────────
+  gsap.to('#contact > *', {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '#contact', start: 'top bottom', once: true }
+  });
+}
+
+// ═══════════════════════════════════════════
+// HERO CUBE DRAG INTERACTION
+// ═══════════════════════════════════════════
+function initHeroCubeDrag() {
+  const scene = document.querySelector('.hero-cube-scene');
+  const cube  = document.querySelector('.hero-cube');
+
+  const spinDeg = 360 / (28 * 60); // one full rotation per 28s at 60fps
+
+  const state = { rotX: -14, rotY: -28, spinning: true };
+  let snapTween = null;
+
+  function applyTransform() {
+    cube.style.transform =
+      `translateZ(-110px) rotateX(${state.rotX}deg) rotateY(${state.rotY}deg)`;
+  }
+
+  // RAF spin loop
+  (function loop() {
+    if (state.spinning) {
+      state.rotY += spinDeg;
+      applyTransform();
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // ── Drag state ──────────────────────────
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+
+  function onDragStart(x, y) {
+    dragging = true;
+    lastX = x;
+    lastY = y;
+    state.spinning = false;
+    if (snapTween) { snapTween.kill(); snapTween = null; }
+    scene.style.cursor = 'grabbing';
+  }
+
+  function onDragMove(x, y) {
+    if (!dragging) return;
+    const dx = x - lastX;
+    const dy = y - lastY;
+    lastX = x;
+    lastY = y;
+    state.rotY += dx * 0.5;
+    state.rotX  = Math.max(-60, Math.min(60, state.rotX - dy * 0.5));
+    applyTransform();
+  }
+
+  function onDragEnd() {
+    if (!dragging) return;
+    dragging = false;
+    scene.style.cursor = 'grab';
+    snapTween = gsap.to(state, {
+      rotX: -14,
+      duration: 1.2,
+      ease: 'power3.out',
+      onUpdate: applyTransform,
+      onComplete() {
+        snapTween = null;
+        state.spinning = true;
+      }
+    });
+  }
+
+  // ── Mouse events ────────────────────────
+  scene.addEventListener('mousedown', e => {
+    e.preventDefault();
+    onDragStart(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', e => onDragMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup',   () => onDragEnd());
+
+  // ── Touch events ────────────────────────
+  scene.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    onDragStart(t.clientX, t.clientY);
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    onDragMove(t.clientX, t.clientY);
+  }, { passive: true });
+  document.addEventListener('touchend', () => onDragEnd());
+}
+</script>
+</body>
+</html>
