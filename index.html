@@ -32,7 +32,9 @@ body {
   font-size: 16px;
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: none;
+}
+@media (pointer: fine) {
+  body { cursor: none; }
 }
 
 /* ═══════════════════════════════════════════
@@ -497,8 +499,10 @@ nav {
 }
 .about-right {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 48px;
 }
 .circle-badge {
   position: relative;
@@ -947,6 +951,159 @@ nav {
 .f-links a:hover { color: #666; }
 
 /* ═══════════════════════════════════════════
+   HERO CTA
+═══════════════════════════════════════════ */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 28px;
+  padding: 13px 28px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.25s, color 0.25s;
+}
+.hero-cta:hover {
+  background: var(--lime);
+  color: var(--black);
+}
+
+/* ═══════════════════════════════════════════
+   STATS BAR
+═══════════════════════════════════════════ */
+#stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  padding: 40px 48px;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 32px;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child {
+  border-right: none;
+  padding-right: 0;
+  padding-left: 32px;
+}
+.stat-item:nth-child(2) {
+  padding-left: 32px;
+}
+.stat-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(44px, 5vw, 60px);
+  line-height: 0.88;
+  color: var(--black);
+  letter-spacing: 0.02em;
+}
+.stat-unit {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 0.88;
+  color: var(--mid);
+  letter-spacing: 0.02em;
+}
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   PROCESS
+═══════════════════════════════════════════ */
+#process {
+  padding: 140px 48px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+.process-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 80px;
+}
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+}
+.process-step {
+  padding: 56px 44px 56px 0;
+  border-right: 1px solid var(--border);
+}
+.process-step:last-child { border-right: none; padding-right: 0; }
+.process-step:not(:first-child) { padding-left: 44px; }
+.process-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--mid);
+  margin-bottom: 20px;
+  display: block;
+}
+.process-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 54px;
+  line-height: 0.88;
+  color: var(--black);
+  margin-bottom: 18px;
+  display: block;
+  letter-spacing: 0.02em;
+}
+.process-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════
+   ABOUT STATS COLUMN
+═══════════════════════════════════════════ */
+.about-stats-col {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.about-stat-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(32px, 3.5vw, 44px);
+  line-height: 0.88;
+  color: var(--black);
+  letter-spacing: 0.02em;
+}
+.about-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 960px) {
@@ -973,6 +1130,16 @@ nav {
   }
   .principle-item:last-child { border-bottom: none; }
   .principle-item:not(:first-child) { padding-left: 0; }
+  #stats-bar { grid-template-columns: 1fr; gap: 28px; padding: 40px 24px; }
+  .stat-item { border-right: none; padding: 0 0 28px; border-bottom: 1px solid var(--border); }
+  .stat-item:last-child { border-bottom: none; padding-bottom: 0; padding-left: 0; }
+  .stat-item:nth-child(2) { padding-left: 0; }
+  .process-steps { grid-template-columns: 1fr; }
+  .process-step { border-right: none; padding: 36px 0; border-bottom: 1px solid var(--border); }
+  .process-step:last-child { border-bottom: none; }
+  .process-step:not(:first-child) { padding-left: 0; }
+  #process { padding: 80px 24px; }
+  #process .process-eyebrow { margin-bottom: 40px; }
 
   .cube-scene { width: 260px; height: 260px; }
   .cf { width: 260px; height: 260px; }
@@ -1005,6 +1172,13 @@ nav {
   #about, #principles { padding: 80px 24px; }
 }
 </style>
+<meta name="description" content="AdScale Labs builds AI automation systems for small businesses — lead generation agents, email automation, and custom workflows. Illinois, USA.">
+<meta property="og:title" content="AdScale Labs — AI Automation Agency">
+<meta property="og:description" content="We build AI systems that generate revenue 24/7. Lead gen agents, email automation, and custom workflows for small businesses.">
+<meta property="og:url" content="https://adscalelabs-site.vercel.app">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#EDECEA">
 </head>
 <body>
 
@@ -1022,7 +1196,7 @@ nav {
 <nav id="mainNav">
   <a href="#" class="nav-logo">
     <span class="logo-main">AdScale Labs</span>
-    We build<br>AI Systems
+    We build<br>Websites & AI
   </a>
   <span class="nav-col-label">AI_automation</span>
   <div class="nav-pill">
@@ -1041,9 +1215,10 @@ nav {
 <section id="hero">
   <div class="hero-intro-wrap">
     <p class="hero-intro">
-      We are an AI automation agency specializing in building lead generation agents,
-      email automation, and custom AI workflows for small businesses.
+      We build websites, AI automation systems, and lead generation agents
+      for small businesses — everything you need to grow online, on autopilot.
     </p>
+    <a href="mailto:adscalelabs@gmail.com" class="hero-cta">Book a Free Call →</a>
   </div>
 
   <!-- Decorative 3D rotating box -->
@@ -1061,7 +1236,7 @@ nav {
         </div>
         <div class="hcf hcf-back">
           <div class="hcf-services">
-            AI AGENTS<br>LEAD SCRAPING<br>EMAIL AUTOMATION<br>WORKFLOWS
+            WEBSITES<br>AI AGENTS<br>LEAD SCRAPING<br>EMAIL AUTOMATION
           </div>
         </div>
         <div class="hcf hcf-left">
@@ -1080,11 +1255,28 @@ nav {
 
   <div class="hero-bottom">
     <div class="hero-headline">
-      2026,<br>Launch<br>AdScale<br>Labs
+      AI That<br>Works While<br>You Sleep.
     </div>
     <div class="hero-outlined">AI /<br>SCALE</div>
   </div>
 </section>
+
+<!-- ─── STATS BAR ──────────────────────────── -->
+<div id="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">7</span>
+    <span class="stat-unit">days</span>
+    <span class="stat-label">Avg. time to first deployment</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">24/7</span>
+    <span class="stat-label">Autonomous operation, zero downtime</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">100%</span>
+    <span class="stat-label">Custom-built, tested before you pay</span>
+  </div>
+</div>
 
 <!-- ─── AUTOMATE / SCALE ──────────────────── -->
 <section id="automate-scale">
@@ -1095,7 +1287,7 @@ nav {
     WE BUILD SYSTEMS THAT WORK FOR YOU<br>
     AND YOUR BUSINESS GROWS WHILE YOU SLEEP
   </div>
-  <div class="as-tagline">We share our results.</div>
+  <div class="as-tagline">Every system we ship is tested before you pay a cent.</div>
 </section>
 
 <!-- ─── OVERFLOW TEXT ────────────────────── -->
@@ -1148,6 +1340,20 @@ nav {
       </div>
     </div>
     <div class="about-right">
+      <div class="about-stats-col">
+        <div class="about-stat">
+          <span class="about-stat-num">&lt; 7</span>
+          <span class="about-stat-label">Days to first delivery</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-num">24/7</span>
+          <span class="about-stat-label">Autonomous operation</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-num">0</span>
+          <span class="about-stat-label">Upfront cost before you see it work</span>
+        </div>
+      </div>
       <div class="circle-badge">
         <svg class="badge-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -1167,11 +1373,33 @@ nav {
   </div>
 </section>
 
+<!-- ─── PROCESS ──────────────────────────── -->
+<section id="process">
+  <div class="process-eyebrow">03 — How It Works</div>
+  <div class="process-steps">
+    <div class="process-step">
+      <span class="process-num">01</span>
+      <span class="process-name">Discovery</span>
+      <p class="process-body">We map your workflow in a free 30-minute call. No commitment — just clarity on what to automate first.</p>
+    </div>
+    <div class="process-step">
+      <span class="process-num">02</span>
+      <span class="process-name">Build</span>
+      <p class="process-body">We build your system in days, not months. You see it working before you pay a single dollar.</p>
+    </div>
+    <div class="process-step">
+      <span class="process-num">03</span>
+      <span class="process-name">Scale</span>
+      <p class="process-body">We deploy on our infrastructure and monitor it. Start with one workflow, expand when you're ready.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ─── PRINCIPLES ───────────────────────── -->
 <section id="principles">
   <div class="principles-watermark" id="principlesWmark">rinciple</div>
   <div class="principles-header">
-    <div class="principles-eyebrow">02 — Our Principles</div>
+    <div class="principles-eyebrow">04 — Our Principles</div>
     <div class="principles-desc">The values we hold to in every system we build and every client we serve.</div>
   </div>
   <div class="principles-list">
@@ -1245,13 +1473,13 @@ nav {
 <section id="services">
   <div class="services-label">[2026 WHAT WE DO]</div>
   <ul class="services-list">
+    <li>WEBSITES</li>
     <li>AI AGENTS</li>
     <li>LEAD SCRAPING</li>
     <li>EMAIL AUTOMATION</li>
     <li>WORKFLOWS</li>
     <li>DATA PIPELINES</li>
     <li>OUTREACH</li>
-    <li>ANALYTICS</li>
     <li>GROWTH</li>
   </ul>
   <p class="services-quote">
@@ -1292,24 +1520,26 @@ nav {
 // ═══════════════════════════════════════════
 // CURSOR
 // ═══════════════════════════════════════════
-const cursorEl   = document.getElementById('cursor');
-const followerEl = document.getElementById('cursorFollower');
-let mx = 0, my = 0, fx = 0, fy = 0;
+if (window.matchMedia('(pointer: fine)').matches) {
+  const cursorEl   = document.getElementById('cursor');
+  const followerEl = document.getElementById('cursorFollower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  gsap.to(cursorEl, { x: mx, y: my, duration: 0.06, ease: 'none' });
-});
-(function animFollower() {
-  fx += (mx - fx) * 0.09;
-  fy += (my - fy) * 0.09;
-  gsap.set(followerEl, { x: fx, y: fy });
-  requestAnimationFrame(animFollower);
-})();
-document.querySelectorAll('a, button, .nav-pill a, .services-list li').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-});
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    gsap.to(cursorEl, { x: mx, y: my, duration: 0.06, ease: 'none' });
+  });
+  (function animFollower() {
+    fx += (mx - fx) * 0.09;
+    fy += (my - fy) * 0.09;
+    gsap.set(followerEl, { x: fx, y: fy });
+    requestAnimationFrame(animFollower);
+  })();
+  document.querySelectorAll('a, button, .nav-pill a, .services-list li').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  });
+}
 
 // ═══════════════════════════════════════════
 // LOADER
@@ -1323,18 +1553,22 @@ const loaderEl = document.getElementById('loader');
 // while the loader is still covering the screen — no flash
 function primeStates() {
   gsap.set('.hero-intro',                           { opacity: 0, y: 32 });
+  gsap.set('.hero-cta',                             { opacity: 0, y: 20 });
   gsap.set('.hero-cube-scene',                      { opacity: 0, y: 70 });
   gsap.set('.hero-headline',                        { opacity: 0, y: 50 });
   gsap.set('.hero-outlined',                        { opacity: 0, y: 30 });
   gsap.set('.as-mega',                              { opacity: 0, y: 90 });
   gsap.set(['.as-eyebrow', '.as-sub', '.as-tagline'], { opacity: 0, y: 24 });
+  gsap.set('#stats-bar .stat-item',                 { opacity: 0, y: 32 });
   gsap.set('.float-icon',                           { opacity: 0, y: 24 });
   gsap.set('.overflow-card',                        { opacity: 0, x: 50 });
   gsap.set('.overflow-quote',                       { opacity: 0, y: 24 });
   gsap.set('.about-eyebrow',                        { opacity: 0, x: -40 });
   gsap.set('.about-body',                           { opacity: 0, y: 44 });
   gsap.set('.about-handwritten',                    { opacity: 0, x: -28 });
+  gsap.set('.about-stat',                           { opacity: 0, y: 28 });
   gsap.set('.circle-badge',                         { opacity: 0, scale: 0.78 });
+  gsap.set('.process-step',                         { opacity: 0, y: 56 });
   gsap.set('.principle-item',                       { opacity: 0, y: 56 });
   gsap.set('.services-label',                       { opacity: 0, y: 28 });
   gsap.set('.services-list li',                     { opacity: 0, y: 64 });
@@ -1374,6 +1608,7 @@ function initSite() {
 function setupAnimations() {
   // ── Hero entrance (no scrollTrigger — plays immediately after loader) ──
   gsap.to('.hero-intro',     { opacity: 1, y: 0, duration: 1,   ease: 'power3.out', delay: 0.4  });
+  gsap.to('.hero-cta',       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.65 });
   gsap.to('.hero-cube-scene',{ opacity: 1, y: 0, duration: 1.3, ease: 'expo.out',   delay: 0.55 });
   gsap.to('.hero-headline',  { opacity: 1, y: 0, duration: 1,   ease: 'expo.out',   delay: 0.75 });
   gsap.to('.hero-outlined',  { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.85 });
@@ -1388,6 +1623,12 @@ function setupAnimations() {
   gsap.to('.hero-headline', {
     y: -40, ease: 'none',
     scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+
+  // ── Stats bar ────────────────────────────
+  gsap.to('#stats-bar .stat-item', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
+    scrollTrigger: { trigger: '#stats-bar', start: 'top bottom', once: true }
   });
 
   // ── Automate / Scale ─────────────────────
@@ -1439,9 +1680,19 @@ function setupAnimations() {
     opacity: 1, x: 0, duration: 0.8, delay: 0.15,
     scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
   });
+  gsap.to('.about-stat', {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
   gsap.to('.circle-badge', {
     opacity: 1, scale: 1, duration: 1.1, ease: 'back.out(1.5)',
     scrollTrigger: { trigger: '#about', start: 'top bottom', once: true }
+  });
+
+  // ── Process ──────────────────────────────
+  gsap.to('.process-step', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
+    scrollTrigger: { trigger: '#process', start: 'top bottom', once: true }
   });
 
   // ── Principles ───────────────────────────
