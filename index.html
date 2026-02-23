@@ -629,6 +629,163 @@ nav {
 }
 
 /* ═══════════════════════════════════════════
+   CASE STUDY
+═══════════════════════════════════════════ */
+#case-study {
+  padding: 140px 48px;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+.cs-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 72px;
+}
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.cs-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 20px;
+}
+.cs-headline {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(72px, 9vw, 120px);
+  line-height: 0.88;
+  color: var(--black);
+  letter-spacing: 0.02em;
+  margin-bottom: 32px;
+}
+.cs-headline-wrap {
+  overflow: hidden;
+  display: block;
+}
+.cs-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 380px;
+}
+.cs-url {
+  display: inline-block;
+  margin-top: 28px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 1px solid var(--black);
+  padding-bottom: 3px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.cs-url:hover { color: var(--lime); border-color: var(--lime); }
+.cs-block {
+  padding: 32px 0;
+}
+.cs-block:last-of-type { border-bottom: 1px solid var(--border); }
+.cs-rule {
+  height: 1px;
+  background: var(--border);
+  transform-origin: left center;
+  margin-bottom: 0;
+}
+.cs-block-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 14px;
+}
+.cs-block-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 300;
+}
+.cs-built-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cs-built-list li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--black);
+  font-weight: 300;
+  padding-left: 16px;
+  position: relative;
+}
+.cs-built-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--lime);
+  font-size: 11px;
+}
+.cs-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cs-scan {
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--lime) 40%, var(--lime) 60%, transparent);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+.cs-metric {
+  padding: 28px 24px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cs-metric-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 48px;
+  line-height: 0.9;
+  color: var(--black);
+  letter-spacing: 0.02em;
+}
+.cs-metric-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1.6;
+}
+@media (max-width: 960px) {
+  .cs-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+/* ═══════════════════════════════════════════
    CUBE SECTION — PINNED PROJECT SHOWCASE
 ═══════════════════════════════════════════ */
 #cube-section {
@@ -1421,6 +1578,55 @@ nav {
   </div>
 </section>
 
+<!-- ─── CASE STUDY ───────────────────────── -->
+<section id="case-study">
+  <div class="cs-eyebrow">05 — Case Study</div>
+  <div class="cs-grid">
+    <div class="cs-left">
+      <div class="cs-tag">Client — 2025</div>
+      <h2 class="cs-headline">
+        <span class="cs-headline-wrap"><span class="cs-headline-line">Convoy</span></span>
+        <span class="cs-headline-wrap"><span class="cs-headline-line">Truck</span></span>
+        <span class="cs-headline-wrap"><span class="cs-headline-line">Repair</span></span>
+      </h2>
+      <p class="cs-body">A top-rated commercial truck repair shop in Matteson, IL — known for quality work and fast turnaround. But with no website and no digital presence, they had no way to capture service requests after hours. Missed calls meant missed revenue.</p>
+      <a href="https://convoytruckrepair.com" class="cs-url" target="_blank">convoytruckrepair.com →</a>
+    </div>
+    <div class="cs-right">
+      <div class="cs-block">
+        <div class="cs-rule"></div>
+        <div class="cs-block-label">The Problem</div>
+        <p class="cs-block-body">Every service request came through phone calls. No website, no lead capture, no follow-up system. After-hours calls went unanswered — jobs went to competitors.</p>
+      </div>
+      <div class="cs-block">
+        <div class="cs-rule"></div>
+        <div class="cs-block-label">What We Built</div>
+        <ul class="cs-built-list">
+          <li>Full custom website</li>
+          <li>AI chatbot for 24/7 service intake</li>
+          <li>Automated form → email pipeline</li>
+          <li>Reference number system for every request</li>
+        </ul>
+      </div>
+      <div class="cs-metrics">
+        <div class="cs-scan"></div>
+        <div class="cs-metric">
+          <span class="cs-metric-num">0/7</span>
+          <span class="cs-metric-label">Service intake, automated</span>
+        </div>
+        <div class="cs-metric">
+          <span class="cs-metric-num">&lt;0</span>
+          <span class="cs-metric-label">Days to delivery</span>
+        </div>
+        <div class="cs-metric">
+          <span class="cs-metric-num">99</span>
+          <span class="cs-metric-label">Missed requests after hours</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── CUBE / CAPABILITIES (PINNED) ─────────── -->
 <section id="cube-section">
   <div class="cube-labels">
@@ -1570,7 +1776,15 @@ function primeStates() {
   gsap.set('.circle-badge',                         { opacity: 0, scale: 0.78 });
   gsap.set('.process-step',                         { opacity: 0, y: 56 });
   gsap.set('.principle-item',                       { opacity: 0, y: 56 });
-  gsap.set('.services-label',                       { opacity: 0, y: 28 });
+  gsap.set('.cs-eyebrow',                            { opacity: 0, x: -40 });
+  gsap.set('.cs-tag',                                { opacity: 0, y: 20 });
+  gsap.set('.cs-headline-line',                      { yPercent: 110 });
+  gsap.set('.cs-body',                               { opacity: 0, y: 28 });
+  gsap.set('.cs-url',                                { opacity: 0, y: 16 });
+  gsap.set('.cs-block',                              { opacity: 0, y: 36 });
+  gsap.set('.cs-rule',                               { scaleX: 0 });
+  gsap.set('.cs-metric',                             { opacity: 0, y: 28 });
+  gsap.set('.services-label',                        { opacity: 0, y: 28 });
   gsap.set('.services-list li',                     { opacity: 0, y: 64 });
   gsap.set('.services-quote',                       { opacity: 0, y: 28 });
   gsap.set('#contact > *',                          { opacity: 0, y: 28 });
@@ -1703,6 +1917,65 @@ function setupAnimations() {
   gsap.to('.principle-item', {
     opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
     scrollTrigger: { trigger: '#principles', start: 'top bottom', once: true }
+  });
+
+  // ── Case Study ───────────────────────────
+  gsap.to('.cs-eyebrow', {
+    opacity: 1, x: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#case-study', start: 'top bottom', once: true }
+  });
+  gsap.to('.cs-tag', {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: '#case-study', start: 'top bottom', once: true }
+  });
+  gsap.to('.cs-headline-line', {
+    yPercent: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12,
+    scrollTrigger: { trigger: '#case-study', start: 'top 80%', once: true }
+  });
+  gsap.to(['.cs-body', '.cs-url'], {
+    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.3,
+    scrollTrigger: { trigger: '#case-study', start: 'top 80%', once: true }
+  });
+  gsap.to('.cs-block', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
+    scrollTrigger: { trigger: '.cs-right', start: 'top bottom', once: true }
+  });
+  gsap.to('.cs-rule', {
+    scaleX: 1, duration: 1, ease: 'expo.out', stagger: 0.18,
+    scrollTrigger: { trigger: '.cs-right', start: 'top 85%', once: true }
+  });
+  gsap.to('.cs-metric', {
+    opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '.cs-metrics', start: 'top 90%', once: true }
+  });
+  ScrollTrigger.create({
+    trigger: '.cs-metrics',
+    start: 'top 85%',
+    once: true,
+    onEnter: () => {
+      const metricsEl = document.querySelector('.cs-metrics');
+      const scanEl    = document.querySelector('.cs-scan');
+      gsap.set(scanEl, { opacity: 1, x: 0 });
+      gsap.to(scanEl, {
+        x: metricsEl.offsetWidth,
+        duration: 0.7,
+        ease: 'power2.inOut',
+        onComplete: () => gsap.set(scanEl, { opacity: 0 })
+      });
+      const nums = document.querySelectorAll('.cs-metric-num');
+      const c0 = { v: 0 };
+      gsap.to(c0, { v: 24, duration: 1.4, ease: 'power2.out', delay: 0.2,
+        onUpdate: () => { nums[0].textContent = Math.round(c0.v) + '/7'; }
+      });
+      const c1 = { v: 0 };
+      gsap.to(c1, { v: 7, duration: 1.2, ease: 'power2.out', delay: 0.3,
+        onUpdate: () => { nums[1].textContent = '<' + Math.round(c1.v); }
+      });
+      const c2 = { v: 99 };
+      gsap.to(c2, { v: 0, duration: 1.6, ease: 'power2.out', delay: 0.4,
+        onUpdate: () => { nums[2].textContent = Math.round(c2.v); }
+      });
+    }
   });
 
   // ── CUBE — pinned project showcase ───────
