@@ -1,0 +1,239 @@
+{
+  "name": "AdScale Labs — Email Outreach",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger",
+      "name": "Run Outreach",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "getRows",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "filtersUI": {},
+        "options": {}
+      },
+      "id": "read-leads",
+      "name": "Read Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [460, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Filter to actionable leads only:\n//   - Col E (Has Website) = TRUE\n//   - Col H (Draft Email) is not empty\n//   - Col I (Email Sent) is not TRUE\n// Then cap at 20 per run to stay under spam thresholds.\n\nconst items = $input.all();\n\nconst filtered = items.filter(item => {\n  const d = item.json;\n\n  // Col E: Has Website — try header name or column letter\n  const hasWebsite = String(\n    d['Has Website'] ?? d['has_website'] ?? d['E'] ?? ''\n  ).trim().toUpperCase() === 'TRUE';\n\n  // Col H: Draft Email — must not be empty\n  const draftEmail = String(\n    d['Draft Email'] ?? d['draft_email'] ?? d['H'] ?? ''\n  ).trim();\n\n  // Col I: Email Sent — skip already-contacted leads\n  const emailSent = String(\n    d['Email Sent'] ?? d['email_sent'] ?? d['I'] ?? ''\n  ).trim().toUpperCase() === 'TRUE';\n\n  return hasWebsite && draftEmail !== '' && !emailSent;\n});\n\n// 20-email daily cap\nreturn filtered.slice(0, 20);"
+      },
+      "id": "filter-leads",
+      "name": "Filter Actionable Leads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Scrape each lead's website to find a real contact email address.\n// Strategy: try /contact → /contact-us → /about → /team → homepage.\n// Prioritises mailto: links over regex on raw HTML text.\n// Uses $helpers.httpRequest (n8n's supported HTTP method in Code nodes).\n\nconst items = $input.all();\nconst results = [];\n\nconst EMAIL_REGEX = /[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}/g;\nconst MAILTO_REGEX = /href=[\"']mailto:([^\"'?\\s]+)/gi;\n\n// Skip these — not real business contact emails\nconst SKIP = [\n  'noreply', 'no-reply', 'donotreply', 'do-not-reply',\n  'wordpress.com', 'wixpress.com', 'squarespace.com', 'wix.com',\n  'sentry.io', 'example.com', 'w3.org', 'schema.org',\n  'yourdomain', 'privacy@', 'dmca@', 'abuse@', 'postmaster@',\n  'webmaster@', 'hostmaster@', 'support@wordpress'\n];\n\nfunction isValid(email) {\n  return !SKIP.some(skip => email.toLowerCase().includes(skip));\n}\n\nfunction firstValidEmail(html) {\n  // 1. mailto: links — most reliable, lowest false-positive rate\n  const mailtoMatches = [...html.matchAll(MAILTO_REGEX)].map(m => m[1].trim());\n  const mailtoHit = mailtoMatches.find(isValid);\n  if (mailtoHit) return mailtoHit;\n\n  // 2. Regex on raw HTML text — catches plain-text email addresses\n  const matches = [...(html.match(EMAIL_REGEX) || [])];\n  return matches.find(isValid) || '';\n}\n\nfor (const item of items) {\n  const d = { ...item.json };\n\n  // Col C: Website URL\n  let base = String(d['Website URL'] ?? d['website_url'] ?? d['C'] ?? '').trim();\n\n  if (!base) {\n    results.push({ json: { ...d, email_found: '' } });\n    continue;\n  }\n\n  // Normalize: ensure https:// prefix, strip trailing slash\n  if (!/^https?:\\/\\//i.test(base)) base = 'https://' + base;\n  base = base.replace(/\\/+$/, '');\n\n  const urls = [base + '/contact', base + '/contact-us', base + '/about', base + '/team', base];\n  let emailFound = '';\n\n  for (const url of urls) {\n    try {\n      const html = await $helpers.httpRequest({\n        method: 'GET',\n        url,\n        timeout: 8000,\n        ignoreHttpStatusErrors: true,\n        returnFullResponse: false,\n        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' }\n      });\n\n      const htmlStr = typeof html === 'string' ? html : '';\n      emailFound = firstValidEmail(htmlStr);\n      if (emailFound) break;\n\n    } catch (_) {\n      // Timeout or DNS failure — try next URL\n    }\n  }\n\n  results.push({ json: { ...d, email_found: emailFound } });\n}\n\nreturn results;"
+      },
+      "id": "scrape-email",
+      "name": "Scrape Email from Website",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "email-check",
+              "leftValue": "={{ $json.email_found }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "email-found",
+      "name": "Email Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email_found }}",
+        "subject": "={{ 'Quick question about ' + ($json['Business Name'] ?? $json['business_name'] ?? $json['name'] ?? $json['Name'] ?? 'your business') + (Number($json['Website Score'] ?? $json['website_score'] ?? $json['F'] ?? 3) <= 2 ? '' : \"'s website\") }}",
+        "message": "={{ $json['Draft Email'] ?? $json['draft_email'] ?? $json['H'] ?? '' }}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Cold Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1340, 160],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_GMAIL_CREDENTIAL_ID",
+          "name": "Gmail — adscalelabs@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "I": "TRUE",
+            "J": "={{ $json.email_found }}",
+            "K": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": ["row_number"],
+          "schema": [
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "canBeUsedToMatch": true,
+              "defaultMatch": true,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "I",
+              "displayName": "Email Sent",
+              "canBeUsedToMatch": false,
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "J",
+              "displayName": "Email Address Found",
+              "canBeUsedToMatch": false,
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "K",
+              "displayName": "Sent At",
+              "canBeUsedToMatch": false,
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "update-sheet",
+      "name": "Mark Lead as Contacted",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1560, 160],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## No Email Found — Call List\n\nLeads that reach this branch have a website but no contactable email was found on /contact, /about, or the homepage.\n\n**These leads should be called manually.** They remain in the sheet with col I empty so future runs will attempt them again (in case the site is updated).\n\nTip: add a \"Needs Call\" column to the sheet and flag these rows with a separate workflow.",
+        "height": 240,
+        "width": 360,
+        "color": 5
+      },
+      "id": "note-no-email",
+      "name": "No Email — Call List",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1340, 380]
+    }
+  ],
+  "connections": {
+    "Run Outreach": {
+      "main": [
+        [{ "node": "Read Leads", "type": "main", "index": 0 }]
+      ]
+    },
+    "Read Leads": {
+      "main": [
+        [{ "node": "Filter Actionable Leads", "type": "main", "index": 0 }]
+      ]
+    },
+    "Filter Actionable Leads": {
+      "main": [
+        [{ "node": "Scrape Email from Website", "type": "main", "index": 0 }]
+      ]
+    },
+    "Scrape Email from Website": {
+      "main": [
+        [{ "node": "Email Found?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Email Found?": {
+      "main": [
+        [{ "node": "Send Cold Email", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Send Cold Email": {
+      "main": [
+        [{ "node": "Mark Lead as Contacted", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

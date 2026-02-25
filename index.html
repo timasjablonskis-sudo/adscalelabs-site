@@ -1007,19 +1007,38 @@ nav {
   gap: 0;
 }
 .services-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: default;
+}
+.svc-name {
   font-family: 'Bebas Neue', cursive;
-  font-size: clamp(60px, 10vw, 132px);
+  font-size: clamp(52px, 8vw, 108px);
   line-height: 0.9;
   color: #FAFAF8;
   letter-spacing: 0.02em;
-  cursor: default;
   opacity: 0.82;
   transition: color 0.3s ease, letter-spacing 0.3s ease, opacity 0.3s ease;
+  display: block;
 }
-.services-list li:hover {
+.services-list li:hover .svc-name {
   color: var(--lime);
   letter-spacing: 0.06em;
   opacity: 1;
+}
+.svc-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #2e2e2e;
+  max-width: 520px;
+  line-height: 1.7;
+  margin-top: 2px;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+.services-list li:hover .svc-desc {
+  color: #686868;
 }
 .services-quote {
   font-family: 'DM Sans', sans-serif;
@@ -1718,14 +1737,38 @@ nav {
 <section id="services">
   <div class="services-label">[2026 WHAT WE DO]</div>
   <ul class="services-list">
-    <li>WEBSITES</li>
-    <li>AI AGENTS</li>
-    <li>LEAD SCRAPING</li>
-    <li>EMAIL AUTOMATION</li>
-    <li>WORKFLOWS</li>
-    <li>DATA PIPELINES</li>
-    <li>OUTREACH</li>
-    <li>GROWTH</li>
+    <li>
+      <span class="svc-name">WEBSITES</span>
+      <span class="svc-desc">Custom business sites and landing pages built to convert.</span>
+    </li>
+    <li>
+      <span class="svc-name">AI LEAD QUALIFICATION</span>
+      <span class="svc-desc">24/7 intake automation that qualifies prospects and books appointments without human input.</span>
+    </li>
+    <li>
+      <span class="svc-name">MISSED CALL TEXT-BACK</span>
+      <span class="svc-desc">Auto SMS follow-up to every missed call. Recover lost leads before your competition picks them up.</span>
+    </li>
+    <li>
+      <span class="svc-name">AI AUTOMATION WORKFLOWS</span>
+      <span class="svc-desc">Connect your CRM, payments, booking, and chat tools. One trigger, everything moves.</span>
+    </li>
+    <li>
+      <span class="svc-name">AI CUSTOMER SUPPORT</span>
+      <span class="svc-desc">Helpdesk bots that handle tickets, answer questions, and escalate only what matters.</span>
+    </li>
+    <li>
+      <span class="svc-name">AI CONTENT SYSTEMS</span>
+      <span class="svc-desc">Blog posts, email sequences, ad copy, and SEO pipelines running on autopilot.</span>
+    </li>
+    <li>
+      <span class="svc-name">LEAD SCRAPING</span>
+      <span class="svc-desc">Sourcing and qualifying thousands of targeted prospects from across the web.</span>
+    </li>
+    <li>
+      <span class="svc-name">AI ANALYTICS DASHBOARDS</span>
+      <span class="svc-desc">Natural language reports and predictive insights so you always know what to do next.</span>
+    </li>
   </ul>
   <p class="services-quote">
     "We build, deploy, and scale AI systems that work while you sleep."
