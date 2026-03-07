@@ -67,6 +67,78 @@ body.hovering .cursor-follower {
 }
 
 /* ═══════════════════════════════════════════
+   FILM GRAIN OVERLAY
+═══════════════════════════════════════════ */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  animation: grainShift 0.8s steps(4) infinite;
+}
+@keyframes grainShift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2%, -3%); }
+  50%  { transform: translate(3%, 1%); }
+  75%  { transform: translate(-1%, 3%); }
+  100% { transform: translate(2%, -2%); }
+}
+/* ═══════════════════════════════════════════
+   AMBIENT FLOATING ORBS
+═══════════════════════════════════════════ */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+.ambient-orb--1 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(200,255,0,0.06) 0%, transparent 70%);
+  filter: blur(80px);
+  animation: orbFloat1 25s ease-in-out infinite;
+}
+.ambient-orb--2 {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(250,250,248,0.05) 0%, transparent 70%);
+  filter: blur(80px);
+  animation: orbFloat2 30s ease-in-out infinite;
+}
+.ambient-orb--3 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(200,255,0,0.04) 0%, transparent 70%);
+  filter: blur(80px);
+  animation: orbFloat3 22s ease-in-out infinite;
+}
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(30px, -40px); }
+  66%      { transform: translate(-20px, 20px); }
+}
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-40px, -30px); }
+}
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(0, 0); }
+  40%      { transform: translate(20px, 50px); }
+  80%      { transform: translate(-30px, -20px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-grain { animation: none; }
+  .ambient-orb { animation: none !important; }
+}
+/* ═══════════════════════════════════════════
+   LENIS
+═══════════════════════════════════════════ */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+/* ═══════════════════════════════════════════
    LOADER
 ═══════════════════════════════════════════ */
 #loader {
@@ -1496,6 +1568,7 @@ nav {
 </head>
 <body>
 
+<div class="film-grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-follower" id="cursorFollower"></div>
 
@@ -1527,6 +1600,7 @@ nav {
 
 <!-- ─── HERO ──────────────────────────────── -->
 <section id="hero">
+  <div class="ambient-orb ambient-orb--1" style="top:-10%;right:-5%;" aria-hidden="true"></div>
   <div class="hero-intro-wrap">
     <p class="hero-intro">
       Every after-hours visitor is a potential client walking away. Our AI chatbot
@@ -1538,6 +1612,7 @@ nav {
 
   <!-- Decorative 3D rotating box -->
   <div class="hero-cube-area">
+    <canvas id="heroParticles" style="position:absolute;inset:0;z-index:0;pointer-events:none;"></canvas>
     <div class="hero-cube-scene">
       <div class="hero-cube">
         <div class="hcf hcf-front">
@@ -1637,6 +1712,7 @@ nav {
 
 <!-- ─── ABOUT ────────────────────────────── -->
 <section id="about">
+  <div class="ambient-orb ambient-orb--2" style="bottom:-15%;left:-8%;" aria-hidden="true"></div>
   <div class="about-watermark" id="aboutWmark">e are</div>
   <div class="about-grid">
     <div>
@@ -1835,6 +1911,7 @@ nav {
 
 <!-- ─── SERVICES (DARK) ──────────────────── -->
 <section id="services">
+  <div class="ambient-orb ambient-orb--3" style="top:30%;right:-10%;" aria-hidden="true"></div>
   <div class="services-label">[2026 WHAT WE DO]</div>
   <ul class="services-list">
     <li>
@@ -1891,6 +1968,7 @@ nav {
 <!-- ─── LIBRARIES ─────────────────────────── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -1914,6 +1992,28 @@ if (window.matchMedia('(pointer: fine)').matches) {
   document.querySelectorAll('a, button, .nav-pill a, .services-list li').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+  });
+
+  // Cursor particle trail
+  const trailParts = [];
+  const MAX_TRAIL = 15;
+  let trailFrame = 0;
+  document.addEventListener('mousemove', e => {
+    trailFrame++;
+    if (trailFrame % 3 !== 0 || trailParts.length >= MAX_TRAIL) return;
+    const el = document.createElement('div');
+    el.style.cssText = `position:fixed;width:5px;height:5px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9997;left:${e.clientX}px;top:${e.clientY}px;transform:translate(-50%,-50%);opacity:0.5;transition:opacity 0.4s ease-out,transform 0.4s ease-out;`;
+    document.body.appendChild(el);
+    trailParts.push(el);
+    requestAnimationFrame(() => {
+      el.style.opacity = '0';
+      el.style.transform = `translate(-50%,-50%) translate(${(Math.random()-0.5)*20}px,${(Math.random()-0.5)*20}px) scale(0.2)`;
+    });
+    setTimeout(() => {
+      el.remove();
+      const idx = trailParts.indexOf(el);
+      if (idx > -1) trailParts.splice(idx, 1);
+    }, 420);
   });
 }
 
@@ -1978,6 +2078,17 @@ const loadInterval = setInterval(() => {
 function initSite() {
   gsap.registerPlugin(ScrollTrigger);
 
+  // Lenis smooth scroll
+  const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // Override anchor links for smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => { e.preventDefault(); lenis.scrollTo(a.getAttribute('href')); });
+  });
+
   gsap.to(loaderEl, {
     yPercent: -100,
     duration: 1.1,
@@ -1998,6 +2109,7 @@ function setupAnimations() {
   gsap.to('.hero-outlined',  { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.85 });
 
   initHeroCubeDrag();
+  if (window.matchMedia('(pointer: fine)').matches) initHeroParticles();
 
   // Hero parallax
   gsap.to('.hero-cube-scene', {
@@ -2015,10 +2127,35 @@ function setupAnimations() {
     scrollTrigger: { trigger: '#stats-bar', start: 'top bottom', once: true }
   });
 
-  // ── Automate / Scale ─────────────────────
-  gsap.to('.as-mega', {
-    opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: 0.15,
-    scrollTrigger: { trigger: '#automate-scale', start: 'top bottom', once: true }
+  // ── Automate / Scale — text scramble ─────
+  const glyphChars = '!<>-_\\/[]{}#@$%^&*()+=|~`';
+  function scrambleText(el, finalText, duration) {
+    const len = finalText.length;
+    let frame = 0;
+    const total = Math.round(duration * 60);
+    (function tick() {
+      let out = '';
+      const p = frame / total;
+      for (let i = 0; i < len; i++) {
+        if (p > (i / len) + 0.3) out += finalText[i];
+        else out += glyphChars[Math.floor(Math.random() * glyphChars.length)];
+      }
+      el.textContent = out;
+      frame++;
+      if (frame <= total) requestAnimationFrame(tick);
+      else el.textContent = finalText;
+    })();
+  }
+  const megaEls = document.querySelectorAll('.as-mega');
+  megaEls.forEach(el => { el.dataset.finalText = el.textContent; });
+  ScrollTrigger.create({
+    trigger: '#automate-scale', start: 'top bottom', once: true,
+    onEnter: () => {
+      megaEls.forEach((el, i) => {
+        gsap.to(el, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out', delay: i * 0.15 });
+        setTimeout(() => scrambleText(el, el.dataset.finalText, 0.8), i * 150);
+      });
+    }
   });
   gsap.to(['.as-eyebrow', '.as-sub', '.as-tagline'], {
     opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1,
@@ -2304,6 +2441,71 @@ function initHeroCubeDrag() {
     onDragMove(t.clientX, t.clientY);
   }, { passive: true });
   document.addEventListener('touchend', () => onDragEnd());
+}
+
+// ═══════════════════════════════════════════
+// HERO PARTICLE FIELD
+// ═══════════════════════════════════════════
+function initHeroParticles() {
+  const canvas = document.getElementById('heroParticles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const area = canvas.parentElement;
+  function resize() { canvas.width = area.offsetWidth; canvas.height = area.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COUNT = 180;
+  const particles = [];
+  let mouseX = canvas.width / 2, mouseY = canvas.height / 2;
+  let isVisible = true;
+
+  area.addEventListener('mousemove', (e) => {
+    const r = canvas.getBoundingClientRect();
+    mouseX = e.clientX - r.left;
+    mouseY = e.clientY - r.top;
+  });
+
+  const obs = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }, { threshold: 0.1 });
+  obs.observe(area);
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: 1 + Math.random() * 2,
+      sx: (Math.random() - 0.5) * 0.3,
+      sy: (Math.random() - 0.5) * 0.3,
+      op: 0.1 + Math.random() * 0.25,
+      layer: 0.5 + Math.random() * 0.5,
+    });
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!isVisible) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.x += p.sx * p.layer;
+      p.y += p.sy * p.layer;
+      const dx = p.x - mouseX, dy = p.y - mouseY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        const force = (120 - dist) / 120 * 0.8;
+        p.x += (dx / dist) * force;
+        p.y += (dy / dist) * force;
+      }
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,255,0,${p.op})`;
+      ctx.fill();
+    }
+  }
+  animate();
 }
 </script>
 <script src="demo-chat.js"></script>

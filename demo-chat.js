@@ -91,8 +91,9 @@
       box-shadow:0 24px 80px rgba(0,0,0,0.6), 0 0 20px ${CONFIG.primaryGlow};
       display:flex;flex-direction:column;
       opacity:0;visibility:hidden;
-      transform:translateY(16px) scale(0.96);
-      transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+      transform-origin:bottom right;
+      transform:scale(0.3);
+      transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
       overflow:hidden;
       font-family:${CONFIG.fontBody};
       -webkit-font-smoothing:antialiased;
@@ -100,7 +101,22 @@
     }
     #adscale-chat-window.visible{
       opacity:1;visibility:visible;
-      transform:translateY(0) scale(1);
+      transform:scale(1);
+    }
+
+    /* Ripple ring on toggle click */
+    .adscale-ripple-ring{
+      position:absolute;inset:0;
+      border:2px solid ${CONFIG.primaryColor};
+      pointer-events:none;
+      opacity:0;
+    }
+    #adscale-chat-toggle.ripple .adscale-ripple-ring{
+      animation:adscale-ripple 0.5s ease-out forwards;
+    }
+    @keyframes adscale-ripple{
+      0%{transform:scale(1);opacity:0.6;}
+      100%{transform:scale(2.5);opacity:0;}
     }
 
     /* Header */
@@ -315,6 +331,7 @@
       #adscale-chat-window{transition:opacity 0.2s!important;transform:none!important}
       .adscale-msg{animation:none!important}
       .adscale-typing span{animation:none!important;opacity:0.6}
+      .adscale-ripple-ring{animation:none!important}
     }
 
     /* Mobile responsive */
@@ -335,6 +352,7 @@
   root.innerHTML = `
     <!-- Toggle Button -->
     <button id="adscale-chat-toggle" aria-label="Try our chatbot demo">
+      <div class="adscale-ripple-ring"></div>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
         <path d="M7 9h10v2H7zm0-3h10v2H7z"/>
@@ -400,10 +418,12 @@
   /* ── TOGGLE OPEN / CLOSE ────────────────────────────────── */
   function openChat() {
     isOpen = true;
+    toggle.classList.add('ripple');
+    setTimeout(() => toggle.classList.remove('ripple'), 500);
     chatWindow.classList.add('visible');
     toggle.classList.add('open');
     toggle.style.animation = 'none';
-    setTimeout(() => textarea.focus(), 350);
+    setTimeout(() => textarea.focus(), 400);
   }
   function closeChat() {
     isOpen = false;
