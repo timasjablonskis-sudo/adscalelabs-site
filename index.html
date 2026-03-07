@@ -217,76 +217,164 @@ nav {
   justify-content: center;
   align-items: flex-end;
   padding: 0 0 20px;
+  position: relative;
+}
+/* Ambient glow behind cube */
+.hero-cube-area::before {
+  content: '';
+  position: absolute;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(200,255,0,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: cubeGlowPulse 4s ease-in-out infinite;
+}
+@keyframes cubeGlowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 .hero-cube-scene {
-  perspective: 1000px;
-  width: 220px;
-  height: 220px;
+  perspective: 1200px;
+  width: 300px;
+  height: 300px;
   cursor: grab;
+  position: relative;
+  z-index: 1;
 }
 .hero-cube {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transform: translateZ(-110px) rotateX(-14deg) rotateY(-28deg);
+  transform: translateZ(-150px) rotateX(-14deg) rotateY(-28deg);
 }
 .hcf {
   position: absolute;
-  width: 220px; height: 220px;
-  border: 1px solid var(--border);
+  width: 300px; height: 300px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   backface-visibility: hidden;
   overflow: hidden;
+  border: 1px solid rgba(200,255,0,0.1);
 }
-.hcf-front  { transform: rotateY(0deg)    translateZ(110px); background: var(--white); }
-.hcf-back   { transform: rotateY(180deg)  translateZ(110px); background: var(--gray); }
-.hcf-right  { transform: rotateY(90deg)   translateZ(110px); background: var(--black); }
-.hcf-left   { transform: rotateY(-90deg)  translateZ(110px); background: var(--gray); }
-.hcf-top    { transform: rotateX(90deg)   translateZ(110px); background: var(--bg); }
-.hcf-bottom { transform: rotateX(-90deg)  translateZ(110px); background: var(--bg); }
+/* All faces dark */
+.hcf-front {
+  transform: rotateY(0deg) translateZ(150px);
+  background: #0C0C0C;
+  border-color: rgba(200,255,0,0.2);
+  box-shadow: inset 0 0 80px rgba(200,255,0,0.03);
+}
+.hcf-back {
+  transform: rotateY(180deg) translateZ(150px);
+  background: #080808;
+}
+.hcf-right {
+  transform: rotateY(90deg) translateZ(150px);
+  background: #0A0A0A;
+  border-left: 1px solid rgba(200,255,0,0.25);
+  box-shadow: inset 0 0 100px rgba(200,255,0,0.04);
+}
+.hcf-left {
+  transform: rotateY(-90deg) translateZ(150px);
+  background: #0E0E0E;
+}
+.hcf-top {
+  transform: rotateX(90deg) translateZ(150px);
+  background: linear-gradient(180deg, rgba(200,255,0,0.06) 0%, #0A0A0A 100%);
+  border: none;
+  border-bottom: 1px solid rgba(200,255,0,0.15);
+}
+.hcf-bottom {
+  transform: rotateX(-90deg) translateZ(150px);
+  background: #080808;
+  border: none;
+}
+/* Scanline overlay on front face */
+.hcf-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(200,255,0,0.015) 3px,
+    rgba(200,255,0,0.015) 4px
+  );
+  pointer-events: none;
+}
+/* Corner markers on front face */
+.hcf-front::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(200,255,0,0.08);
+  pointer-events: none;
+}
+/* Grid overlay on right face */
+.hcf-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(200,255,0,0.03) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(200,255,0,0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+}
 
 .hcf-label {
   font-family: 'Bebas Neue', cursive;
-  font-size: 30px;
-  letter-spacing: 0.03em;
-  color: var(--black);
+  font-size: 44px;
+  letter-spacing: 0.04em;
+  color: var(--lime);
   text-align: center;
   line-height: 1.05;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 30px rgba(200,255,0,0.15);
 }
 .hcf-sub {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--mid);
-  margin-top: 8px;
+  color: rgba(200,255,0,0.4);
+  margin-top: 12px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 .hcf-stat {
   font-family: 'Bebas Neue', cursive;
-  font-size: 56px;
+  font-size: 64px;
   color: var(--lime);
   line-height: 0.9;
   text-align: center;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 40px rgba(200,255,0,0.2);
 }
 .hcf-stat-label {
   font-family: 'Space Mono', monospace;
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 0.1em;
-  color: #666;
+  color: rgba(200,255,0,0.35);
   text-transform: uppercase;
-  margin-top: 6px;
+  margin-top: 8px;
+  position: relative;
+  z-index: 1;
 }
 .hcf-services {
   font-family: 'Space Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.1em;
+  font-size: 9px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mid);
+  color: rgba(200,255,0,0.3);
   text-align: center;
-  line-height: 2.2;
-  padding: 16px;
+  line-height: 2.6;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Hero bottom bar */
@@ -1330,6 +1418,17 @@ nav {
   .nav-col-label { display: none; }
   .nav-location { display: none; }
 
+  .hero-cube-area::before { width: 240px; height: 240px; }
+  .hero-cube-scene { width: 220px; height: 220px; }
+  .hcf { width: 220px; height: 220px; }
+  .hcf-front  { transform: rotateY(0deg)    translateZ(110px); }
+  .hcf-back   { transform: rotateY(180deg)  translateZ(110px); }
+  .hcf-right  { transform: rotateY(90deg)   translateZ(110px); }
+  .hcf-left   { transform: rotateY(-90deg)  translateZ(110px); }
+  .hcf-top    { transform: rotateX(90deg)   translateZ(110px); }
+  .hcf-bottom { transform: rotateX(-90deg)  translateZ(110px); }
+  .hcf-label { font-size: 30px; }
+
   .hero-bottom { grid-template-columns: 1fr; gap: 20px; }
   .hero-outlined { display: none; }
   .hero-intro-wrap { padding: 30px 24px 16px; }
@@ -1446,9 +1545,9 @@ nav {
           <div class="hcf-sub">Never Miss a Lead</div>
         </div>
         <div class="hcf hcf-right">
-          <div class="hcf-stat" style="font-size:38px;line-height:1.1;">AI</div>
+          <div class="hcf-stat" style="font-size:52px;line-height:1.05;">AI</div>
           <div class="hcf-stat-label">Smart Responses</div>
-          <div class="hcf-sub" style="margin-top:6px;">Trained On You</div>
+          <div class="hcf-sub" style="margin-top:8px;">Trained On You</div>
         </div>
         <div class="hcf hcf-back">
           <div class="hcf-services">
@@ -1456,7 +1555,7 @@ nav {
           </div>
         </div>
         <div class="hcf hcf-left">
-          <div class="hcf-label" style="font-size:22px;color:var(--mid);">Live In<br>&lt;48hrs</div>
+          <div class="hcf-label" style="font-size:28px;">Live In<br>&lt;48hrs</div>
           <div class="hcf-sub">Setup</div>
         </div>
         <div class="hcf hcf-top">
@@ -2135,7 +2234,7 @@ function initHeroCubeDrag() {
 
   function applyTransform() {
     cube.style.transform =
-      `translateZ(-110px) rotateX(${state.rotX}deg) rotateY(${state.rotY}deg)`;
+      `translateZ(-150px) rotateX(${state.rotX}deg) rotateY(${state.rotY}deg)`;
   }
 
   // RAF spin loop
