@@ -1538,7 +1538,6 @@ nav {
 
   <!-- Decorative 3D rotating box -->
   <div class="hero-cube-area">
-    <div class="hero-cube-parallax">
     <div class="hero-cube-scene">
       <div class="hero-cube">
         <div class="hcf hcf-front">
@@ -1566,7 +1565,6 @@ nav {
           <div class="hcf-sub">adscalelabs.com</div>
         </div>
       </div>
-    </div>
     </div>
   </div>
 
@@ -2001,8 +1999,8 @@ function setupAnimations() {
 
   initHeroCubeDrag();
 
-  // Hero parallax — targets wrapper so it doesn't conflict with entrance y animation
-  gsap.to('.hero-cube-parallax', {
+  // Hero parallax
+  gsap.to('.hero-cube-scene', {
     y: -90, ease: 'none',
     scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
   });
