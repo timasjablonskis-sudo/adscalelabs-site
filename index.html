@@ -949,121 +949,455 @@ nav {
 }
 
 /* ═══════════════════════════════════════════
-   AI DEMOS
+   AI FRONT DESK — ISOMETRIC SCENE + CHATS
 ═══════════════════════════════════════════ */
 #ai-demos {
   padding: 120px 72px;
+  overflow: hidden;
 }
-.demos-header {
-  margin-bottom: 56px;
-}
+.demos-header { margin-bottom: 56px; }
 .demos-eyebrow {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--mid);
+  font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--mid);
   margin-bottom: 20px;
 }
 .demos-headline {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(36px, 5vw, 56px);
-  line-height: 1.05;
-  color: var(--black);
+  line-height: 1.05; color: var(--black);
 }
-.demos-tabs {
+
+/* ── Layout ── */
+.fd-container {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: 48px;
+  align-items: center;
+}
+
+/* ── Isometric Scene ── */
+.fd-scene-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
   display: flex;
-  gap: 8px;
-  margin-bottom: 36px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
-.demo-tab {
+.fd-scene {
+  position: relative;
+  width: 380px; height: 280px;
+  transform: rotateX(55deg) rotateZ(-45deg);
+  transform-style: preserve-3d;
+}
+
+/* Desk */
+.fd-desk {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px; height: 160px;
+  transform-style: preserve-3d;
+}
+.fd-desk-top {
+  position: absolute; width: 100%; height: 100%;
+  background: var(--dark);
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  transform: translateZ(36px);
+}
+.fd-desk-top::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 10%; width: 80%; height: 2px;
+  background: var(--lime); opacity: 0.6;
+}
+.fd-desk-front {
+  position: absolute; width: 100%; height: 36px;
+  background: #1a1a1a; border: 1px solid #222;
+  bottom: -36px; left: 0;
+  transform-origin: top; transform: rotateX(-90deg) translateZ(0);
+}
+.fd-desk-side {
+  position: absolute; width: 36px; height: 160px;
+  background: #141414; border: 1px solid #1e1e1e;
+  right: -36px; top: 0;
+  transform-origin: left; transform: rotateY(90deg) translateZ(0);
+}
+
+/* Desk accessories */
+.fd-monitor {
+  position: absolute;
+  left: 50%; top: 42%;
+  transform: translate(-50%, -50%) translateZ(38px);
+  width: 44px; height: 32px;
+  background: #111; border: 2px solid #333;
+  border-radius: 3px;
+}
+.fd-monitor::after {
+  content: ''; position: absolute;
+  top: 3px; left: 3px; right: 3px; bottom: 3px;
+  background: linear-gradient(135deg, rgba(200,255,0,0.15), rgba(200,255,0,0.03));
+  border-radius: 1px;
+}
+.fd-keyboard {
+  position: absolute;
+  left: 50%; top: 58%;
+  transform: translate(-50%, -50%) translateZ(37px);
+  width: 36px; height: 14px;
+  background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 2px;
+}
+.fd-mug {
+  position: absolute;
+  left: 72%; top: 35%;
+  transform: translateZ(37px);
+  width: 14px; height: 14px;
+  background: var(--lime); opacity: 0.3;
+  border-radius: 50%;
+}
+.fd-papers {
+  position: absolute;
+  left: 25%; top: 65%;
+  transform: translateZ(37px);
+  width: 22px; height: 28px;
+  background: #f5f5f0;
+  border: 1px solid #ddd;
+  border-radius: 1px;
+  opacity: 0.7;
+}
+.fd-papers::before {
+  content: ''; position: absolute;
+  top: -2px; left: 2px;
+  width: 100%; height: 100%;
+  background: #eee; border: 1px solid #ddd;
+  border-radius: 1px; z-index: -1;
+}
+
+/* ── Agents ── */
+.fd-agent {
+  position: absolute;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+.fd-agent-head {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  margin: 0 auto 2px;
+  transition: transform 0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+.fd-agent-body {
+  width: 20px; height: 26px;
+  border-radius: 4px 4px 7px 7px;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+.fd-agent-glow {
+  position: absolute;
+  bottom: -8px; left: 50%;
+  transform: translateX(-50%);
+  width: 36px; height: 10px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.fd-agent.active .fd-agent-glow {
+  opacity: 1;
+}
+.fd-agent:hover .fd-agent-head,
+.fd-agent:hover .fd-agent-body {
+  transform: scale(1.12);
+}
+
+/* Agent colors */
+.fd-agent[data-agent="chatbot"] .fd-agent-head { background: var(--lime); }
+.fd-agent[data-agent="chatbot"] .fd-agent-body { background: var(--lime); opacity: 0.85; }
+.fd-agent[data-agent="chatbot"] .fd-agent-glow { box-shadow: 0 0 20px var(--lime), 0 0 40px rgba(200,255,0,0.3); background: rgba(200,255,0,0.15); }
+
+.fd-agent[data-agent="sms"] .fd-agent-head { background: #007AFF; }
+.fd-agent[data-agent="sms"] .fd-agent-body { background: #007AFF; opacity: 0.85; }
+.fd-agent[data-agent="sms"] .fd-agent-glow { box-shadow: 0 0 20px #007AFF, 0 0 40px rgba(0,122,255,0.3); background: rgba(0,122,255,0.15); }
+
+.fd-agent[data-agent="instagram"] .fd-agent-head { background: #E1306C; }
+.fd-agent[data-agent="instagram"] .fd-agent-body { background: #E1306C; opacity: 0.85; }
+.fd-agent[data-agent="instagram"] .fd-agent-glow { box-shadow: 0 0 20px #E1306C, 0 0 40px rgba(225,48,108,0.3); background: rgba(225,48,108,0.15); }
+
+.fd-agent[data-agent="booking"] .fd-agent-head { background: #F5A623; }
+.fd-agent[data-agent="booking"] .fd-agent-body { background: #F5A623; opacity: 0.85; }
+.fd-agent[data-agent="booking"] .fd-agent-glow { box-shadow: 0 0 20px #F5A623, 0 0 40px rgba(245,166,35,0.3); background: rgba(245,166,35,0.15); }
+
+.fd-agent[data-agent="review"] .fd-agent-head { background: #8B5CF6; }
+.fd-agent[data-agent="review"] .fd-agent-body { background: #8B5CF6; opacity: 0.85; }
+.fd-agent[data-agent="review"] .fd-agent-glow { box-shadow: 0 0 20px #8B5CF6, 0 0 40px rgba(139,92,246,0.3); background: rgba(139,92,246,0.15); }
+
+/* Agent positions (isometric space) */
+.fd-agent[data-agent="chatbot"]  { left: 50%; top: 18%; transform: translate(-50%, -50%) translateZ(42px); }
+.fd-agent[data-agent="sms"]      { left: 22%; top: 22%; transform: translate(-50%, -50%) translateZ(42px); }
+.fd-agent[data-agent="instagram"]{ left: 82%; top: 48%; transform: translate(-50%, -50%) translateZ(42px); }
+.fd-agent[data-agent="booking"]  { left: 75%; top: 18%; transform: translate(-50%, -50%) translateZ(42px); }
+.fd-agent[data-agent="review"]   { left: 15%; top: 52%; transform: translate(-50%, -50%) translateZ(42px); }
+
+/* Agent labels (flat, non-transformed overlay) */
+.fd-agent-labels {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.fd-agent-label {
+  position: absolute;
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: 9px; letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 10px 20px;
+  color: var(--mid); text-align: center;
+  transition: color 0.3s ease;
+  pointer-events: auto; cursor: pointer;
+  white-space: nowrap;
+}
+.fd-agent-label.active { color: var(--lime); }
+.fd-agent-label:hover { color: var(--black); }
+
+/* Label positions (aligned visually to iso agents) */
+.fd-agent-label[data-agent="chatbot"]  { left: 50%; top: 78%; transform: translateX(-50%); }
+.fd-agent-label[data-agent="sms"]      { left: 12%; top: 38%; }
+.fd-agent-label[data-agent="instagram"]{ left: 78%; top: 72%; }
+.fd-agent-label[data-agent="booking"]  { left: 72%; top: 30%; }
+.fd-agent-label[data-agent="review"]   { left: 5%; top: 65%; }
+
+/* ── Mobile agent nav (hidden at desktop) ── */
+.fd-agent-mobile-nav {
+  display: none;
+  gap: 8px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.fd-mobile-pill {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 16px;
   border: 1px solid var(--border);
   background: transparent;
   color: var(--muted);
   cursor: pointer;
   transition: all 0.25s ease;
 }
-.demo-tab:hover {
-  border-color: var(--black);
-  color: var(--black);
+.fd-mobile-pill:hover { border-color: var(--black); color: var(--black); }
+.fd-mobile-pill.active { background: var(--black); color: var(--lime); border-color: var(--black); }
+.fd-mobile-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
-.demo-tab.active {
-  background: var(--black);
-  color: var(--lime);
-  border-color: var(--black);
+
+/* ── Chat Panel + Phone Frame ── */
+.fd-chat-panel {
+  display: flex;
+  justify-content: center;
 }
-.demos-stage {
-  position: relative;
-}
-.demo-sim {
-  display: none;
-  background: var(--dark);
-  border-radius: 12px;
+.fd-chat-frame {
+  width: 100%; max-width: 380px;
+  height: 520px;
+  border-radius: 32px;
   overflow: hidden;
-  max-width: 640px;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  display: flex; flex-direction: column;
 }
-.demo-sim.active {
-  display: block;
+.fd-chat-frame[style*="display:none"] { display: none !important; }
+
+/* ── iMessage Style ── */
+.fd-chat--imessage { background: #fff; }
+.fd-chat--imessage .chat-topbar {
+  height: 56px; background: #F8F8F8;
+  border-bottom: 0.5px solid #E0E0E0;
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 10px;
+  flex-shrink: 0;
 }
-.demo-sim-header {
+.fd-chat--imessage .chat-topbar-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--lime);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.fd-chat--imessage .chat-topbar-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600; font-size: 16px;
+  color: #000; flex: 1;
+}
+.fd-chat--imessage .chat-messages {
+  padding: 16px;
+  display: flex; flex-direction: column;
+  gap: 6px; flex: 1;
+  overflow-y: auto;
+}
+.fd-chat--imessage .msg-sent {
+  align-self: flex-end;
+  background: #007AFF; color: #fff;
+  padding: 10px 14px;
+  border-radius: 18px 18px 4px 18px;
+  max-width: 75%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; line-height: 1.4;
+}
+.fd-chat--imessage .msg-received {
+  align-self: flex-start;
+  background: #E9E9EB; color: #000;
+  padding: 10px 14px;
+  border-radius: 18px 18px 18px 4px;
+  max-width: 75%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; line-height: 1.4;
+}
+.fd-chat--imessage .msg-delivery {
+  align-self: flex-end;
+  font-size: 11px; color: #8E8E93;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: -2px;
+}
+
+/* ── Instagram DM Style ── */
+.fd-chat--instagram { background: #fff; }
+.fd-chat--instagram .chat-topbar {
+  height: 56px; background: #FAFAFA;
+  border-bottom: 0.5px solid #DBDBDB;
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 12px;
+  flex-shrink: 0;
+}
+.fd-chat--instagram .chat-topbar-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2px; flex-shrink: 0;
+}
+.fd-chat--instagram .chat-topbar-avatar-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: var(--lime);
+  border: 2px solid #fff;
+}
+.fd-chat--instagram .chat-topbar-info { display: flex; flex-direction: column; }
+.fd-chat--instagram .chat-topbar-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600; font-size: 14px; color: #262626;
+}
+.fd-chat--instagram .chat-topbar-status {
+  font-size: 11px; color: #8E8E8E;
+  font-family: 'DM Sans', sans-serif;
+}
+.fd-chat--instagram .chat-messages {
+  padding: 16px;
+  display: flex; flex-direction: column;
+  gap: 8px; flex: 1;
+  overflow-y: auto;
+}
+.fd-chat--instagram .msg-sent {
+  align-self: flex-end;
+  background: linear-gradient(to right, #6366F1, #8B5CF6);
+  color: #fff; padding: 10px 14px;
+  border-radius: 22px 22px 4px 22px;
+  max-width: 70%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; line-height: 1.45;
+}
+.fd-chat--instagram .msg-received {
+  align-self: flex-start;
+  background: #EFEFEF; color: #262626;
+  padding: 10px 14px;
+  border-radius: 22px 22px 22px 4px;
+  max-width: 70%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; line-height: 1.45;
+}
+.fd-chat--instagram .msg-seen {
+  align-self: flex-end;
+  font-size: 11px; color: #8E8E8E;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: -4px;
+}
+
+/* ── Webchat Style (dark) ── */
+.fd-chat--webchat { background: var(--dark); }
+.fd-chat--webchat .chat-topbar {
+  height: 48px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center;
+  padding: 0 20px; flex-shrink: 0;
+}
+.fd-chat--webchat .chat-topbar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--lime);
+  margin-right: 10px;
+}
+.fd-chat--webchat .chat-topbar-name {
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--mid);
-  padding: 20px 28px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.demo-sim-messages {
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.fd-chat--webchat .chat-messages {
+  padding: 20px;
+  display: flex; flex-direction: column;
+  gap: 12px; flex: 1;
+  overflow-y: auto;
 }
-.demo-msg {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  line-height: 1.7;
-  padding: 14px 18px;
-  border-radius: 12px;
-  max-width: 85%;
-  opacity: 0;
-  transform: translateY(12px);
-}
-.demo-msg.visible {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.demo-msg.client {
+.fd-chat--webchat .msg-sent {
   align-self: flex-end;
-  background: rgba(200, 255, 0, 0.08);
-  border: 1px solid rgba(200, 255, 0, 0.2);
+  background: rgba(200,255,0,0.08);
+  border: 1px solid rgba(200,255,0,0.2);
   color: var(--lime);
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; line-height: 1.6;
 }
-.demo-msg.ai {
+.fd-chat--webchat .msg-received {
   align-self: flex-start;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
   color: rgba(255,255,255,0.85);
+  padding: 12px 16px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; line-height: 1.6;
 }
-.demo-msg.system {
-  align-self: center;
-  text-align: center;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  color: var(--mid);
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
+
+/* Shared message initial state for animation */
+.fd-chat-frame .msg-sent,
+.fd-chat-frame .msg-received,
+.fd-chat-frame .msg-delivery,
+.fd-chat-frame .msg-seen,
+.fd-chat-frame .msg-system {
+  opacity: 0; transform: translateY(8px);
 }
+
+/* ── Responsive ── */
 @media (max-width: 960px) {
   #ai-demos { padding: 80px 24px; }
+  .fd-container { grid-template-columns: 1fr; gap: 36px; }
+  .fd-scene { transform: rotateX(55deg) rotateZ(-45deg) scale(0.75); }
+  .fd-scene-wrap { min-height: 320px; }
+  .fd-chat-frame { max-width: 340px; height: 480px; }
+}
+@media (max-width: 480px) {
+  .fd-scene-wrap { display: none; }
+  .fd-agent-labels { display: none; }
+  .fd-agent-mobile-nav { display: flex; }
+  .fd-chat-frame { max-width: 100%; height: 440px; border-radius: 20px; }
 }
 
 /* ═══════════════════════════════════════════
@@ -2059,78 +2393,160 @@ nav {
   </div>
 </section>
 
-<!-- ─── AI DEMOS ───────────────────────── -->
+<!-- ─── AI FRONT DESK ──────────────────── -->
 <section id="ai-demos">
   <div class="demos-header">
     <div class="demos-eyebrow">05 — See It In Action</div>
-    <h2 class="demos-headline">Watch The AI Handle Real Client Conversations</h2>
+    <h2 class="demos-headline">Your AI Front Desk, Working 24/7</h2>
   </div>
-  <div class="demos-tabs">
-    <button class="demo-tab active" data-demo="chatbot">Website Chatbot</button>
-    <button class="demo-tab" data-demo="missed-call">Missed Call</button>
-    <button class="demo-tab" data-demo="instagram">Instagram DM</button>
-    <button class="demo-tab" data-demo="prequal">Pre-Qualification</button>
-    <button class="demo-tab" data-demo="reactivation">Reactivation</button>
+
+  <!-- Mobile agent nav (hidden at desktop) -->
+  <div class="fd-agent-mobile-nav">
+    <button class="fd-mobile-pill active" data-agent="chatbot"><span class="fd-mobile-dot" style="background:var(--lime)"></span>Chatbot</button>
+    <button class="fd-mobile-pill" data-agent="sms"><span class="fd-mobile-dot" style="background:#007AFF"></span>SMS</button>
+    <button class="fd-mobile-pill" data-agent="instagram"><span class="fd-mobile-dot" style="background:#E1306C"></span>Instagram</button>
+    <button class="fd-mobile-pill" data-agent="booking"><span class="fd-mobile-dot" style="background:#F5A623"></span>Booking</button>
+    <button class="fd-mobile-pill" data-agent="review"><span class="fd-mobile-dot" style="background:#8B5CF6"></span>Review</button>
   </div>
-  <div class="demos-stage">
-    <!-- Website Chatbot Demo -->
-    <div class="demo-sim active" id="demo-chatbot">
-      <div class="demo-sim-header">Website Chat — GlowMedSpa.com</div>
-      <div class="demo-sim-messages">
-        <div class="demo-msg client">Hi! How much is lip filler?</div>
-        <div class="demo-msg ai">Great question! Our lip filler starts at $600 per syringe. Most clients love the Juvederm Ultra — it gives a natural, plump look that lasts 12–18 months. Would you like to book a free consultation?</div>
-        <div class="demo-msg client">Yes! Do you have anything this week?</div>
-        <div class="demo-msg ai">We have openings Thursday at 2pm and Friday at 10am. Which works better for you? I'll just need your name and phone number to confirm.</div>
-        <div class="demo-msg client">Thursday works. I'm Sarah, 312-555-0199</div>
-        <div class="demo-msg ai">You're all set, Sarah! Consultation booked for Thursday at 2pm. You'll get a confirmation text shortly. See you then! ✨</div>
+
+  <div class="fd-container">
+    <!-- LEFT: Isometric Scene -->
+    <div class="fd-scene-wrap">
+      <div class="fd-scene">
+        <!-- Desk -->
+        <div class="fd-desk">
+          <div class="fd-desk-top"></div>
+          <div class="fd-desk-front"></div>
+          <div class="fd-desk-side"></div>
+        </div>
+        <!-- Accessories -->
+        <div class="fd-monitor"></div>
+        <div class="fd-keyboard"></div>
+        <div class="fd-mug"></div>
+        <div class="fd-papers"></div>
+        <!-- Agents -->
+        <div class="fd-agent active" data-agent="chatbot">
+          <div class="fd-agent-head"></div>
+          <div class="fd-agent-body"></div>
+          <div class="fd-agent-glow"></div>
+        </div>
+        <div class="fd-agent" data-agent="sms">
+          <div class="fd-agent-head"></div>
+          <div class="fd-agent-body"></div>
+          <div class="fd-agent-glow"></div>
+        </div>
+        <div class="fd-agent" data-agent="instagram">
+          <div class="fd-agent-head"></div>
+          <div class="fd-agent-body"></div>
+          <div class="fd-agent-glow"></div>
+        </div>
+        <div class="fd-agent" data-agent="booking">
+          <div class="fd-agent-head"></div>
+          <div class="fd-agent-body"></div>
+          <div class="fd-agent-glow"></div>
+        </div>
+        <div class="fd-agent" data-agent="review">
+          <div class="fd-agent-head"></div>
+          <div class="fd-agent-body"></div>
+          <div class="fd-agent-glow"></div>
+        </div>
+      </div>
+      <!-- Labels (flat overlay) -->
+      <div class="fd-agent-labels">
+        <div class="fd-agent-label active" data-agent="chatbot">Chatbot</div>
+        <div class="fd-agent-label" data-agent="sms">SMS</div>
+        <div class="fd-agent-label" data-agent="instagram">Instagram</div>
+        <div class="fd-agent-label" data-agent="booking">Booking</div>
+        <div class="fd-agent-label" data-agent="review">Review</div>
       </div>
     </div>
-    <!-- Missed Call Demo -->
-    <div class="demo-sim" id="demo-missed-call">
-      <div class="demo-sim-header">SMS — Missed Call Recovery</div>
-      <div class="demo-sim-messages">
-        <div class="demo-msg system">📞 Missed call from (773) 555-0142 — 6:47 PM</div>
-        <div class="demo-msg ai">Hi! Sorry we missed your call at Glow Med Spa. How can we help? Reply with a number:<br><br>1️⃣ Botox pricing<br>2️⃣ Filler info<br>3️⃣ Book a consultation<br>4️⃣ Other question</div>
-        <div class="demo-msg client">1</div>
-        <div class="demo-msg ai">Botox is $12/unit. Most clients need 20–40 units depending on the area. A full forehead + crow's feet treatment runs $240–$480. Want to schedule a consultation to get your exact quote?</div>
-        <div class="demo-msg client">Yes please</div>
-        <div class="demo-msg ai">Perfect! What's your name and preferred day? I'll get you on the calendar.</div>
+
+    <!-- RIGHT: Chat Panel -->
+    <div class="fd-chat-panel">
+      <!-- Webchat: Chatbot -->
+      <div class="fd-chat-frame fd-chat--webchat" id="fd-sim-chatbot">
+        <div class="chat-topbar"><div class="chat-topbar-dot"></div><span class="chat-topbar-name">GlowMedSpa.com — Live Chat</span></div>
+        <div class="chat-messages">
+          <div class="msg-sent">Hi! How much is lip filler?</div>
+          <div class="msg-received">Great question! Our lip filler starts at $600 per syringe. Most clients love the Juvederm Ultra — it gives a natural, plump look that lasts 12–18 months. Would you like to book a free consultation?</div>
+          <div class="msg-sent">Yes! Do you have anything this week?</div>
+          <div class="msg-received">We have openings Thursday at 2pm and Friday at 10am. Which works better for you? I'll just need your name and phone number to confirm.</div>
+          <div class="msg-sent">Thursday works. I'm Sarah, 312-555-0199</div>
+          <div class="msg-received">You're all set, Sarah! Consultation booked for Thursday at 2pm. You'll get a confirmation text shortly. See you then!</div>
+        </div>
       </div>
-    </div>
-    <!-- Instagram DM Demo -->
-    <div class="demo-sim" id="demo-instagram">
-      <div class="demo-sim-header">Instagram — Direct Messages</div>
-      <div class="demo-sim-messages">
-        <div class="demo-msg client">Hey! How much is Botox? 💉</div>
-        <div class="demo-msg ai">Hey! 💕 Botox is $12/unit at Glow Med Spa. Most clients get 20–40 units for forehead + crow's feet ($240–$480). We're running a new client special this month — 10% off your first treatment!</div>
-        <div class="demo-msg client">Omg yes! How do I book?</div>
-        <div class="demo-msg ai">I can book you right now! Just need your name and phone number, and I'll text you a confirmation with all the details. What day works best for you?</div>
-        <div class="demo-msg client">This Friday? I'm Jess, 847-555-0233</div>
-        <div class="demo-msg ai">Done! Jess, you're booked for Friday. You'll get a text with the address, parking info, and what to expect. Can't wait to see you! ✨</div>
+
+      <!-- iMessage: SMS -->
+      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-sms" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-avatar">💬</div>
+          <span class="chat-topbar-name">Glow Med Spa</span>
+        </div>
+        <div class="chat-messages">
+          <div class="msg-received">Hi! Sorry we missed your call at Glow Med Spa. How can we help?<br><br>1️⃣ Botox pricing<br>2️⃣ Filler info<br>3️⃣ Book a consultation<br>4️⃣ Other question</div>
+          <div class="msg-sent">1</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">Botox is $12/unit. Most clients need 20–40 units depending on the area. A full forehead + crow's feet treatment runs $240–$480. Want to schedule a consultation?</div>
+          <div class="msg-sent">Yes please</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">Perfect! What's your name and preferred day? I'll get you on the calendar.</div>
+        </div>
       </div>
-    </div>
-    <!-- Pre-Qualification Demo -->
-    <div class="demo-sim" id="demo-prequal">
-      <div class="demo-sim-header">Website Chat — Pre-Qualification Flow</div>
-      <div class="demo-sim-messages">
-        <div class="demo-msg ai">Welcome to Glow Med Spa! I'd love to help you find the right treatment. Have you had injectable treatments before?</div>
-        <div class="demo-msg client">No, this would be my first time</div>
-        <div class="demo-msg ai">Exciting! First-timers love starting with Botox or a subtle lip enhancement. What result are you hoping for?</div>
-        <div class="demo-msg client">I want to smooth out my forehead lines</div>
-        <div class="demo-msg ai">Botox is perfect for that — quick treatment, no downtime, results in 3–5 days. Most forehead treatments are $240–$360. When would you like to come in for a consultation?</div>
-        <div class="demo-msg client">Next week sometime</div>
-        <div class="demo-msg ai">We have Tuesday at 11am or Wednesday at 3pm open. I'll just need your name and number to book!</div>
+
+      <!-- Instagram: Instagram DM -->
+      <div class="fd-chat-frame fd-chat--instagram" id="fd-sim-instagram" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-avatar"><div class="chat-topbar-avatar-inner"></div></div>
+          <div class="chat-topbar-info">
+            <span class="chat-topbar-name">glowmedspa</span>
+            <span class="chat-topbar-status">Active now</span>
+          </div>
+        </div>
+        <div class="chat-messages">
+          <div class="msg-sent">Hey! How much is Botox?</div>
+          <div class="msg-received">Hey! Botox is $12/unit at Glow Med Spa. Most clients get 20–40 units for forehead + crow's feet ($240–$480). We're running a new client special this month — 10% off your first treatment!</div>
+          <div class="msg-sent">Omg yes! How do I book?</div>
+          <div class="msg-received">I can book you right now! Just need your name and phone number, and I'll text you a confirmation with all the details. What day works best?</div>
+          <div class="msg-sent">This Friday? I'm Jess, 847-555-0233</div>
+          <div class="msg-seen">Seen</div>
+          <div class="msg-received">Done! Jess, you're booked for Friday. You'll get a text with the address, parking info, and what to expect. Can't wait to see you!</div>
+        </div>
       </div>
-    </div>
-    <!-- Reactivation Demo -->
-    <div class="demo-sim" id="demo-reactivation">
-      <div class="demo-sim-header">SMS — Client Reactivation</div>
-      <div class="demo-sim-messages">
-        <div class="demo-msg ai">Hi Sarah! It's been 4 months since your last Botox appointment at Glow Med Spa. Most clients rebook around this time to keep results fresh. Ready for a touch-up? 💫</div>
-        <div class="demo-msg client">Oh wow, has it been that long already? Yes I need to come in</div>
-        <div class="demo-msg ai">Time flies! We have openings this week — Thursday at 1pm or Saturday at 10am. Which works for you?</div>
-        <div class="demo-msg client">Saturday morning is perfect</div>
-        <div class="demo-msg ai">Booked! Saturday at 10am. Same treatment as last time (forehead + crow's feet, 32 units). See you then, Sarah!</div>
+
+      <!-- iMessage: Booking (pre-qual) -->
+      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-booking" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-avatar">📋</div>
+          <span class="chat-topbar-name">Glow Med Spa Booking</span>
+        </div>
+        <div class="chat-messages">
+          <div class="msg-received">Welcome to Glow Med Spa! I'd love to help you find the right treatment. Have you had injectable treatments before?</div>
+          <div class="msg-sent">No, this would be my first time</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">Exciting! First-timers love starting with Botox or a subtle lip enhancement. What result are you hoping for?</div>
+          <div class="msg-sent">I want to smooth out my forehead lines</div>
+          <div class="msg-received">Botox is perfect for that — quick treatment, no downtime, results in 3–5 days. Most forehead treatments are $240–$360. When would you like to come in?</div>
+          <div class="msg-sent">Next week sometime</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">We have Tuesday at 11am or Wednesday at 3pm open. I'll just need your name and number to book!</div>
+        </div>
+      </div>
+
+      <!-- iMessage: Review (reactivation) -->
+      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-review" style="display:none">
+        <div class="chat-topbar">
+          <div class="chat-topbar-avatar">⭐</div>
+          <span class="chat-topbar-name">Glow Med Spa</span>
+        </div>
+        <div class="chat-messages">
+          <div class="msg-received">Hi Sarah! It's been 4 months since your last Botox appointment at Glow Med Spa. Most clients rebook around this time to keep results fresh. Ready for a touch-up?</div>
+          <div class="msg-sent">Oh wow, has it been that long already? Yes I need to come in</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">Time flies! We have openings this week — Thursday at 1pm or Saturday at 10am. Which works for you?</div>
+          <div class="msg-sent">Saturday morning is perfect</div>
+          <div class="msg-delivery">Delivered</div>
+          <div class="msg-received">Booked! Saturday at 10am. Same treatment as last time (forehead + crow's feet, 32 units). See you then, Sarah!</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2431,12 +2847,13 @@ function primeStates() {
   gsap.set('.cs-block',                              { opacity: 0, y: 36 });
   gsap.set('.cs-rule',                               { scaleX: 0 });
   gsap.set('.cs-metric',                             { opacity: 0, y: 28 });
-  gsap.set('.demo-tab',                               { opacity: 0, y: 20 });
-  gsap.set('.demo-sim',                               { opacity: 0 });
-  gsap.set('.testimonial-card',                       { opacity: 0, y: 56 });
-  gsap.set('#final-cta > *',                          { opacity: 0, y: 28 });
   gsap.set('.demos-eyebrow',                          { opacity: 0, x: -40 });
   gsap.set('.demos-headline',                         { opacity: 0, y: 32 });
+  gsap.set('.fd-scene',                               { opacity: 0, scale: 0.85 });
+  gsap.set('.fd-agent',                               { opacity: 0, y: 16 });
+  gsap.set('.fd-agent-label',                         { opacity: 0, y: 8 });
+  gsap.set('.fd-chat-frame',                          { opacity: 0, x: 30 });
+  gsap.set('.testimonial-card',                       { opacity: 0, y: 56 });
   gsap.set('.testimonials-eyebrow',                   { opacity: 0, x: -40 });
   gsap.set('.testimonials-headline',                  { opacity: 0, y: 32 });
   gsap.set('.services-label',                        { opacity: 0, y: 28 });
@@ -2611,7 +3028,7 @@ function setupAnimations() {
     scrollTrigger: { trigger: '#principles', start: 'top bottom', once: true }
   });
 
-  // ── AI Demos ────────────────────────────
+  // ── AI Front Desk ───────────────────────
   gsap.to('.demos-eyebrow', {
     opacity: 1, x: 0, duration: 0.8,
     scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
@@ -2620,18 +3037,27 @@ function setupAnimations() {
     opacity: 1, y: 0, duration: 1, ease: 'power3.out',
     scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
   });
-  gsap.to('.demo-tab', {
-    opacity: 1, y: 0, duration: 0.6, stagger: 0.08,
-    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+  gsap.to('.fd-scene', {
+    opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.5)',
+    scrollTrigger: { trigger: '#ai-demos', start: 'top 80%', once: true }
+  });
+  gsap.to('.fd-agent', {
+    opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12,
+    scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
+  });
+  gsap.to('.fd-agent-label', {
+    opacity: 1, y: 0, duration: 0.5, stagger: 0.08, delay: 0.4,
+    scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
   });
   ScrollTrigger.create({
     trigger: '#ai-demos', start: 'top 70%', once: true,
     onEnter: () => {
-      const activeSim = document.querySelector('.demo-sim.active');
-      if (activeSim) {
-        gsap.to(activeSim, { opacity: 1, duration: 0.5 });
-        animateDemoMessages(activeSim);
+      const activeFrame = document.querySelector('.fd-chat-frame:not([style*="display:none"])');
+      if (activeFrame) {
+        gsap.to(activeFrame, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' });
+        animateFDMessages(activeFrame);
       }
+      startAgentIdleAnimation();
     }
   });
 
@@ -2785,50 +3211,102 @@ function setupAnimations() {
     scrollTrigger: { trigger: '#contact', start: 'top bottom', once: true }
   });
 
-  // ── Init demo tab interactions ──────────
-  initDemoTabs();
+  // ── Init front desk interactions ────────
+  initFrontDesk();
 }
 
 // ═══════════════════════════════════════════
-// AI DEMO TABS + MESSAGE ANIMATION
+// AI FRONT DESK — INTERACTION + ANIMATION
 // ═══════════════════════════════════════════
-function animateDemoMessages(simEl) {
-  const msgs = simEl.querySelectorAll('.demo-msg');
+function animateFDMessages(frameEl) {
+  const msgs = frameEl.querySelectorAll('.msg-sent, .msg-received, .msg-delivery, .msg-seen, .msg-system');
   msgs.forEach((msg, i) => {
-    msg.classList.remove('visible');
-    msg.style.opacity = '0';
-    msg.style.transform = 'translateY(12px)';
-    setTimeout(() => {
-      msg.classList.add('visible');
-      msg.style.opacity = '1';
-      msg.style.transform = 'translateY(0)';
-    }, 400 + i * 600);
+    gsap.set(msg, { opacity: 0, y: 8 });
+    gsap.to(msg, {
+      opacity: 1, y: 0, duration: 0.35, ease: 'power2.out',
+      delay: 0.3 + i * 0.5
+    });
   });
 }
 
-function initDemoTabs() {
-  const tabs = document.querySelectorAll('.demo-tab');
-  const sims = document.querySelectorAll('.demo-sim');
+function startAgentIdleAnimation() {
+  document.querySelectorAll('.fd-agent').forEach((agent, i) => {
+    gsap.to(agent, {
+      y: '-=3', duration: 1.2 + i * 0.2,
+      ease: 'sine.inOut', yoyo: true,
+      repeat: -1, delay: i * 0.3
+    });
+  });
+}
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const demoId = tab.dataset.demo;
+function switchToAgent(agentId) {
+  const agents = document.querySelectorAll('.fd-agent');
+  const labels = document.querySelectorAll('.fd-agent-label');
+  const frames = document.querySelectorAll('.fd-chat-frame');
+  const pills = document.querySelectorAll('.fd-mobile-pill');
 
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+  // Update agent states
+  agents.forEach(a => {
+    a.classList.remove('active');
+    gsap.to(a, { opacity: 0.5, duration: 0.3, overwrite: 'auto' });
+  });
+  const activeAgent = document.querySelector(`.fd-agent[data-agent="${agentId}"]`);
+  if (activeAgent) {
+    activeAgent.classList.add('active');
+    gsap.to(activeAgent, { opacity: 1, duration: 0.3, overwrite: 'auto' });
+  }
 
-      sims.forEach(s => {
-        s.classList.remove('active');
-        s.style.opacity = '0';
-      });
+  // Update labels
+  labels.forEach(l => l.classList.remove('active'));
+  const activeLabel = document.querySelector(`.fd-agent-label[data-agent="${agentId}"]`);
+  if (activeLabel) activeLabel.classList.add('active');
 
-      const target = document.getElementById('demo-' + demoId);
-      if (target) {
-        target.classList.add('active');
-        gsap.to(target, { opacity: 1, duration: 0.4 });
-        animateDemoMessages(target);
+  // Update mobile pills
+  pills.forEach(p => p.classList.remove('active'));
+  const activePill = document.querySelector(`.fd-mobile-pill[data-agent="${agentId}"]`);
+  if (activePill) activePill.classList.add('active');
+
+  // Transition chat frames
+  const currentFrame = document.querySelector('.fd-chat-frame:not([style*="display: none"]):not([style*="display:none"])');
+  if (currentFrame) {
+    gsap.to(currentFrame, {
+      opacity: 0, y: 10, duration: 0.25,
+      onComplete: () => {
+        currentFrame.style.display = 'none';
+        showFrame(agentId);
       }
     });
+  } else {
+    showFrame(agentId);
+  }
+}
+
+function showFrame(agentId) {
+  const newFrame = document.getElementById('fd-sim-' + agentId);
+  if (newFrame) {
+    newFrame.style.display = 'flex';
+    gsap.fromTo(newFrame,
+      { opacity: 0, y: -10 },
+      { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }
+    );
+    animateFDMessages(newFrame);
+  }
+}
+
+function initFrontDesk() {
+  // Desktop agent clicks
+  document.querySelectorAll('.fd-agent').forEach(agent => {
+    agent.addEventListener('click', () => switchToAgent(agent.dataset.agent));
+  });
+
+  // Label clicks
+  document.querySelectorAll('.fd-agent-label').forEach(label => {
+    label.addEventListener('click', () => switchToAgent(label.dataset.agent));
+  });
+
+  // Mobile pill clicks
+  document.querySelectorAll('.fd-mobile-pill').forEach(pill => {
+    pill.addEventListener('click', () => switchToAgent(pill.dataset.agent));
   });
 }
 
