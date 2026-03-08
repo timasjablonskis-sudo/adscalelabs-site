@@ -1074,101 +1074,86 @@ nav {
   border-radius: 1px; z-index: -1;
 }
 
-/* ── Agents ── */
-.fd-agent {
-  position: absolute;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: opacity 0.3s ease;
-  z-index: 2;
-}
-.fd-agent-head {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  margin: 0 auto 2px;
-  transition: transform 0.25s ease;
-  position: relative;
-  z-index: 1;
-}
-.fd-agent-body {
-  width: 20px; height: 26px;
-  border-radius: 4px 4px 7px 7px;
-  margin: 0 auto;
-  transition: transform 0.25s ease;
-  position: relative;
-  z-index: 1;
-}
-.fd-agent-glow {
-  position: absolute;
-  bottom: -8px; left: 50%;
-  transform: translateX(-50%);
-  width: 36px; height: 10px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.fd-agent.active .fd-agent-glow {
-  opacity: 1;
-}
-.fd-agent:hover .fd-agent-head,
-.fd-agent:hover .fd-agent-body {
-  transform: scale(1.12);
-}
-
-/* Agent colors */
-.fd-agent[data-agent="chatbot"] .fd-agent-head { background: var(--lime); }
-.fd-agent[data-agent="chatbot"] .fd-agent-body { background: var(--lime); opacity: 0.85; }
-.fd-agent[data-agent="chatbot"] .fd-agent-glow { box-shadow: 0 0 20px var(--lime), 0 0 40px rgba(200,255,0,0.3); background: rgba(200,255,0,0.15); }
-
-.fd-agent[data-agent="sms"] .fd-agent-head { background: #007AFF; }
-.fd-agent[data-agent="sms"] .fd-agent-body { background: #007AFF; opacity: 0.85; }
-.fd-agent[data-agent="sms"] .fd-agent-glow { box-shadow: 0 0 20px #007AFF, 0 0 40px rgba(0,122,255,0.3); background: rgba(0,122,255,0.15); }
-
-.fd-agent[data-agent="instagram"] .fd-agent-head { background: #E1306C; }
-.fd-agent[data-agent="instagram"] .fd-agent-body { background: #E1306C; opacity: 0.85; }
-.fd-agent[data-agent="instagram"] .fd-agent-glow { box-shadow: 0 0 20px #E1306C, 0 0 40px rgba(225,48,108,0.3); background: rgba(225,48,108,0.15); }
-
-.fd-agent[data-agent="booking"] .fd-agent-head { background: #F5A623; }
-.fd-agent[data-agent="booking"] .fd-agent-body { background: #F5A623; opacity: 0.85; }
-.fd-agent[data-agent="booking"] .fd-agent-glow { box-shadow: 0 0 20px #F5A623, 0 0 40px rgba(245,166,35,0.3); background: rgba(245,166,35,0.15); }
-
-.fd-agent[data-agent="review"] .fd-agent-head { background: #8B5CF6; }
-.fd-agent[data-agent="review"] .fd-agent-body { background: #8B5CF6; opacity: 0.85; }
-.fd-agent[data-agent="review"] .fd-agent-glow { box-shadow: 0 0 20px #8B5CF6, 0 0 40px rgba(139,92,246,0.3); background: rgba(139,92,246,0.15); }
-
-/* Agent positions (isometric space) */
-.fd-agent[data-agent="chatbot"]  { left: 50%; top: 18%; transform: translate(-50%, -50%) translateZ(42px); }
-.fd-agent[data-agent="sms"]      { left: 22%; top: 22%; transform: translate(-50%, -50%) translateZ(42px); }
-.fd-agent[data-agent="instagram"]{ left: 82%; top: 48%; transform: translate(-50%, -50%) translateZ(42px); }
-.fd-agent[data-agent="booking"]  { left: 75%; top: 18%; transform: translate(-50%, -50%) translateZ(42px); }
-.fd-agent[data-agent="review"]   { left: 15%; top: 52%; transform: translate(-50%, -50%) translateZ(42px); }
-
-/* Agent labels (flat, non-transformed overlay) */
-.fd-agent-labels {
+/* ── Agents (positioned around desk, NOT inside iso transform) ── */
+.fd-agents-ring {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   pointer-events: none;
 }
-.fd-agent-label {
+.fd-agent {
   position: absolute;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fd-agent:hover { transform: translateY(-4px) !important; }
+.fd-agent-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  position: relative;
+  transition: box-shadow 0.4s ease, transform 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.fd-agent.active .fd-agent-icon {
+  transform: scale(1.08);
+}
+.fd-agent-name {
   font-family: 'Space Mono', monospace;
   font-size: 9px; letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mid); text-align: center;
+  color: var(--mid);
   transition: color 0.3s ease;
-  pointer-events: auto; cursor: pointer;
   white-space: nowrap;
 }
-.fd-agent-label.active { color: var(--lime); }
-.fd-agent-label:hover { color: var(--black); }
+.fd-agent.active .fd-agent-name { color: var(--black); font-weight: 700; }
+.fd-agent:hover .fd-agent-name { color: var(--black); }
+.fd-agent-ring {
+  position: absolute;
+  inset: -4px; border-radius: 20px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.4s ease;
+}
+.fd-agent.active .fd-agent-ring {
+  border-color: var(--lime);
+  box-shadow: 0 0 16px rgba(200,255,0,0.25);
+}
 
-/* Label positions (aligned visually to iso agents) */
-.fd-agent-label[data-agent="chatbot"]  { left: 50%; top: 78%; transform: translateX(-50%); }
-.fd-agent-label[data-agent="sms"]      { left: 12%; top: 38%; }
-.fd-agent-label[data-agent="instagram"]{ left: 78%; top: 72%; }
-.fd-agent-label[data-agent="booking"]  { left: 72%; top: 30%; }
-.fd-agent-label[data-agent="review"]   { left: 5%; top: 65%; }
+/* Agent icon backgrounds */
+.fd-agent[data-agent="chatbot"] .fd-agent-icon  { background: var(--dark); color: var(--lime); }
+.fd-agent[data-agent="sms"] .fd-agent-icon       { background: #007AFF; color: #fff; }
+.fd-agent[data-agent="instagram"] .fd-agent-icon { background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737); color: #fff; }
+.fd-agent[data-agent="booking"] .fd-agent-icon   { background: #F5A623; color: #fff; }
+.fd-agent[data-agent="review"] .fd-agent-icon    { background: #8B5CF6; color: #fff; }
+
+/* Agent positions around the desk */
+.fd-agent[data-agent="chatbot"]  { left: 50%; top: 8%; transform: translateX(-50%); }
+.fd-agent[data-agent="sms"]      { left: 2%; top: 25%; }
+.fd-agent[data-agent="instagram"]{ right: 2%; top: 25%; left: auto; }
+.fd-agent[data-agent="booking"]  { right: 12%; bottom: 12%; left: auto; top: auto; }
+.fd-agent[data-agent="review"]   { left: 12%; bottom: 12%; top: auto; }
+
+/* Instruction hint */
+.fd-hint {
+  text-align: center;
+  margin-top: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+}
+.fd-hint span {
+  display: inline-block;
+  animation: fd-hint-pulse 2s ease-in-out infinite;
+}
+@keyframes fd-hint-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
 
 /* ── Mobile agent nav (hidden at desktop) ── */
 .fd-agent-mobile-nav {
@@ -1395,7 +1380,6 @@ nav {
 }
 @media (max-width: 480px) {
   .fd-scene-wrap { display: none; }
-  .fd-agent-labels { display: none; }
   .fd-agent-mobile-nav { display: flex; }
   .fd-chat-frame { max-width: 100%; height: 440px; border-radius: 20px; }
 }
@@ -2410,7 +2394,7 @@ nav {
   </div>
 
   <div class="fd-container">
-    <!-- LEFT: Isometric Scene -->
+    <!-- LEFT: Isometric Scene + Agent Ring -->
     <div class="fd-scene-wrap">
       <div class="fd-scene">
         <!-- Desk -->
@@ -2424,41 +2408,31 @@ nav {
         <div class="fd-keyboard"></div>
         <div class="fd-mug"></div>
         <div class="fd-papers"></div>
-        <!-- Agents -->
+      </div>
+      <!-- Agents ring (outside isometric transform, so they stay upright) -->
+      <div class="fd-agents-ring">
         <div class="fd-agent active" data-agent="chatbot">
-          <div class="fd-agent-head"></div>
-          <div class="fd-agent-body"></div>
-          <div class="fd-agent-glow"></div>
+          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>💬</div>
+          <span class="fd-agent-name">Chatbot</span>
         </div>
         <div class="fd-agent" data-agent="sms">
-          <div class="fd-agent-head"></div>
-          <div class="fd-agent-body"></div>
-          <div class="fd-agent-glow"></div>
+          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📱</div>
+          <span class="fd-agent-name">SMS</span>
         </div>
         <div class="fd-agent" data-agent="instagram">
-          <div class="fd-agent-head"></div>
-          <div class="fd-agent-body"></div>
-          <div class="fd-agent-glow"></div>
+          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📸</div>
+          <span class="fd-agent-name">Instagram</span>
         </div>
         <div class="fd-agent" data-agent="booking">
-          <div class="fd-agent-head"></div>
-          <div class="fd-agent-body"></div>
-          <div class="fd-agent-glow"></div>
+          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📅</div>
+          <span class="fd-agent-name">Booking</span>
         </div>
         <div class="fd-agent" data-agent="review">
-          <div class="fd-agent-head"></div>
-          <div class="fd-agent-body"></div>
-          <div class="fd-agent-glow"></div>
+          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>⭐</div>
+          <span class="fd-agent-name">Review</span>
         </div>
       </div>
-      <!-- Labels (flat overlay) -->
-      <div class="fd-agent-labels">
-        <div class="fd-agent-label active" data-agent="chatbot">Chatbot</div>
-        <div class="fd-agent-label" data-agent="sms">SMS</div>
-        <div class="fd-agent-label" data-agent="instagram">Instagram</div>
-        <div class="fd-agent-label" data-agent="booking">Booking</div>
-        <div class="fd-agent-label" data-agent="review">Review</div>
-      </div>
+      <div class="fd-hint"><span>Click an agent to see how it handles real conversations</span></div>
     </div>
 
     <!-- RIGHT: Chat Panel -->
@@ -2851,8 +2825,8 @@ function primeStates() {
   gsap.set('.demos-headline',                         { opacity: 0, y: 32 });
   gsap.set('.fd-scene',                               { opacity: 0, scale: 0.85 });
   gsap.set('.fd-agent',                               { opacity: 0, y: 16 });
-  gsap.set('.fd-agent-label',                         { opacity: 0, y: 8 });
   gsap.set('.fd-chat-frame',                          { opacity: 0, x: 30 });
+  gsap.set('.fd-hint',                                { opacity: 0 });
   gsap.set('.testimonial-card',                       { opacity: 0, y: 56 });
   gsap.set('.testimonials-eyebrow',                   { opacity: 0, x: -40 });
   gsap.set('.testimonials-headline',                  { opacity: 0, y: 32 });
@@ -3045,8 +3019,8 @@ function setupAnimations() {
     opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12,
     scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
   });
-  gsap.to('.fd-agent-label', {
-    opacity: 1, y: 0, duration: 0.5, stagger: 0.08, delay: 0.4,
+  gsap.to('.fd-hint', {
+    opacity: 1, duration: 0.8, delay: 1,
     scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
   });
   ScrollTrigger.create({
@@ -3241,25 +3215,18 @@ function startAgentIdleAnimation() {
 
 function switchToAgent(agentId) {
   const agents = document.querySelectorAll('.fd-agent');
-  const labels = document.querySelectorAll('.fd-agent-label');
-  const frames = document.querySelectorAll('.fd-chat-frame');
   const pills = document.querySelectorAll('.fd-mobile-pill');
 
   // Update agent states
   agents.forEach(a => {
     a.classList.remove('active');
-    gsap.to(a, { opacity: 0.5, duration: 0.3, overwrite: 'auto' });
+    gsap.to(a, { opacity: 0.6, duration: 0.3, overwrite: 'auto' });
   });
   const activeAgent = document.querySelector(`.fd-agent[data-agent="${agentId}"]`);
   if (activeAgent) {
     activeAgent.classList.add('active');
     gsap.to(activeAgent, { opacity: 1, duration: 0.3, overwrite: 'auto' });
   }
-
-  // Update labels
-  labels.forEach(l => l.classList.remove('active'));
-  const activeLabel = document.querySelector(`.fd-agent-label[data-agent="${agentId}"]`);
-  if (activeLabel) activeLabel.classList.add('active');
 
   // Update mobile pills
   pills.forEach(p => p.classList.remove('active'));
@@ -3297,11 +3264,6 @@ function initFrontDesk() {
   // Desktop agent clicks
   document.querySelectorAll('.fd-agent').forEach(agent => {
     agent.addEventListener('click', () => switchToAgent(agent.dataset.agent));
-  });
-
-  // Label clicks
-  document.querySelectorAll('.fd-agent-label').forEach(label => {
-    label.addEventListener('click', () => switchToAgent(label.dataset.agent));
   });
 
   // Mobile pill clicks
