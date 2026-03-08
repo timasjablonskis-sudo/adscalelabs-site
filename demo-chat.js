@@ -9,10 +9,10 @@
   /* ── CONFIG ──────────────────────────────────────────────── */
   const CONFIG = {
     webhookUrl: 'https://n8n.srv1388391.hstgr.cloud/webhook/4631eaba-5808-401f-854b-4996951eefea/chat',
-    companyName: 'Glow MedSpa',
-    tagline: 'Live Demo',
-    welcomeMessage: "Hi! Welcome to Glow MedSpa. I can help you with treatments, pricing, booking a consultation, or anything else. Ask me anything!",
-    placeholderText: 'Ask about treatments, pricing, hours...',
+    companyName: 'AI Front Desk',
+    tagline: 'Med Spa Demo',
+    welcomeMessage: "Hi! I'm an AI receptionist demo for med spas. Ask me about Botox, fillers, pricing, or booking — I'll show you exactly how the AI handles real client conversations.",
+    placeholderText: 'Ask about Botox, fillers, booking...',
     primaryColor: '#C8FF00',
     primaryGlow: 'rgba(200,255,0,0.25)',
     bgDark: '#0A0A0A',
@@ -383,10 +383,10 @@
       </div>
 
       <div class="adscale-quick-actions" id="adscale-quick-actions">
-        <button class="adscale-quick-btn" data-msg="What treatments do you offer?">Treatments</button>
-        <button class="adscale-quick-btn" data-msg="I'd like to book a consultation">Book Now</button>
-        <button class="adscale-quick-btn" data-msg="How much does Botox cost?">Pricing</button>
-        <button class="adscale-quick-btn" data-msg="What are your hours?">Hours</button>
+        <button class="adscale-quick-btn" data-msg="How much does Botox cost?">Botox Info</button>
+        <button class="adscale-quick-btn" data-msg="I'd like to book a consultation">Book Consultation</button>
+        <button class="adscale-quick-btn" data-msg="What filler options do you have and what's the pricing?">Filler Pricing</button>
+        <button class="adscale-quick-btn" data-msg="What treatments do you offer?">All Treatments</button>
       </div>
 
       <div class="adscale-chat-input">

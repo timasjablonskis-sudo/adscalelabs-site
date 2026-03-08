@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AdScale Labs — AI Chatbots That Capture Leads 24/7</title>
+<title>AdScale Labs — AI Front Desk for Med Spas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
@@ -941,8 +941,243 @@ nav {
   color: var(--mid);
   line-height: 1.6;
 }
+@media (max-width: 1200px) {
+  .process-steps { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 960px) {
   .cs-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+/* ═══════════════════════════════════════════
+   AI DEMOS
+═══════════════════════════════════════════ */
+#ai-demos {
+  padding: 120px 72px;
+}
+.demos-header {
+  margin-bottom: 56px;
+}
+.demos-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 20px;
+}
+.demos-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05;
+  color: var(--black);
+}
+.demos-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.demo-tab {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.demo-tab:hover {
+  border-color: var(--black);
+  color: var(--black);
+}
+.demo-tab.active {
+  background: var(--black);
+  color: var(--lime);
+  border-color: var(--black);
+}
+.demos-stage {
+  position: relative;
+}
+.demo-sim {
+  display: none;
+  background: var(--dark);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 640px;
+}
+.demo-sim.active {
+  display: block;
+}
+.demo-sim-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.demo-sim-messages {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.demo-msg {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  padding: 14px 18px;
+  border-radius: 12px;
+  max-width: 85%;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.demo-msg.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.demo-msg.client {
+  align-self: flex-end;
+  background: rgba(200, 255, 0, 0.08);
+  border: 1px solid rgba(200, 255, 0, 0.2);
+  color: var(--lime);
+}
+.demo-msg.ai {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.85);
+}
+.demo-msg.system {
+  align-self: center;
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--mid);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+}
+@media (max-width: 960px) {
+  #ai-demos { padding: 80px 24px; }
+}
+
+/* ═══════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════ */
+#testimonials {
+  padding: 120px 72px;
+}
+.testimonials-header {
+  margin-bottom: 56px;
+}
+.testimonials-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 20px;
+}
+.testimonials-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05;
+  color: var(--black);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+.testimonial-card {
+  background: var(--bg);
+  padding: 48px 36px;
+}
+.testimonial-stars {
+  font-size: 14px;
+  color: var(--lime);
+  margin-bottom: 24px;
+  letter-spacing: 0.1em;
+}
+.testimonial-quote {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--black);
+  margin-bottom: 32px;
+}
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.testimonial-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--black);
+}
+.testimonial-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+}
+@media (max-width: 960px) {
+  #testimonials { padding: 80px 24px; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   FINAL CTA
+═══════════════════════════════════════════ */
+#final-cta {
+  background: var(--dark);
+  padding: 120px 72px;
+  text-align: center;
+}
+.final-cta-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.final-cta-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--mid);
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+.final-cta-btn {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dark);
+  background: var(--lime);
+  padding: 16px 40px;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+.final-cta-btn:hover {
+  background: #d4ff33;
+  transform: translateY(-2px);
+}
+@media (max-width: 960px) {
+  #final-cta { padding: 80px 24px; }
 }
 
 /* ═══════════════════════════════════════════
@@ -1415,15 +1650,15 @@ nav {
 }
 .process-steps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   border-top: 1px solid var(--border);
 }
 .process-step {
-  padding: 56px 44px 56px 0;
+  padding: 48px 28px 48px 0;
   border-right: 1px solid var(--border);
 }
 .process-step:last-child { border-right: none; padding-right: 0; }
-.process-step:not(:first-child) { padding-left: 44px; }
+.process-step:not(:first-child) { padding-left: 28px; }
 .process-num {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
@@ -1558,9 +1793,9 @@ nav {
   #about, #principles { padding: 80px 24px; }
 }
 </style>
-<meta name="description" content="AdScale Labs builds AI chatbots that capture leads 24/7 — so your business never misses another after-hours inquiry. Try our live demo.">
-<meta property="og:title" content="AdScale Labs — AI Chatbots That Capture Leads 24/7">
-<meta property="og:description" content="Your business closes. Your leads don't. AI chatbots that capture leads, answer questions, and book appointments around the clock.">
+<meta name="description" content="AdScale Labs builds AI front desk systems for med spas — chatbots, voice AI, Instagram DM automation, and missed call recovery that book consultations 24/7.">
+<meta property="og:title" content="AdScale Labs — AI Front Desk for Med Spas">
+<meta property="og:description" content="AI receptionist that books Botox & filler consultations 24/7. Capture every lead, answer treatment questions instantly, and never miss another client.">
 <meta property="og:url" content="https://adscalelabs-site.vercel.app">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -1583,15 +1818,15 @@ nav {
 <nav id="mainNav">
   <a href="#" class="nav-logo">
     <span class="logo-main">AdScale Labs</span>
-    After-hours<br>Lead Capture
+    AI Front Desk<br>For Med Spas
   </a>
-  <span class="nav-col-label">AI_chatbots</span>
+  <span class="nav-col-label">AI_systems</span>
   <div class="nav-pill">
     <a href="#hero">Home</a>
     <a href="#services">Services</a>
     <a href="#contact">Contact</a>
   </div>
-  <span class="nav-col-label">Lead_capture</span>
+  <span class="nav-col-label">Med_spas</span>
   <div class="nav-location">⊕ <b>Illinois, USA</b></div>
 </nav>
 
@@ -1603,11 +1838,10 @@ nav {
   <div class="ambient-orb ambient-orb--1" style="top:-10%;right:-5%;" aria-hidden="true"></div>
   <div class="hero-intro-wrap">
     <p class="hero-intro">
-      Every after-hours visitor is a potential client walking away. Our AI chatbot
-      captures leads, answers questions, and books appointments 24/7 — so you
-      never miss another one.
+      Capture every lead, answer treatment questions instantly, and automatically
+      schedule consultations — while your team focuses on clients.
     </p>
-    <a href="mailto:timasjablonskis@gmail.com" class="hero-cta">Book a Free Call →</a>
+    <a href="mailto:timasjablonskis@gmail.com" class="hero-cta">Book a Demo →</a>
   </div>
 
   <!-- Decorative 3D rotating box -->
@@ -1616,25 +1850,25 @@ nav {
     <div class="hero-cube-scene">
       <div class="hero-cube">
         <div class="hcf hcf-front">
-          <div class="hcf-label">24/7<br>Capture</div>
-          <div class="hcf-sub">Never Miss a Lead</div>
+          <div class="hcf-label">AI<br>Chatbot</div>
+          <div class="hcf-sub">Website Lead Capture</div>
         </div>
         <div class="hcf hcf-right">
-          <div class="hcf-stat" style="font-size:52px;line-height:1.05;">AI</div>
-          <div class="hcf-stat-label">Smart Responses</div>
-          <div class="hcf-sub" style="margin-top:8px;">Trained On You</div>
+          <div class="hcf-stat" style="font-size:42px;line-height:1.05;">Voice<br>AI</div>
+          <div class="hcf-stat-label">AI Receptionist</div>
+          <div class="hcf-sub" style="margin-top:8px;">24/7 Calls</div>
         </div>
         <div class="hcf hcf-back">
           <div class="hcf-services">
-            AI CHATBOT<br>LEAD CAPTURE<br>INSTANT ALERTS<br>EASY SETUP
+            CHATBOT<br>VOICE AI<br>DM AUTO<br>SMS RECOVERY
           </div>
         </div>
         <div class="hcf hcf-left">
-          <div class="hcf-label" style="font-size:28px;">Live In<br>&lt;48hrs</div>
-          <div class="hcf-sub">Setup</div>
+          <div class="hcf-label" style="font-size:28px;">DM<br>Auto</div>
+          <div class="hcf-sub">Instagram + SMS</div>
         </div>
         <div class="hcf hcf-top">
-          <div class="hcf-sub">We Build AI</div>
+          <div class="hcf-sub">Med Spa AI</div>
         </div>
         <div class="hcf hcf-bottom">
           <div class="hcf-sub">adscalelabs.com</div>
@@ -1645,7 +1879,7 @@ nav {
 
   <div class="hero-bottom">
     <div class="hero-headline">
-      Your Business<br>Closes. Your<br>Leads Don't.
+      AI Receptionist<br>That Books Botox<br>Consultations 24/7
     </div>
     <div class="hero-outlined">NEVER /<br>MISS</div>
   </div>
@@ -1654,42 +1888,43 @@ nav {
 <!-- ─── STATS BAR ──────────────────────────── -->
 <div id="stats-bar">
   <div class="stat-item">
-    <span class="stat-num">68%</span>
-    <span class="stat-label">Of consumers prefer chat over calling a business</span>
+    <span class="stat-num">$20K</span>
+    <span class="stat-unit">+</span>
+    <span class="stat-label">Lost monthly from just 2 missed clients per day</span>
   </div>
   <div class="stat-item">
     <span class="stat-num">24/7</span>
-    <span class="stat-label">Lead capture, even at 3am</span>
+    <span class="stat-label">AI answers calls, DMs, and website chats</span>
   </div>
   <div class="stat-item">
-    <span class="stat-num">&lt;48</span>
-    <span class="stat-unit">hrs</span>
-    <span class="stat-label">From signup to live on your site</span>
+    <span class="stat-num">10</span>
+    <span class="stat-unit">+</span>
+    <span class="stat-label">Automations working for your med spa</span>
   </div>
 </div>
 
 <!-- ─── AUTOMATE / SCALE ──────────────────── -->
 <section id="automate-scale">
-  <div class="as-eyebrow">Stop losing leads after hours</div>
-  <span class="as-mega">CAPTURE</span>
-  <span class="as-mega">CONVERT</span>
+  <div class="as-eyebrow">Your AI front desk never takes a day off</div>
+  <span class="as-mega">AI FRONT</span>
+  <span class="as-mega">DESK</span>
   <div class="as-sub">
-    AI CHATBOT CAPTURES LEADS 24/7<br>
-    WHILE YOU FOCUS ON YOUR BUSINESS
+    CHATBOT · VOICE AI · INSTAGRAM DMS · SMS<br>
+    EVERY CHANNEL COVERED, EVERY LEAD CAPTURED
   </div>
-  <div class="as-tagline">Every missed chat is a missed appointment.</div>
+  <div class="as-tagline">Missing just 2 clients a day costs $20K+ per month.</div>
 </section>
 
 <!-- ─── OVERFLOW TEXT ────────────────────── -->
 <section id="overflow-section">
   <div class="overflow-inner" id="overflowInner">
-    <span class="overflow-line l3">YOUR WEBSITE WORKS WHILE YOU SLEEP</span>
-    <span class="overflow-line l2">EVERY VISITOR GETS AN ANSWER</span>
-    <span class="overflow-line">LEADS CAPTURED NOT LOST</span>
-    <span class="overflow-line l3">AI CHATBOT BOOKS APPOINTMENTS 24/7</span>
-    <span class="overflow-line l2">STOP LOSING AFTER HOURS LEADS</span>
-    <span class="overflow-line">CAPTURE EVERY OPPORTUNITY</span>
-    <span class="overflow-line l3">NEVER MISS ANOTHER CLIENT</span>
+    <span class="overflow-line l3">NEVER MISS A BOTOX INQUIRY</span>
+    <span class="overflow-line l2">AI ANSWERS WHILE YOU TREAT</span>
+    <span class="overflow-line">CAPTURE EVERY FILLER LEAD</span>
+    <span class="overflow-line l3">BOOK CONSULTATIONS 24/7</span>
+    <span class="overflow-line l2">RECOVER MISSED CALLS INSTANTLY</span>
+    <span class="overflow-line">AUTOMATE YOUR INSTAGRAM DMS</span>
+    <span class="overflow-line l3">REACTIVATE PAST CLIENTS</span>
 
     <!-- Floating symbols -->
     <div class="float-icon" style="top:12%;left:7%;">⊕</div>
@@ -1699,14 +1934,14 @@ nav {
 
     <!-- Overlay card -->
     <div class="overflow-card">
-      <div class="overflow-card-row"><b>AI CHATBOT</b></div>
-      <div class="overflow-card-row">24/7 LEAD CAPTURE</div>
-      <div class="overflow-card-row">INSTANT NOTIFICATIONS</div>
-      <div class="overflow-card-row"><b>ADSCALE LABS — 2026</b></div>
+      <div class="overflow-card-row"><b>CLIENT ASKS:</b></div>
+      <div class="overflow-card-row">"How much is lip filler?"</div>
+      <div class="overflow-card-row"><b>AI RESPONDS IN 3 SECONDS</b></div>
+      <div class="overflow-card-row">→ CONSULTATION BOOKED</div>
     </div>
   </div>
   <p class="overflow-quote">
-    "The leads you're missing after hours are going to your competition."
+    "Every unanswered DM, missed call, and ignored website visitor is revenue walking to your competitor."
   </p>
 </section>
 
@@ -1716,33 +1951,35 @@ nav {
   <div class="about-watermark" id="aboutWmark">e are</div>
   <div class="about-grid">
     <div>
-      <div class="about-eyebrow">01 — About AdScale Labs</div>
+      <div class="about-eyebrow">01 — How The AI Captures Leads</div>
       <p class="about-body">
-        We built an AI chatbot for a truck repair shop. Within days, it was
-        capturing service requests at 2am that used to go to voicemail — and
-        to competitors. That's when we realized: every business has this problem.
+        A potential client visits your website at 9pm asking about lip filler pricing.
+        Your staff is gone. Without AI, that lead disappears — probably to the med spa
+        down the street that answered faster.
         <br><br>
-        Now we build AI chatbots for medspas and service businesses. Custom-trained
-        on your services, pricing, and FAQ. Live on your site in under 48 hours.
-        You focus on your clients; we make sure you never miss another one.
+        With our AI front desk, the chatbot responds in 3 seconds: "Lip filler
+        treatments typically range from $600–$1,000. Would you like to book a
+        consultation with one of our specialists?" It captures their name, phone,
+        and email — and books the appointment before they even think about calling
+        your competitor.
       </p>
       <div class="about-handwritten">
-        "The leads you miss after hours<br>are the ones your competitor gets."
+        "The average filler client is worth $600–$1,200.<br>How many are you losing after hours?"
       </div>
     </div>
     <div class="about-right">
       <div class="about-stats-col">
         <div class="about-stat">
-          <span class="about-stat-num">&lt; 48</span>
-          <span class="about-stat-label">Hours to go live on your site</span>
+          <span class="about-stat-num">$600</span>
+          <span class="about-stat-label">Average filler client value — per visit</span>
         </div>
         <div class="about-stat">
           <span class="about-stat-num">24/7</span>
-          <span class="about-stat-label">Lead capture, zero downtime</span>
+          <span class="about-stat-label">AI captures leads on website, DMs, and calls</span>
         </div>
         <div class="about-stat">
-          <span class="about-stat-num">$0</span>
-          <span class="about-stat-label">Upfront — see it work before you pay</span>
+          <span class="about-stat-num">&lt; 48</span>
+          <span class="about-stat-label">Hours from signup to live AI on your site</span>
         </div>
       </div>
       <div class="circle-badge">
@@ -1751,13 +1988,13 @@ nav {
             <path id="bp" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/>
           </defs>
           <text font-family="'Space Mono',monospace" font-size="10.5" fill="#999" letter-spacing="2.5">
-            <textPath href="#bp">LEAD_CAPTURE · 24/7 · 2026 · ADSCALE · </textPath>
+            <textPath href="#bp">MED_SPA · AI_FRONT_DESK · 2026 · </textPath>
           </text>
           <circle cx="100" cy="28" r="2.5" fill="#0A0A0A"/>
         </svg>
         <div class="badge-inner">
           <span class="badge-inner-symbol">⊕</span>
-          Never Miss<br>A Lead
+          AI Front<br>Desk
         </div>
       </div>
     </div>
@@ -1770,18 +2007,28 @@ nav {
   <div class="process-steps">
     <div class="process-step">
       <span class="process-num">01</span>
-      <span class="process-name">Discovery</span>
-      <p class="process-body">Tell us about your business. We customize the chatbot for your services, hours, and FAQ in a quick call.</p>
+      <span class="process-name">Visit</span>
+      <p class="process-body">Client visits your website, sends an Instagram DM, or calls your med spa.</p>
     </div>
     <div class="process-step">
       <span class="process-num">02</span>
-      <span class="process-name">Deploy</span>
-      <p class="process-body">We install the widget on your site in under 48 hours. No code changes needed on your end.</p>
+      <span class="process-name">Respond</span>
+      <p class="process-body">AI responds instantly — no hold times, no voicemail, no waiting until morning.</p>
     </div>
     <div class="process-step">
       <span class="process-num">03</span>
+      <span class="process-name">Answer</span>
+      <p class="process-body">AI answers questions about Botox pricing, filler options, treatment details, and availability.</p>
+    </div>
+    <div class="process-step">
+      <span class="process-num">04</span>
       <span class="process-name">Capture</span>
-      <p class="process-body">Start getting lead notifications immediately. Every after-hours chat is a new potential client.</p>
+      <p class="process-body">AI collects name, phone number, email, and treatment interest from every lead.</p>
+    </div>
+    <div class="process-step">
+      <span class="process-num">05</span>
+      <span class="process-name">Book</span>
+      <p class="process-body">AI books the consultation automatically and notifies your team in real time.</p>
     </div>
   </div>
 </section>
@@ -1790,31 +2037,108 @@ nav {
 <section id="principles">
   <div class="principles-watermark" id="principlesWmark">rinciple</div>
   <div class="principles-header">
-    <div class="principles-eyebrow">04 — Our Principles</div>
-    <div class="principles-desc">The values behind every chatbot we build and every lead we capture.</div>
+    <div class="principles-eyebrow">04 — Why Med Spas Choose Us</div>
+    <div class="principles-desc">Built for aesthetics practices. Not generic SaaS — real AI trained on your treatments.</div>
   </div>
   <div class="principles-list">
     <div class="principle-item">
       <span class="principle-num">(1)</span>
-      <span class="principle-name">Transparent</span>
-      <p class="principle-body">You see the chatbot working before you pay a dollar. No black boxes — we show you exactly how it captures and delivers leads.</p>
+      <span class="principle-name">Med Spa Native</span>
+      <p class="principle-body">Our AI knows Botox units, filler types, downtime expectations, and pricing structures. It speaks your clients' language from day one.</p>
     </div>
     <div class="principle-item">
       <span class="principle-num">(2)</span>
-      <span class="principle-name">Efficient</span>
-      <p class="principle-body">Live on your site in under 48 hours. No lengthy onboarding, no enterprise bloat — just a chatbot that works from day one.</p>
+      <span class="principle-name">Revenue Focused</span>
+      <p class="principle-body">Every feature is designed to book consultations, not just answer questions. The AI qualifies leads and pushes toward scheduling.</p>
     </div>
     <div class="principle-item">
       <span class="principle-num">(3)</span>
-      <span class="principle-name">Scalable</span>
-      <p class="principle-body">Start with one location, expand to your whole business. Every chatbot is custom-trained and grows with you.</p>
+      <span class="principle-name">Live in 48 Hours</span>
+      <p class="principle-body">No 6-week implementation. We train the AI on your menu, connect your booking system, and go live in under two days.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AI DEMOS ───────────────────────── -->
+<section id="ai-demos">
+  <div class="demos-header">
+    <div class="demos-eyebrow">05 — See It In Action</div>
+    <h2 class="demos-headline">Watch The AI Handle Real Client Conversations</h2>
+  </div>
+  <div class="demos-tabs">
+    <button class="demo-tab active" data-demo="chatbot">Website Chatbot</button>
+    <button class="demo-tab" data-demo="missed-call">Missed Call</button>
+    <button class="demo-tab" data-demo="instagram">Instagram DM</button>
+    <button class="demo-tab" data-demo="prequal">Pre-Qualification</button>
+    <button class="demo-tab" data-demo="reactivation">Reactivation</button>
+  </div>
+  <div class="demos-stage">
+    <!-- Website Chatbot Demo -->
+    <div class="demo-sim active" id="demo-chatbot">
+      <div class="demo-sim-header">Website Chat — GlowMedSpa.com</div>
+      <div class="demo-sim-messages">
+        <div class="demo-msg client">Hi! How much is lip filler?</div>
+        <div class="demo-msg ai">Great question! Our lip filler starts at $600 per syringe. Most clients love the Juvederm Ultra — it gives a natural, plump look that lasts 12–18 months. Would you like to book a free consultation?</div>
+        <div class="demo-msg client">Yes! Do you have anything this week?</div>
+        <div class="demo-msg ai">We have openings Thursday at 2pm and Friday at 10am. Which works better for you? I'll just need your name and phone number to confirm.</div>
+        <div class="demo-msg client">Thursday works. I'm Sarah, 312-555-0199</div>
+        <div class="demo-msg ai">You're all set, Sarah! Consultation booked for Thursday at 2pm. You'll get a confirmation text shortly. See you then! ✨</div>
+      </div>
+    </div>
+    <!-- Missed Call Demo -->
+    <div class="demo-sim" id="demo-missed-call">
+      <div class="demo-sim-header">SMS — Missed Call Recovery</div>
+      <div class="demo-sim-messages">
+        <div class="demo-msg system">📞 Missed call from (773) 555-0142 — 6:47 PM</div>
+        <div class="demo-msg ai">Hi! Sorry we missed your call at Glow Med Spa. How can we help? Reply with a number:<br><br>1️⃣ Botox pricing<br>2️⃣ Filler info<br>3️⃣ Book a consultation<br>4️⃣ Other question</div>
+        <div class="demo-msg client">1</div>
+        <div class="demo-msg ai">Botox is $12/unit. Most clients need 20–40 units depending on the area. A full forehead + crow's feet treatment runs $240–$480. Want to schedule a consultation to get your exact quote?</div>
+        <div class="demo-msg client">Yes please</div>
+        <div class="demo-msg ai">Perfect! What's your name and preferred day? I'll get you on the calendar.</div>
+      </div>
+    </div>
+    <!-- Instagram DM Demo -->
+    <div class="demo-sim" id="demo-instagram">
+      <div class="demo-sim-header">Instagram — Direct Messages</div>
+      <div class="demo-sim-messages">
+        <div class="demo-msg client">Hey! How much is Botox? 💉</div>
+        <div class="demo-msg ai">Hey! 💕 Botox is $12/unit at Glow Med Spa. Most clients get 20–40 units for forehead + crow's feet ($240–$480). We're running a new client special this month — 10% off your first treatment!</div>
+        <div class="demo-msg client">Omg yes! How do I book?</div>
+        <div class="demo-msg ai">I can book you right now! Just need your name and phone number, and I'll text you a confirmation with all the details. What day works best for you?</div>
+        <div class="demo-msg client">This Friday? I'm Jess, 847-555-0233</div>
+        <div class="demo-msg ai">Done! Jess, you're booked for Friday. You'll get a text with the address, parking info, and what to expect. Can't wait to see you! ✨</div>
+      </div>
+    </div>
+    <!-- Pre-Qualification Demo -->
+    <div class="demo-sim" id="demo-prequal">
+      <div class="demo-sim-header">Website Chat — Pre-Qualification Flow</div>
+      <div class="demo-sim-messages">
+        <div class="demo-msg ai">Welcome to Glow Med Spa! I'd love to help you find the right treatment. Have you had injectable treatments before?</div>
+        <div class="demo-msg client">No, this would be my first time</div>
+        <div class="demo-msg ai">Exciting! First-timers love starting with Botox or a subtle lip enhancement. What result are you hoping for?</div>
+        <div class="demo-msg client">I want to smooth out my forehead lines</div>
+        <div class="demo-msg ai">Botox is perfect for that — quick treatment, no downtime, results in 3–5 days. Most forehead treatments are $240–$360. When would you like to come in for a consultation?</div>
+        <div class="demo-msg client">Next week sometime</div>
+        <div class="demo-msg ai">We have Tuesday at 11am or Wednesday at 3pm open. I'll just need your name and number to book!</div>
+      </div>
+    </div>
+    <!-- Reactivation Demo -->
+    <div class="demo-sim" id="demo-reactivation">
+      <div class="demo-sim-header">SMS — Client Reactivation</div>
+      <div class="demo-sim-messages">
+        <div class="demo-msg ai">Hi Sarah! It's been 4 months since your last Botox appointment at Glow Med Spa. Most clients rebook around this time to keep results fresh. Ready for a touch-up? 💫</div>
+        <div class="demo-msg client">Oh wow, has it been that long already? Yes I need to come in</div>
+        <div class="demo-msg ai">Time flies! We have openings this week — Thursday at 1pm or Saturday at 10am. Which works for you?</div>
+        <div class="demo-msg client">Saturday morning is perfect</div>
+        <div class="demo-msg ai">Booked! Saturday at 10am. Same treatment as last time (forehead + crow's feet, 32 units). See you then, Sarah!</div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ─── CASE STUDY ───────────────────────── -->
 <section id="case-study">
-  <div class="cs-eyebrow">05 — Case Study</div>
+  <div class="cs-eyebrow">06 — Case Study</div>
   <div class="cs-grid">
     <div class="cs-left">
       <div class="cs-tag">Client — 2025</div>
@@ -1861,42 +2185,76 @@ nav {
   </div>
 </section>
 
+<!-- ─── TESTIMONIALS ───────────────────── -->
+<section id="testimonials">
+  <div class="testimonials-header">
+    <div class="testimonials-eyebrow">07 — Results</div>
+    <h2 class="testimonials-headline">What Med Spa Owners Say</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">"We were losing 3–4 leads every weekend. Now the AI books consultations while we're closed. We added $12K in revenue the first month."</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Dr. Sarah K.</span>
+        <span class="testimonial-title">Glow Aesthetics, Chicago</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">"The Instagram DM automation alone paid for itself in the first week. Clients love getting instant responses about pricing and availability."</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Maria L.</span>
+        <span class="testimonial-title">Pure Beauty Med Spa, Scottsdale</span>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-quote">"Setup took less than 2 days. The AI sounds exactly like our front desk — clients don't even know they're chatting with AI. It just works."</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Dr. James R.</span>
+        <span class="testimonial-title">Revive Med Spa, Miami</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── CUBE / CAPABILITIES (PINNED) ─────────── -->
 <section id="cube-section">
   <div class="cube-labels">
     <div class="cube-label-col">
-      How It Works
-      <b id="cubeLabelLeft">24/7 Lead Capture</b>
+      AI Channels
+      <b id="cubeLabelLeft">Website Chatbot</b>
     </div>
     <div class="cube-label-col right">
-      <b id="cubeLabelRight">LEAD_CAPTURE—24/7</b>
+      <b id="cubeLabelRight">WEBSITE—CHATBOT</b>
     </div>
   </div>
 
   <div class="cube-scene">
     <div class="cube-inner" id="cubeInner">
-      <!-- Front: 24/7 Lead Capture -->
+      <!-- Front: Website Chatbot -->
       <div class="cf cf-front">
-        <div class="cf-front-logo" style="font-size:28px;">24/7<br>Capture</div>
-        <div class="cf-front-tag">Never miss an after-hours<br>inquiry again</div>
+        <div class="cf-front-logo" style="font-size:28px;">Web<br>Chat</div>
+        <div class="cf-front-tag">AI answers treatment questions<br>and books consultations 24/7</div>
         <div class="cf-front-year">AI</div>
       </div>
-      <!-- Right: Smart Responses -->
+      <!-- Right: Voice AI -->
       <div class="cf cf-right">
-        <div class="cf-stat-big" style="font-size:42px;line-height:1.1;">Smart<br>AI</div>
-        <div class="cf-stat-label">Trained On Your Business</div>
-        <div class="cf-stat-sub">Custom</div>
+        <div class="cf-stat-big" style="font-size:42px;line-height:1.1;">Voice<br>AI</div>
+        <div class="cf-stat-label">Answers Calls Like Your Best Receptionist</div>
+        <div class="cf-stat-sub">24/7</div>
       </div>
-      <!-- Back: Instant Alerts -->
+      <!-- Back: Instagram DMs -->
       <div class="cf cf-back">
-        <div class="cf-back-tag">Real-Time Lead Notifications</div>
-        <div class="cf-back-name">Instant<br>Alerts</div>
-        <div class="cf-back-desc">Get notified the moment a lead comes in — by email, SMS, or both.</div>
+        <div class="cf-back-tag">Instagram DM Automation</div>
+        <div class="cf-back-name">DM<br>Auto</div>
+        <div class="cf-back-desc">AI responds to every DM about pricing, availability, and treatments — then books.</div>
       </div>
-      <!-- Left: Easy Setup -->
+      <!-- Left: SMS Follow-Up -->
       <div class="cf cf-left">
-        <div class="cf-coming-label">Easy Setup</div>
-        <div class="cf-coming-text" style="opacity:0.8;">One<br>Script.<br>Done.</div>
+        <div class="cf-coming-label">SMS Follow-Up</div>
+        <div class="cf-coming-text" style="opacity:0.8;">Missed<br>Call?<br>Handled.</div>
       </div>
       <!-- Top / Bottom caps -->
       <div class="cf cf-top"></div>
@@ -1905,35 +2263,54 @@ nav {
   </div>
 
   <div class="cube-desc-wrap">
-    <div class="cube-desc" id="cubeDesc">AI chatbot captures leads, answers questions, and books appointments around the clock.</div>
+    <div class="cube-desc" id="cubeDesc">AI chatbot on your website answers Botox, filler, and treatment questions — then books the consultation.</div>
   </div>
 </section>
 
 <!-- ─── SERVICES (DARK) ──────────────────── -->
 <section id="services">
   <div class="ambient-orb ambient-orb--3" style="top:30%;right:-10%;" aria-hidden="true"></div>
-  <div class="services-label">[2026 WHAT WE DO]</div>
+  <div class="services-label">[2026 AI FRONT DESK SYSTEMS]</div>
   <ul class="services-list">
     <li>
-      <span class="svc-name">AI CHATBOT</span>
-      <span class="svc-desc">24/7 lead capture widget for your website. Answers questions, books appointments, and sends you every lead.</span>
+      <span class="svc-name">AI WEBSITE CHATBOT</span>
+      <span class="svc-desc">24/7 lead capture on your website. Answers treatment questions, collects contact info, and books consultations automatically.</span>
     </li>
     <li>
-      <span class="svc-name">WEBSITES</span>
-      <span class="svc-desc">Custom business sites and landing pages built to convert — designed to work with our chatbot.</span>
+      <span class="svc-name">AI VOICE RECEPTIONIST</span>
+      <span class="svc-desc">AI answers every call — handles pricing questions, checks availability, and schedules consultations like your best front desk staff.</span>
+    </li>
+    <li>
+      <span class="svc-name">INSTAGRAM DM AUTOMATION</span>
+      <span class="svc-desc">AI responds to every DM instantly. Answers questions about Botox, fillers, and treatments — then guides to booking.</span>
     </li>
     <li>
       <span class="svc-name">MISSED CALL TEXT-BACK</span>
-      <span class="svc-desc">Auto SMS follow-up to every missed call. Recover lost leads before your competition picks them up.</span>
+      <span class="svc-desc">Missed a call? AI sends an instant SMS with treatment options and a direct link to schedule. No lead left behind.</span>
     </li>
     <li>
-      <span class="svc-name">AI AUTOMATION</span>
-      <span class="svc-desc">Custom workflow automation — connect your CRM, booking, and tools. One trigger, everything moves.</span>
+      <span class="svc-name">CONSULTATION BOOKING</span>
+      <span class="svc-desc">AI syncs with your calendar and books consultations in real time. Clients pick a slot, you get notified instantly.</span>
+    </li>
+    <li>
+      <span class="svc-name">CLIENT REACTIVATION</span>
+      <span class="svc-desc">Automated outreach to past clients who haven't rebooked. "Hi Sarah — it's been 4 months since your last Botox. Time for a refresh?"</span>
+    </li>
+    <li>
+      <span class="svc-name">REVIEW GENERATION</span>
+      <span class="svc-desc">Automated post-appointment texts requesting Google reviews. Build your reputation on autopilot.</span>
     </li>
   </ul>
   <p class="services-quote">
-    "Your business closes at 5pm. Your leads don't."
+    "Your med spa closes at 6pm. Your clients don't stop searching."
   </p>
+</section>
+
+<!-- ─── FINAL CTA ──────────────────────── -->
+<section id="final-cta">
+  <h2 class="final-cta-headline">Stop Losing Clients to Missed Messages</h2>
+  <p class="final-cta-sub">Every unanswered call, DM, and website visit is revenue walking out the door. Let AI handle it — 24/7.</p>
+  <a href="mailto:timasjablonskis@gmail.com" class="final-cta-btn">Book Your AI Demo →</a>
 </section>
 
 <!-- ─── FOOTER / CONTACT ─────────────────── -->
@@ -1947,7 +2324,7 @@ nav {
     </a>
   </div>
   <div class="contact-mid">
-    AI Lead Capture<br>
+    AI Front Desk for Med Spas<br>
     Illinois, USA<br>
     Est. 2026
     <span class="copy">© 2026 AdScale Labs. All rights reserved.</span>
@@ -1956,7 +2333,7 @@ nav {
     <span class="contact-logo">AdScale Labs</span>
     <div class="f-links">
       <a href="#about">About</a>
-      <a href="#principles">Principles</a>
+      <a href="#ai-demos">Demos</a>
       <a href="#services">Services</a>
     </div>
   </div>
@@ -2054,6 +2431,14 @@ function primeStates() {
   gsap.set('.cs-block',                              { opacity: 0, y: 36 });
   gsap.set('.cs-rule',                               { scaleX: 0 });
   gsap.set('.cs-metric',                             { opacity: 0, y: 28 });
+  gsap.set('.demo-tab',                               { opacity: 0, y: 20 });
+  gsap.set('.demo-sim',                               { opacity: 0 });
+  gsap.set('.testimonial-card',                       { opacity: 0, y: 56 });
+  gsap.set('#final-cta > *',                          { opacity: 0, y: 28 });
+  gsap.set('.demos-eyebrow',                          { opacity: 0, x: -40 });
+  gsap.set('.demos-headline',                         { opacity: 0, y: 32 });
+  gsap.set('.testimonials-eyebrow',                   { opacity: 0, x: -40 });
+  gsap.set('.testimonials-headline',                  { opacity: 0, y: 32 });
   gsap.set('.services-label',                        { opacity: 0, y: 28 });
   gsap.set('.services-list li',                     { opacity: 0, y: 64 });
   gsap.set('.services-quote',                       { opacity: 0, y: 28 });
@@ -2226,6 +2611,30 @@ function setupAnimations() {
     scrollTrigger: { trigger: '#principles', start: 'top bottom', once: true }
   });
 
+  // ── AI Demos ────────────────────────────
+  gsap.to('.demos-eyebrow', {
+    opacity: 1, x: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+  });
+  gsap.to('.demos-headline', {
+    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+  });
+  gsap.to('.demo-tab', {
+    opacity: 1, y: 0, duration: 0.6, stagger: 0.08,
+    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+  });
+  ScrollTrigger.create({
+    trigger: '#ai-demos', start: 'top 70%', once: true,
+    onEnter: () => {
+      const activeSim = document.querySelector('.demo-sim.active');
+      if (activeSim) {
+        gsap.to(activeSim, { opacity: 1, duration: 0.5 });
+        animateDemoMessages(activeSim);
+      }
+    }
+  });
+
   // ── Case Study ───────────────────────────
   gsap.to('.cs-eyebrow', {
     opacity: 1, x: 0, duration: 0.8,
@@ -2285,6 +2694,26 @@ function setupAnimations() {
     }
   });
 
+  // ── Testimonials ─────────────────────────
+  gsap.to('.testimonials-eyebrow', {
+    opacity: 1, x: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#testimonials', start: 'top bottom', once: true }
+  });
+  gsap.to('.testimonials-headline', {
+    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '#testimonials', start: 'top bottom', once: true }
+  });
+  gsap.to('.testimonial-card', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
+    scrollTrigger: { trigger: '#testimonials', start: 'top bottom', once: true }
+  });
+
+  // ── Final CTA ──────────────────────────
+  gsap.to('#final-cta > *', {
+    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1,
+    scrollTrigger: { trigger: '#final-cta', start: 'top bottom', once: true }
+  });
+
   // ── CUBE — pinned project showcase ───────
   const cubeInner  = document.getElementById('cubeInner');
   const labelLeft  = document.getElementById('cubeLabelLeft');
@@ -2295,10 +2724,10 @@ function setupAnimations() {
   const halfSize = isMobile ? 130 : 175;
 
   const projects = [
-    { left: '24/7 Lead Capture',  right: 'LEAD_CAPTURE—24/7',         desc: 'AI chatbot captures leads, answers questions, and books appointments around the clock.' },
-    { left: 'Smart Responses',    right: 'SMART_AI—RESPONSES',        desc: 'Trained on your services, pricing, and FAQ. Every answer sounds like you.'              },
-    { left: 'Instant Alerts',     right: 'INSTANT—ALERTS',            desc: 'Get notified the moment a lead comes in — by email, SMS, or both.'                     },
-    { left: 'Easy Setup',         right: 'EASY_SETUP—48HRS',          desc: 'One script tag on your site. Live in under 48 hours, no code changes needed.'           }
+    { left: 'Website Chatbot',  right: 'WEBSITE—CHATBOT',   desc: 'AI chatbot on your website answers Botox, filler, and treatment questions — then books the consultation.' },
+    { left: 'Voice AI',         right: 'VOICE—AI',          desc: 'AI answers phone calls like your best receptionist. Handles scheduling, pricing questions, and follow-ups.' },
+    { left: 'Instagram DMs',    right: 'INSTAGRAM—DMS',     desc: 'AI responds to every DM about pricing, availability, and treatments — then books the consultation.'       },
+    { left: 'SMS Follow-Up',    right: 'SMS—FOLLOWUP',      desc: 'Missed call? AI sends an instant text-back with treatment options and a link to book.'                    }
   ];
 
   let lastIdx = -1;
@@ -2354,6 +2783,52 @@ function setupAnimations() {
   gsap.to('#contact > *', {
     opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
     scrollTrigger: { trigger: '#contact', start: 'top bottom', once: true }
+  });
+
+  // ── Init demo tab interactions ──────────
+  initDemoTabs();
+}
+
+// ═══════════════════════════════════════════
+// AI DEMO TABS + MESSAGE ANIMATION
+// ═══════════════════════════════════════════
+function animateDemoMessages(simEl) {
+  const msgs = simEl.querySelectorAll('.demo-msg');
+  msgs.forEach((msg, i) => {
+    msg.classList.remove('visible');
+    msg.style.opacity = '0';
+    msg.style.transform = 'translateY(12px)';
+    setTimeout(() => {
+      msg.classList.add('visible');
+      msg.style.opacity = '1';
+      msg.style.transform = 'translateY(0)';
+    }, 400 + i * 600);
+  });
+}
+
+function initDemoTabs() {
+  const tabs = document.querySelectorAll('.demo-tab');
+  const sims = document.querySelectorAll('.demo-sim');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const demoId = tab.dataset.demo;
+
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      sims.forEach(s => {
+        s.classList.remove('active');
+        s.style.opacity = '0';
+      });
+
+      const target = document.getElementById('demo-' + demoId);
+      if (target) {
+        target.classList.add('active');
+        gsap.to(target, { opacity: 1, duration: 0.4 });
+        animateDemoMessages(target);
+      }
+    });
   });
 }
 
