@@ -949,11 +949,74 @@ nav {
 }
 
 /* ═══════════════════════════════════════════
-   AI FRONT DESK — ISOMETRIC SCENE + CHATS
+   AI FRONT DESK — DOORS REVEAL + PIXEL SCENE
 ═══════════════════════════════════════════ */
 #ai-demos {
-  padding: 120px 72px;
+  position: relative;
+  min-height: 100vh;
   overflow: hidden;
+  background: var(--bg);
+}
+
+/* ── Doors ── */
+.fd-doors {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  pointer-events: none;
+}
+.fd-door {
+  width: 50%;
+  height: 100%;
+  background: var(--dark);
+  position: relative;
+  will-change: transform;
+}
+.fd-door::before {
+  content: '';
+  position: absolute;
+  top: 50%; width: 4px; height: 48px;
+  background: var(--lime);
+  transform: translateY(-50%);
+}
+.fd-door--left::before { right: 24px; }
+.fd-door--right::before { left: 24px; }
+.fd-door::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.fd-door--left::after {
+  content: 'FRONT';
+  right: 48px;
+}
+.fd-door--right::after {
+  content: 'DESK';
+  left: 48px;
+}
+.fd-door-seam {
+  position: absolute;
+  top: 0; width: 1px; height: 100%;
+  background: rgba(200,255,0,0.15);
+}
+.fd-door--left .fd-door-seam { right: 0; }
+.fd-door--right .fd-door-seam { left: 0; }
+
+/* ── Revealed Content ── */
+.fd-reveal {
+  position: relative;
+  z-index: 1;
+  padding: 120px 72px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: center;
 }
 .demos-header { margin-bottom: 56px; }
 .demos-eyebrow {
@@ -976,133 +1039,138 @@ nav {
   align-items: center;
 }
 
-/* ── Isometric Scene ── */
+/* ── Pixel Scene ── */
 .fd-scene-wrap {
   position: relative;
   width: 100%;
   max-width: 520px;
-  min-height: 420px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
 }
-.fd-scene {
+.fd-pixel-scene {
   position: relative;
-  width: 380px; height: 280px;
-  transform: rotateX(55deg) rotateZ(-45deg);
-  transform-style: preserve-3d;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  width: 320px;
+  height: 200px;
 }
 
-/* Desk */
-.fd-desk {
+/* Pixel desk */
+.fd-px-desk {
   position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  width: 280px; height: 160px;
-  transform-style: preserve-3d;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 60px;
+  background: #1a1a1a;
+  border: 3px solid #2a2a2a;
 }
-.fd-desk-top {
-  position: absolute; width: 100%; height: 100%;
-  background: var(--dark);
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  transform: translateZ(36px);
+.fd-px-desk::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 8%; width: 84%; height: 3px;
+  background: var(--lime); opacity: 0.5;
 }
-.fd-desk-top::after {
-  content: ''; position: absolute;
-  bottom: 0; left: 10%; width: 80%; height: 2px;
-  background: var(--lime); opacity: 0.6;
+/* Desk legs */
+.fd-px-desk::after {
+  content: '';
+  position: absolute;
+  bottom: -16px; left: 12px;
+  width: 12px; height: 16px;
+  background: #141414;
+  box-shadow: 184px 0 0 #141414;
 }
-.fd-desk-front {
-  position: absolute; width: 100%; height: 36px;
-  background: #1a1a1a; border: 1px solid #222;
-  bottom: -36px; left: 0;
-  transform-origin: top; transform: rotateX(-90deg) translateZ(0);
+/* Monitor */
+.fd-px-monitor {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 36px;
+  background: #111;
+  border: 3px solid #333;
 }
-.fd-desk-side {
-  position: absolute; width: 36px; height: 160px;
-  background: #141414; border: 1px solid #1e1e1e;
-  right: -36px; top: 0;
-  transform-origin: left; transform: rotateY(90deg) translateZ(0);
+.fd-px-monitor::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: rgba(200,255,0,0.12);
+}
+.fd-px-monitor::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 10px;
+  background: #222;
+}
+/* Keyboard */
+.fd-px-keyboard {
+  position: absolute;
+  bottom: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: #1e1e1e;
+  border: 2px solid #2a2a2a;
+}
+/* Coffee mug */
+.fd-px-mug {
+  position: absolute;
+  bottom: 82px;
+  right: 56px;
+  width: 12px;
+  height: 14px;
+  background: var(--lime);
+  opacity: 0.35;
+}
+.fd-px-mug::after {
+  content: '';
+  position: absolute;
+  right: -5px; top: 3px;
+  width: 5px; height: 8px;
+  border: 2px solid var(--lime);
+  border-left: none;
+  opacity: 0.35;
 }
 
-/* Desk accessories */
-.fd-monitor {
-  position: absolute;
-  left: 50%; top: 42%;
-  transform: translate(-50%, -50%) translateZ(38px);
-  width: 44px; height: 32px;
-  background: #111; border: 2px solid #333;
-  border-radius: 3px;
+/* ── Pixel Agents ── */
+.fd-pixel-agents {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
 }
-.fd-monitor::after {
-  content: ''; position: absolute;
-  top: 3px; left: 3px; right: 3px; bottom: 3px;
-  background: linear-gradient(135deg, rgba(200,255,0,0.15), rgba(200,255,0,0.03));
-  border-radius: 1px;
-}
-.fd-keyboard {
-  position: absolute;
-  left: 50%; top: 58%;
-  transform: translate(-50%, -50%) translateZ(37px);
-  width: 36px; height: 14px;
-  background: #1a1a1a; border: 1px solid #2a2a2a;
-  border-radius: 2px;
-}
-.fd-mug {
-  position: absolute;
-  left: 72%; top: 35%;
-  transform: translateZ(37px);
-  width: 14px; height: 14px;
-  background: var(--lime); opacity: 0.3;
-  border-radius: 50%;
-}
-.fd-papers {
-  position: absolute;
-  left: 25%; top: 65%;
-  transform: translateZ(37px);
-  width: 22px; height: 28px;
-  background: #f5f5f0;
-  border: 1px solid #ddd;
-  border-radius: 1px;
-  opacity: 0.7;
-}
-.fd-papers::before {
-  content: ''; position: absolute;
-  top: -2px; left: 2px;
-  width: 100%; height: 100%;
-  background: #eee; border: 1px solid #ddd;
-  border-radius: 1px; z-index: -1;
-}
-
-/* ── Agents (positioned around desk, NOT inside iso transform) ── */
-.fd-agents-ring {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-}
-.fd-agent {
-  position: absolute;
+.fd-pixel-agent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   cursor: pointer;
-  pointer-events: auto;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 8px;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  padding: 8px;
 }
-.fd-agent:hover { transform: translateY(-4px) !important; }
-.fd-agent-icon {
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-  position: relative;
-  transition: box-shadow 0.4s ease, transform 0.25s ease;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+.fd-pixel-agent:hover { transform: translateY(-4px); }
+.fd-px-head {
+  width: 20px; height: 20px;
+  image-rendering: pixelated;
 }
-.fd-agent.active .fd-agent-icon {
-  transform: scale(1.08);
+.fd-px-body {
+  width: 16px; height: 24px;
+  image-rendering: pixelated;
+}
+.fd-px-shadow {
+  width: 24px; height: 4px;
+  background: rgba(0,0,0,0.15);
+  margin-top: 2px;
 }
 .fd-agent-name {
   font-family: 'Space Mono', monospace;
@@ -1111,33 +1179,32 @@ nav {
   color: var(--mid);
   transition: color 0.3s ease;
   white-space: nowrap;
+  margin-top: 4px;
 }
-.fd-agent.active .fd-agent-name { color: var(--black); font-weight: 700; }
-.fd-agent:hover .fd-agent-name { color: var(--black); }
-.fd-agent-ring {
-  position: absolute;
-  inset: -4px; border-radius: 20px;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease, box-shadow 0.4s ease;
-}
-.fd-agent.active .fd-agent-ring {
-  border-color: var(--lime);
-  box-shadow: 0 0 16px rgba(200,255,0,0.25);
-}
+.fd-pixel-agent.active .fd-agent-name { color: var(--black); font-weight: 700; }
+.fd-pixel-agent:hover .fd-agent-name { color: var(--black); }
 
-/* Agent icon backgrounds */
-.fd-agent[data-agent="chatbot"] .fd-agent-icon  { background: var(--dark); color: var(--lime); }
-.fd-agent[data-agent="sms"] .fd-agent-icon       { background: #007AFF; color: #fff; }
-.fd-agent[data-agent="instagram"] .fd-agent-icon { background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737); color: #fff; }
-.fd-agent[data-agent="booking"] .fd-agent-icon   { background: #F5A623; color: #fff; }
-.fd-agent[data-agent="review"] .fd-agent-icon    { background: #8B5CF6; color: #fff; }
+/* Agent colors */
+.fd-pixel-agent[data-agent="chatbot"] .fd-px-head { background: var(--lime); }
+.fd-pixel-agent[data-agent="chatbot"] .fd-px-body { background: #1a1a1a; }
+.fd-pixel-agent[data-agent="sms"] .fd-px-head     { background: #007AFF; }
+.fd-pixel-agent[data-agent="sms"] .fd-px-body     { background: #0055CC; }
+.fd-pixel-agent[data-agent="instagram"] .fd-px-head { background: #E1306C; }
+.fd-pixel-agent[data-agent="instagram"] .fd-px-body { background: #B32058; }
+.fd-pixel-agent[data-agent="booking"] .fd-px-head  { background: #F5A623; }
+.fd-pixel-agent[data-agent="booking"] .fd-px-body  { background: #C4851C; }
+.fd-pixel-agent[data-agent="review"] .fd-px-head   { background: #8B5CF6; }
+.fd-pixel-agent[data-agent="review"] .fd-px-body   { background: #6D3FCC; }
 
-/* Agent positions — tight ring around the desk */
-.fd-agent[data-agent="chatbot"]  { left: 50%; top: 6%; transform: translateX(-50%); }
-.fd-agent[data-agent="sms"]      { left: 10%; top: 28%; }
-.fd-agent[data-agent="instagram"]{ right: 10%; top: 28%; left: auto; }
-.fd-agent[data-agent="booking"]  { right: 20%; bottom: 10%; left: auto; top: auto; }
-.fd-agent[data-agent="review"]   { left: 20%; bottom: 10%; top: auto; }
+/* Active glow */
+.fd-pixel-agent.active .fd-px-head {
+  box-shadow: 0 0 12px currentColor;
+}
+.fd-pixel-agent[data-agent="chatbot"].active .fd-px-head  { box-shadow: 0 0 12px var(--lime); }
+.fd-pixel-agent[data-agent="sms"].active .fd-px-head      { box-shadow: 0 0 12px #007AFF; }
+.fd-pixel-agent[data-agent="instagram"].active .fd-px-head { box-shadow: 0 0 12px #E1306C; }
+.fd-pixel-agent[data-agent="booking"].active .fd-px-head   { box-shadow: 0 0 12px #F5A623; }
+.fd-pixel-agent[data-agent="review"].active .fd-px-head    { box-shadow: 0 0 12px #8B5CF6; }
 
 /* Instruction hint */
 .fd-hint {
@@ -1155,6 +1222,29 @@ nav {
 @keyframes fd-hint-pulse {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
+}
+
+/* ── Try Live CTA ── */
+.fd-try-live {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 14px 28px;
+  background: var(--lime);
+  color: var(--dark);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+  animation: try-live-pulse 2.5s ease-in-out infinite;
+}
+.fd-try-live:hover { transform: scale(1.04); }
+@keyframes try-live-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,255,0,0.3); }
+  50% { box-shadow: 0 0 20px 6px rgba(200,255,0,0.15); }
 }
 
 /* ── Mobile agent nav (hidden at desktop) ── */
@@ -1186,7 +1276,8 @@ nav {
 /* ── Chat Panel + Phone Frame ── */
 .fd-chat-panel {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .fd-chat-frame {
   width: 100%; max-width: 380px;
@@ -1374,16 +1465,60 @@ nav {
 
 /* ── Responsive ── */
 @media (max-width: 960px) {
-  #ai-demos { padding: 80px 24px; }
+  .fd-reveal { padding: 80px 24px; }
   .fd-container { grid-template-columns: 1fr; gap: 36px; }
-  .fd-scene { transform: rotateX(55deg) rotateZ(-45deg) scale(0.75); }
-  .fd-scene-wrap { min-height: 320px; }
+  .fd-pixel-scene { transform: scale(0.8); }
   .fd-chat-frame { max-width: 340px; height: 480px; }
 }
 @media (max-width: 480px) {
+  #ai-demos { min-height: auto; }
+  .fd-doors { display: none; }
+  .fd-reveal { opacity: 1 !important; }
   .fd-scene-wrap { display: none; }
   .fd-agent-mobile-nav { display: flex; }
   .fd-chat-frame { max-width: 100%; height: 440px; border-radius: 20px; }
+}
+
+/* ═══════════════════════════════════════════
+   SERVICES
+═══════════════════════════════════════════ */
+#services {
+  background: var(--dark);
+  padding: 120px 72px;
+}
+.services-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px;
+}
+.services-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  color: #fff; line-height: 1;
+  margin-bottom: 56px;
+}
+.services-list {
+  list-style: none;
+}
+.services-list li {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  color: rgba(255,255,255,0.4);
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  cursor: default;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+}
+.services-list li:last-child {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.services-list li:hover {
+  color: var(--lime);
+  padding-left: 16px;
+}
+@media (max-width: 960px) {
+  #services { padding: 80px 24px; }
 }
 
 /* ═══════════════════════════════════════════
@@ -2144,6 +2279,7 @@ nav {
   <div class="nav-pill">
     <a href="#hero">Home</a>
     <a href="#ai-demos">Demos</a>
+    <a href="#services">Services</a>
     <a href="#contact">Contact</a>
   </div>
   <span class="nav-col-label">Med_spas</span>
@@ -2307,148 +2443,161 @@ nav {
 
 <!-- ─── AI FRONT DESK ──────────────────── -->
 <section id="ai-demos">
-  <div class="demos-header">
-    <div class="demos-eyebrow">04 — See It In Action</div>
-    <h2 class="demos-headline">Your AI Front Desk, Working 24/7</h2>
+  <!-- Doors -->
+  <div class="fd-doors">
+    <div class="fd-door fd-door--left"><div class="fd-door-seam"></div></div>
+    <div class="fd-door fd-door--right"><div class="fd-door-seam"></div></div>
   </div>
 
-  <!-- Mobile agent nav (hidden at desktop) -->
-  <div class="fd-agent-mobile-nav">
-    <button class="fd-mobile-pill active" data-agent="chatbot"><span class="fd-mobile-dot" style="background:var(--lime)"></span>Chatbot</button>
-    <button class="fd-mobile-pill" data-agent="sms"><span class="fd-mobile-dot" style="background:#007AFF"></span>SMS</button>
-    <button class="fd-mobile-pill" data-agent="instagram"><span class="fd-mobile-dot" style="background:#E1306C"></span>Instagram</button>
-    <button class="fd-mobile-pill" data-agent="booking"><span class="fd-mobile-dot" style="background:#F5A623"></span>Booking</button>
-    <button class="fd-mobile-pill" data-agent="review"><span class="fd-mobile-dot" style="background:#8B5CF6"></span>Review</button>
-  </div>
-
-  <div class="fd-container">
-    <!-- LEFT: Isometric Scene + Agent Ring -->
-    <div class="fd-scene-wrap">
-      <div class="fd-scene">
-        <!-- Desk -->
-        <div class="fd-desk">
-          <div class="fd-desk-top"></div>
-          <div class="fd-desk-front"></div>
-          <div class="fd-desk-side"></div>
-        </div>
-        <!-- Accessories -->
-        <div class="fd-monitor"></div>
-        <div class="fd-keyboard"></div>
-        <div class="fd-mug"></div>
-        <div class="fd-papers"></div>
-      </div>
-      <!-- Agents ring (outside isometric transform, so they stay upright) -->
-      <div class="fd-agents-ring">
-        <div class="fd-agent active" data-agent="chatbot">
-          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>💬</div>
-          <span class="fd-agent-name">Chatbot</span>
-        </div>
-        <div class="fd-agent" data-agent="sms">
-          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📱</div>
-          <span class="fd-agent-name">SMS</span>
-        </div>
-        <div class="fd-agent" data-agent="instagram">
-          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📸</div>
-          <span class="fd-agent-name">Instagram</span>
-        </div>
-        <div class="fd-agent" data-agent="booking">
-          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>📅</div>
-          <span class="fd-agent-name">Booking</span>
-        </div>
-        <div class="fd-agent" data-agent="review">
-          <div class="fd-agent-icon"><div class="fd-agent-ring"></div>⭐</div>
-          <span class="fd-agent-name">Review</span>
-        </div>
-      </div>
-      <div class="fd-hint"><span>Click an agent to see how it handles real conversations</span></div>
+  <!-- Content revealed behind doors -->
+  <div class="fd-reveal">
+    <div class="demos-header">
+      <div class="demos-eyebrow">04 — See It In Action</div>
+      <h2 class="demos-headline">Your AI Front Desk, Working 24/7</h2>
     </div>
 
-    <!-- RIGHT: Chat Panel -->
-    <div class="fd-chat-panel">
-      <!-- Webchat: Chatbot -->
-      <div class="fd-chat-frame fd-chat--webchat" id="fd-sim-chatbot">
-        <div class="chat-topbar"><div class="chat-topbar-dot"></div><span class="chat-topbar-name">GlowMedSpa.com — Live Chat</span></div>
-        <div class="chat-messages">
-          <div class="msg-sent">Hi! How much is lip filler?</div>
-          <div class="msg-received">Great question! Our lip filler starts at $600 per syringe. Most clients love the Juvederm Ultra — it gives a natural, plump look that lasts 12–18 months. Would you like to book a free consultation?</div>
-          <div class="msg-sent">Yes! Do you have anything this week?</div>
-          <div class="msg-received">We have openings Thursday at 2pm and Friday at 10am. Which works better for you? I'll just need your name and phone number to confirm.</div>
-          <div class="msg-sent">Thursday works. I'm Sarah, 312-555-0199</div>
-          <div class="msg-received">You're all set, Sarah! Consultation booked for Thursday at 2pm. You'll get a confirmation text shortly. See you then!</div>
-        </div>
-      </div>
+    <!-- Mobile agent nav (hidden at desktop) -->
+    <div class="fd-agent-mobile-nav">
+      <button class="fd-mobile-pill active" data-agent="chatbot"><span class="fd-mobile-dot" style="background:var(--lime)"></span>Chatbot</button>
+      <button class="fd-mobile-pill" data-agent="sms"><span class="fd-mobile-dot" style="background:#007AFF"></span>SMS</button>
+      <button class="fd-mobile-pill" data-agent="instagram"><span class="fd-mobile-dot" style="background:#E1306C"></span>Instagram</button>
+      <button class="fd-mobile-pill" data-agent="booking"><span class="fd-mobile-dot" style="background:#F5A623"></span>Booking</button>
+      <button class="fd-mobile-pill" data-agent="review"><span class="fd-mobile-dot" style="background:#8B5CF6"></span>Review</button>
+    </div>
 
-      <!-- iMessage: SMS -->
-      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-sms" style="display:none">
-        <div class="chat-topbar">
-          <div class="chat-topbar-avatar">💬</div>
-          <span class="chat-topbar-name">Glow Med Spa</span>
+    <div class="fd-container">
+      <!-- LEFT: Pixel Desk Scene + Agents -->
+      <div class="fd-scene-wrap">
+        <div class="fd-pixel-scene">
+          <div class="fd-px-desk"></div>
+          <div class="fd-px-monitor"></div>
+          <div class="fd-px-keyboard"></div>
+          <div class="fd-px-mug"></div>
         </div>
-        <div class="chat-messages">
-          <div class="msg-received">Hi! Sorry we missed your call at Glow Med Spa. How can we help?<br><br>1️⃣ Botox pricing<br>2️⃣ Filler info<br>3️⃣ Book a consultation<br>4️⃣ Other question</div>
-          <div class="msg-sent">1</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">Botox is $12/unit. Most clients need 20–40 units depending on the area. A full forehead + crow's feet treatment runs $240–$480. Want to schedule a consultation?</div>
-          <div class="msg-sent">Yes please</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">Perfect! What's your name and preferred day? I'll get you on the calendar.</div>
-        </div>
-      </div>
-
-      <!-- Instagram: Instagram DM -->
-      <div class="fd-chat-frame fd-chat--instagram" id="fd-sim-instagram" style="display:none">
-        <div class="chat-topbar">
-          <div class="chat-topbar-avatar"><div class="chat-topbar-avatar-inner"></div></div>
-          <div class="chat-topbar-info">
-            <span class="chat-topbar-name">glowmedspa</span>
-            <span class="chat-topbar-status">Active now</span>
+        <div class="fd-pixel-agents">
+          <div class="fd-pixel-agent active" data-agent="chatbot">
+            <div class="fd-px-head"></div>
+            <div class="fd-px-body"></div>
+            <div class="fd-px-shadow"></div>
+            <span class="fd-agent-name">Chatbot</span>
+          </div>
+          <div class="fd-pixel-agent" data-agent="sms">
+            <div class="fd-px-head"></div>
+            <div class="fd-px-body"></div>
+            <div class="fd-px-shadow"></div>
+            <span class="fd-agent-name">SMS</span>
+          </div>
+          <div class="fd-pixel-agent" data-agent="instagram">
+            <div class="fd-px-head"></div>
+            <div class="fd-px-body"></div>
+            <div class="fd-px-shadow"></div>
+            <span class="fd-agent-name">Instagram</span>
+          </div>
+          <div class="fd-pixel-agent" data-agent="booking">
+            <div class="fd-px-head"></div>
+            <div class="fd-px-body"></div>
+            <div class="fd-px-shadow"></div>
+            <span class="fd-agent-name">Booking</span>
+          </div>
+          <div class="fd-pixel-agent" data-agent="review">
+            <div class="fd-px-head"></div>
+            <div class="fd-px-body"></div>
+            <div class="fd-px-shadow"></div>
+            <span class="fd-agent-name">Review</span>
           </div>
         </div>
-        <div class="chat-messages">
-          <div class="msg-sent">Hey! How much is Botox?</div>
-          <div class="msg-received">Hey! Botox is $12/unit at Glow Med Spa. Most clients get 20–40 units for forehead + crow's feet ($240–$480). We're running a new client special this month — 10% off your first treatment!</div>
-          <div class="msg-sent">Omg yes! How do I book?</div>
-          <div class="msg-received">I can book you right now! Just need your name and phone number, and I'll text you a confirmation with all the details. What day works best?</div>
-          <div class="msg-sent">This Friday? I'm Jess, 847-555-0233</div>
-          <div class="msg-seen">Seen</div>
-          <div class="msg-received">Done! Jess, you're booked for Friday. You'll get a text with the address, parking info, and what to expect. Can't wait to see you!</div>
-        </div>
+        <div class="fd-hint"><span>Click an agent to see how it handles real conversations</span></div>
       </div>
 
-      <!-- iMessage: Booking (pre-qual) -->
-      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-booking" style="display:none">
-        <div class="chat-topbar">
-          <div class="chat-topbar-avatar">📋</div>
-          <span class="chat-topbar-name">Glow Med Spa Booking</span>
+      <!-- RIGHT: Chat Panel -->
+      <div class="fd-chat-panel">
+        <!-- Webchat: Chatbot -->
+        <div class="fd-chat-frame fd-chat--webchat" id="fd-sim-chatbot">
+          <div class="chat-topbar"><div class="chat-topbar-dot"></div><span class="chat-topbar-name">GlowMedSpa.com — Live Chat</span></div>
+          <div class="chat-messages">
+            <div class="msg-sent">Hi! How much is lip filler?</div>
+            <div class="msg-received">Great question! Our lip filler starts at $600 per syringe. Most clients love the Juvederm Ultra — it gives a natural, plump look that lasts 12–18 months. Would you like to book a free consultation?</div>
+            <div class="msg-sent">Yes! Do you have anything this week?</div>
+            <div class="msg-received">We have openings Thursday at 2pm and Friday at 10am. Which works better for you? I'll just need your name and phone number to confirm.</div>
+            <div class="msg-sent">Thursday works. I'm Sarah, 312-555-0199</div>
+            <div class="msg-received">You're all set, Sarah! Consultation booked for Thursday at 2pm. You'll get a confirmation text shortly. See you then!</div>
+          </div>
         </div>
-        <div class="chat-messages">
-          <div class="msg-received">Welcome to Glow Med Spa! I'd love to help you find the right treatment. Have you had injectable treatments before?</div>
-          <div class="msg-sent">No, this would be my first time</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">Exciting! First-timers love starting with Botox or a subtle lip enhancement. What result are you hoping for?</div>
-          <div class="msg-sent">I want to smooth out my forehead lines</div>
-          <div class="msg-received">Botox is perfect for that — quick treatment, no downtime, results in 3–5 days. Most forehead treatments are $240–$360. When would you like to come in?</div>
-          <div class="msg-sent">Next week sometime</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">We have Tuesday at 11am or Wednesday at 3pm open. I'll just need your name and number to book!</div>
-        </div>
-      </div>
 
-      <!-- iMessage: Review (reactivation) -->
-      <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-review" style="display:none">
-        <div class="chat-topbar">
-          <div class="chat-topbar-avatar">⭐</div>
-          <span class="chat-topbar-name">Glow Med Spa</span>
+        <!-- iMessage: SMS -->
+        <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-sms" style="display:none">
+          <div class="chat-topbar">
+            <div class="chat-topbar-avatar">💬</div>
+            <span class="chat-topbar-name">Glow Med Spa</span>
+          </div>
+          <div class="chat-messages">
+            <div class="msg-received">Hi! Sorry we missed your call at Glow Med Spa. How can we help?<br><br>1️⃣ Botox pricing<br>2️⃣ Filler info<br>3️⃣ Book a consultation<br>4️⃣ Other question</div>
+            <div class="msg-sent">1</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">Botox is $12/unit. Most clients need 20–40 units depending on the area. A full forehead + crow's feet treatment runs $240–$480. Want to schedule a consultation?</div>
+            <div class="msg-sent">Yes please</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">Perfect! What's your name and preferred day? I'll get you on the calendar.</div>
+          </div>
         </div>
-        <div class="chat-messages">
-          <div class="msg-received">Hi Sarah! It's been 4 months since your last Botox appointment at Glow Med Spa. Most clients rebook around this time to keep results fresh. Ready for a touch-up?</div>
-          <div class="msg-sent">Oh wow, has it been that long already? Yes I need to come in</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">Time flies! We have openings this week — Thursday at 1pm or Saturday at 10am. Which works for you?</div>
-          <div class="msg-sent">Saturday morning is perfect</div>
-          <div class="msg-delivery">Delivered</div>
-          <div class="msg-received">Booked! Saturday at 10am. Same treatment as last time (forehead + crow's feet, 32 units). See you then, Sarah!</div>
+
+        <!-- Instagram: Instagram DM -->
+        <div class="fd-chat-frame fd-chat--instagram" id="fd-sim-instagram" style="display:none">
+          <div class="chat-topbar">
+            <div class="chat-topbar-avatar"><div class="chat-topbar-avatar-inner"></div></div>
+            <div class="chat-topbar-info">
+              <span class="chat-topbar-name">glowmedspa</span>
+              <span class="chat-topbar-status">Active now</span>
+            </div>
+          </div>
+          <div class="chat-messages">
+            <div class="msg-sent">Hey! How much is Botox?</div>
+            <div class="msg-received">Hey! Botox is $12/unit at Glow Med Spa. Most clients get 20–40 units for forehead + crow's feet ($240–$480). We're running a new client special this month — 10% off your first treatment!</div>
+            <div class="msg-sent">Omg yes! How do I book?</div>
+            <div class="msg-received">I can book you right now! Just need your name and phone number, and I'll text you a confirmation with all the details. What day works best?</div>
+            <div class="msg-sent">This Friday? I'm Jess, 847-555-0233</div>
+            <div class="msg-seen">Seen</div>
+            <div class="msg-received">Done! Jess, you're booked for Friday. You'll get a text with the address, parking info, and what to expect. Can't wait to see you!</div>
+          </div>
         </div>
+
+        <!-- iMessage: Booking (pre-qual) -->
+        <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-booking" style="display:none">
+          <div class="chat-topbar">
+            <div class="chat-topbar-avatar">📋</div>
+            <span class="chat-topbar-name">Glow Med Spa Booking</span>
+          </div>
+          <div class="chat-messages">
+            <div class="msg-received">Welcome to Glow Med Spa! I'd love to help you find the right treatment. Have you had injectable treatments before?</div>
+            <div class="msg-sent">No, this would be my first time</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">Exciting! First-timers love starting with Botox or a subtle lip enhancement. What result are you hoping for?</div>
+            <div class="msg-sent">I want to smooth out my forehead lines</div>
+            <div class="msg-received">Botox is perfect for that — quick treatment, no downtime, results in 3–5 days. Most forehead treatments are $240–$360. When would you like to come in?</div>
+            <div class="msg-sent">Next week sometime</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">We have Tuesday at 11am or Wednesday at 3pm open. I'll just need your name and number to book!</div>
+          </div>
+        </div>
+
+        <!-- iMessage: Review (reactivation) -->
+        <div class="fd-chat-frame fd-chat--imessage" id="fd-sim-review" style="display:none">
+          <div class="chat-topbar">
+            <div class="chat-topbar-avatar">⭐</div>
+            <span class="chat-topbar-name">Glow Med Spa</span>
+          </div>
+          <div class="chat-messages">
+            <div class="msg-received">Hi Sarah! It's been 4 months since your last Botox appointment at Glow Med Spa. Most clients rebook around this time to keep results fresh. Ready for a touch-up?</div>
+            <div class="msg-sent">Oh wow, has it been that long already? Yes I need to come in</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">Time flies! We have openings this week — Thursday at 1pm or Saturday at 10am. Which works for you?</div>
+            <div class="msg-sent">Saturday morning is perfect</div>
+            <div class="msg-delivery">Delivered</div>
+            <div class="msg-received">Booked! Saturday at 10am. Same treatment as last time (forehead + crow's feet, 32 units). See you then, Sarah!</div>
+          </div>
+        </div>
+
+        <button class="fd-try-live" onclick="document.querySelector('.adc-toggle')?.click()">Try the AI Live →</button>
       </div>
     </div>
   </div>
@@ -2585,6 +2734,21 @@ nav {
   </div>
 </section>
 
+<!-- ─── SERVICES ────────────────────────── -->
+<section id="services">
+  <div class="services-eyebrow">07 — What We Build</div>
+  <h2 class="services-headline">Services</h2>
+  <ul class="services-list">
+    <li>AI Website Chatbot</li>
+    <li>Voice AI Receptionist</li>
+    <li>Instagram DM Automation</li>
+    <li>SMS Follow-Up & Missed Call Text-Back</li>
+    <li>Automated Booking System</li>
+    <li>Review & Reputation Management</li>
+    <li>Lead Reactivation Campaigns</li>
+  </ul>
+</section>
+
 <!-- ─── FINAL CTA ──────────────────────── -->
 <section id="final-cta">
   <h2 class="final-cta-headline">Stop Losing Clients to Missed Messages</h2>
@@ -2613,6 +2777,7 @@ nav {
     <div class="f-links">
       <a href="#about">About</a>
       <a href="#ai-demos">Demos</a>
+      <a href="#services">Services</a>
       <a href="#testimonials">Results</a>
     </div>
   </div>
@@ -2645,7 +2810,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
     gsap.set(followerEl, { x: fx, y: fy });
     requestAnimationFrame(animFollower);
   })();
-  document.querySelectorAll('a, button, .nav-pill a').forEach(el => {
+  document.querySelectorAll('a, button, .nav-pill a, .fd-pixel-agent, .services-list li').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
   });
@@ -2704,12 +2869,15 @@ function primeStates() {
   gsap.set('.cs-block',                              { opacity: 0, y: 36 });
   gsap.set('.cs-rule',                               { scaleX: 0 });
   gsap.set('.cs-metric',                             { opacity: 0, y: 28 });
+  gsap.set('.fd-reveal',                               { opacity: 0 });
   gsap.set('.demos-eyebrow',                          { opacity: 0, x: -40 });
   gsap.set('.demos-headline',                         { opacity: 0, y: 32 });
-  gsap.set('.fd-scene',                               { opacity: 0, scale: 0.85 });
-  gsap.set('.fd-agent',                               { opacity: 0, y: 16 });
+  gsap.set('.fd-pixel-scene',                         { opacity: 0, scale: 0.85 });
+  gsap.set('.fd-pixel-agent',                         { opacity: 0, y: 16 });
   gsap.set('.fd-chat-frame',                          { opacity: 0, x: 30 });
   gsap.set('.fd-hint',                                { opacity: 0 });
+  gsap.set('.fd-try-live',                            { opacity: 0, y: 16 });
+  gsap.set('.services-list li',                       { opacity: 0, x: -30 });
   gsap.set('.testimonial-card',                       { opacity: 0, y: 56 });
   gsap.set('.testimonials-eyebrow',                   { opacity: 0, x: -40 });
   gsap.set('.testimonials-headline',                  { opacity: 0, y: 32 });
@@ -2819,38 +2987,71 @@ function setupAnimations() {
     scrollTrigger: { trigger: '#principles', start: 'top bottom', once: true }
   });
 
-  // ── AI Front Desk ───────────────────────
-  gsap.to('.demos-eyebrow', {
-    opacity: 1, x: 0, duration: 0.8,
-    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
-  });
-  gsap.to('.demos-headline', {
-    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
-  });
-  gsap.to('.fd-scene', {
-    opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.5)',
-    scrollTrigger: { trigger: '#ai-demos', start: 'top 80%', once: true }
-  });
-  gsap.to('.fd-agent', {
-    opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12,
-    scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
-  });
-  gsap.to('.fd-hint', {
-    opacity: 1, duration: 0.8, delay: 1,
-    scrollTrigger: { trigger: '#ai-demos', start: 'top 70%', once: true }
-  });
-  ScrollTrigger.create({
-    trigger: '#ai-demos', start: 'top 70%', once: true,
-    onEnter: () => {
-      const activeFrame = document.querySelector('.fd-chat-frame:not([style*="display:none"])');
-      if (activeFrame) {
-        gsap.to(activeFrame, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' });
-        animateFDMessages(activeFrame);
+  // ── AI Front Desk — Doors Reveal ─────────
+  const leftDoor  = document.querySelector('.fd-door--left');
+  const rightDoor = document.querySelector('.fd-door--right');
+  const fdReveal  = document.querySelector('.fd-reveal');
+  let doorsOpened = false;
+
+  if (leftDoor && rightDoor && fdReveal && window.innerWidth > 480) {
+    ScrollTrigger.create({
+      trigger: '#ai-demos',
+      start: 'top top',
+      end: '+=1500',
+      pin: true,
+      scrub: 1,
+      onUpdate(self) {
+        const p = self.progress;
+        // Doors open 0–60%
+        const doorP = Math.min(p / 0.6, 1);
+        leftDoor.style.transform  = 'translateX(' + (-100 * doorP) + '%)';
+        rightDoor.style.transform = 'translateX(' + (100 * doorP) + '%)';
+        // Content fade 40–70%
+        const contentP = Math.max(0, Math.min((p - 0.4) / 0.3, 1));
+        fdReveal.style.opacity = contentP;
+
+        // Trigger inner animations once doors are open
+        if (contentP >= 1 && !doorsOpened) {
+          doorsOpened = true;
+          gsap.to('.demos-eyebrow', { opacity: 1, x: 0, duration: 0.8 });
+          gsap.to('.demos-headline', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' });
+          gsap.to('.fd-pixel-scene', { opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.5)' });
+          gsap.to('.fd-pixel-agent', { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.12 });
+          gsap.to('.fd-hint', { opacity: 1, duration: 0.8, delay: 0.8 });
+          gsap.to('.fd-try-live', { opacity: 1, y: 0, duration: 0.6, delay: 1 });
+          const activeFrame = document.querySelector('.fd-chat-frame:not([style*="display:none"])');
+          if (activeFrame) {
+            gsap.to(activeFrame, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' });
+            animateFDMessages(activeFrame);
+          }
+          startAgentIdleAnimation();
+        }
       }
-      startAgentIdleAnimation();
-    }
-  });
+    });
+  } else {
+    // Mobile fallback — no doors, just fade in
+    gsap.set('.fd-reveal', { opacity: 1 });
+    gsap.to('.demos-eyebrow', {
+      opacity: 1, x: 0, duration: 0.8,
+      scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+    });
+    gsap.to('.demos-headline', {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#ai-demos', start: 'top bottom', once: true }
+    });
+    ScrollTrigger.create({
+      trigger: '#ai-demos', start: 'top 70%', once: true,
+      onEnter: () => {
+        gsap.to('.fd-pixel-agent', { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 });
+        gsap.to('.fd-try-live', { opacity: 1, y: 0, duration: 0.6, delay: 0.5 });
+        const activeFrame = document.querySelector('.fd-chat-frame:not([style*="display:none"])');
+        if (activeFrame) {
+          gsap.to(activeFrame, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out' });
+          animateFDMessages(activeFrame);
+        }
+      }
+    });
+  }
 
   // ── Case Study ───────────────────────────
   gsap.to('.cs-eyebrow', {
@@ -2923,6 +3124,12 @@ function setupAnimations() {
   gsap.to('.testimonial-card', {
     opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.12,
     scrollTrigger: { trigger: '#testimonials', start: 'top bottom', once: true }
+  });
+
+  // ── Services ───────────────────────────
+  gsap.to('.services-list li', {
+    opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08,
+    scrollTrigger: { trigger: '#services', start: 'top bottom', once: true }
   });
 
   // ── Final CTA ──────────────────────────
@@ -3007,7 +3214,7 @@ function animateFDMessages(frameEl) {
 }
 
 function startAgentIdleAnimation() {
-  document.querySelectorAll('.fd-agent').forEach((agent, i) => {
+  document.querySelectorAll('.fd-pixel-agent').forEach((agent, i) => {
     gsap.to(agent, {
       y: '-=3', duration: 1.2 + i * 0.2,
       ease: 'sine.inOut', yoyo: true,
@@ -3017,7 +3224,7 @@ function startAgentIdleAnimation() {
 }
 
 function switchToAgent(agentId) {
-  const agents = document.querySelectorAll('.fd-agent');
+  const agents = document.querySelectorAll('.fd-pixel-agent');
   const pills = document.querySelectorAll('.fd-mobile-pill');
 
   // Update agent states
@@ -3025,7 +3232,7 @@ function switchToAgent(agentId) {
     a.classList.remove('active');
     gsap.to(a, { opacity: 0.6, duration: 0.3, overwrite: 'auto' });
   });
-  const activeAgent = document.querySelector(`.fd-agent[data-agent="${agentId}"]`);
+  const activeAgent = document.querySelector(`.fd-pixel-agent[data-agent="${agentId}"]`);
   if (activeAgent) {
     activeAgent.classList.add('active');
     gsap.to(activeAgent, { opacity: 1, duration: 0.3, overwrite: 'auto' });
@@ -3065,7 +3272,7 @@ function showFrame(agentId) {
 
 function initFrontDesk() {
   // Desktop agent clicks
-  document.querySelectorAll('.fd-agent').forEach(agent => {
+  document.querySelectorAll('.fd-pixel-agent').forEach(agent => {
     agent.addEventListener('click', () => switchToAgent(agent.dataset.agent));
   });
 
