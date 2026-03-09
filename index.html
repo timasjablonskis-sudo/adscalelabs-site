@@ -1012,13 +1012,14 @@ nav {
 .fd-reveal {
   position: relative;
   z-index: 1;
-  padding: 120px 72px;
+  padding: 80px 72px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   justify-content: center;
+  box-sizing: border-box;
 }
-.demos-header { margin-bottom: 56px; }
+.demos-header { margin-bottom: 36px; }
 .demos-eyebrow {
   font-family: 'Space Mono', monospace;
   font-size: 10px; letter-spacing: 0.14em;
@@ -1142,69 +1143,185 @@ nav {
   opacity: 0.35;
 }
 
-/* ── Pixel Agents ── */
+/* ── Pixel Agents (animated walking characters) ── */
 .fd-pixel-agents {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 32px;
   margin-top: 24px;
 }
 .fd-pixel-agent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
   cursor: pointer;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  padding: 8px;
+  transition: opacity 0.3s ease;
+  padding: 8px 12px;
 }
 .fd-pixel-agent:hover { transform: translateY(-4px); }
-.fd-px-head {
-  width: 20px; height: 20px;
+
+/* Character sprite container — 5x5 pixel grid scaled up */
+.fd-px-sprite {
+  width: 40px;
+  height: 56px;
+  position: relative;
   image-rendering: pixelated;
+  animation: px-walk 0.6s steps(2) infinite;
 }
-.fd-px-body {
-  width: 16px; height: 24px;
-  image-rendering: pixelated;
+@keyframes px-walk {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-2px); }
 }
+
+/* Character built with box-shadow pixel art on a 1px element scaled 4x */
+.fd-px-char {
+  position: absolute;
+  width: 4px; height: 4px;
+  top: 0; left: 0;
+  background: transparent;
+  /* Character pixels drawn via box-shadow - overridden per agent */
+}
+
+/* Walking legs animation */
+.fd-px-legs {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 8px;
+}
+.fd-px-legs::before, .fd-px-legs::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 6px; height: 8px;
+  background: inherit;
+  animation: px-step 0.5s ease-in-out infinite alternate;
+}
+.fd-px-legs::before { left: 1px; }
+.fd-px-legs::after  { right: 1px; animation-delay: 0.25s; }
+@keyframes px-step {
+  0%   { height: 8px; }
+  100% { height: 5px; }
+}
+
+/* Agent shadow */
 .fd-px-shadow {
-  width: 24px; height: 4px;
-  background: rgba(0,0,0,0.15);
+  width: 28px; height: 6px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 50%;
   margin-top: 2px;
+  animation: px-shadow 0.6s steps(2) infinite;
 }
-.fd-agent-name {
+@keyframes px-shadow {
+  0%   { transform: scaleX(1); }
+  50%  { transform: scaleX(0.85); }
+}
+
+/* Nametag badge */
+.fd-agent-badge {
+  margin-top: 8px;
+  padding: 3px 8px;
   font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: 0.12em;
+  font-size: 8px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--mid);
-  transition: color 0.3s ease;
+  color: #fff;
+  border-radius: 3px;
   white-space: nowrap;
-  margin-top: 4px;
+  position: relative;
 }
-.fd-pixel-agent.active .fd-agent-name { color: var(--black); font-weight: 700; }
-.fd-pixel-agent:hover .fd-agent-name { color: var(--black); }
-
-/* Agent colors */
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-head { background: var(--lime); }
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-body { background: #1a1a1a; }
-.fd-pixel-agent[data-agent="sms"] .fd-px-head     { background: #007AFF; }
-.fd-pixel-agent[data-agent="sms"] .fd-px-body     { background: #0055CC; }
-.fd-pixel-agent[data-agent="instagram"] .fd-px-head { background: #E1306C; }
-.fd-pixel-agent[data-agent="instagram"] .fd-px-body { background: #B32058; }
-.fd-pixel-agent[data-agent="booking"] .fd-px-head  { background: #F5A623; }
-.fd-pixel-agent[data-agent="booking"] .fd-px-body  { background: #C4851C; }
-.fd-pixel-agent[data-agent="review"] .fd-px-head   { background: #8B5CF6; }
-.fd-pixel-agent[data-agent="review"] .fd-px-body   { background: #6D3FCC; }
-
-/* Active glow */
-.fd-pixel-agent.active .fd-px-head {
-  box-shadow: 0 0 12px currentColor;
+.fd-agent-badge::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid;
+  border-bottom-color: inherit;
 }
-.fd-pixel-agent[data-agent="chatbot"].active .fd-px-head  { box-shadow: 0 0 12px var(--lime); }
-.fd-pixel-agent[data-agent="sms"].active .fd-px-head      { box-shadow: 0 0 12px #007AFF; }
-.fd-pixel-agent[data-agent="instagram"].active .fd-px-head { box-shadow: 0 0 12px #E1306C; }
-.fd-pixel-agent[data-agent="booking"].active .fd-px-head   { box-shadow: 0 0 12px #F5A623; }
-.fd-pixel-agent[data-agent="review"].active .fd-px-head    { box-shadow: 0 0 12px #8B5CF6; }
+
+/* Per-agent character styles */
+/* Chatbot — lime head, dark body */
+.fd-pixel-agent[data-agent="chatbot"] .fd-px-char {
+  box-shadow:
+    /* Head (row 0-2) */
+    8px 0 0 var(--lime), 12px 0 0 var(--lime), 16px 0 0 var(--lime), 20px 0 0 var(--lime), 24px 0 0 var(--lime),
+    4px 4px 0 var(--lime), 8px 4px 0 var(--lime), 12px 4px 0 #111, 16px 4px 0 var(--lime), 20px 4px 0 #111, 24px 4px 0 var(--lime), 28px 4px 0 var(--lime),
+    8px 8px 0 var(--lime), 12px 8px 0 var(--lime), 16px 8px 0 var(--lime), 20px 8px 0 var(--lime), 24px 8px 0 var(--lime),
+    /* Body (row 3-6) */
+    8px 16px 0 #1a1a1a, 12px 16px 0 #1a1a1a, 16px 16px 0 #1a1a1a, 20px 16px 0 #1a1a1a, 24px 16px 0 #1a1a1a,
+    4px 20px 0 #1a1a1a, 8px 20px 0 #222, 12px 20px 0 #1a1a1a, 16px 20px 0 #1a1a1a, 20px 20px 0 #1a1a1a, 24px 20px 0 #222, 28px 20px 0 #1a1a1a,
+    8px 24px 0 #1a1a1a, 12px 24px 0 #1a1a1a, 16px 24px 0 #1a1a1a, 20px 24px 0 #1a1a1a, 24px 24px 0 #1a1a1a,
+    8px 28px 0 #1a1a1a, 12px 28px 0 #1a1a1a, 16px 28px 0 #1a1a1a, 20px 28px 0 #1a1a1a, 24px 28px 0 #1a1a1a;
+}
+.fd-pixel-agent[data-agent="chatbot"] .fd-px-legs { background: #1a1a1a; }
+.fd-pixel-agent[data-agent="chatbot"] .fd-agent-badge { background: var(--dark); border-color: var(--dark); color: var(--lime); }
+
+/* SMS — blue */
+.fd-pixel-agent[data-agent="sms"] .fd-px-char {
+  box-shadow:
+    8px 0 0 #007AFF, 12px 0 0 #007AFF, 16px 0 0 #007AFF, 20px 0 0 #007AFF, 24px 0 0 #007AFF,
+    4px 4px 0 #007AFF, 8px 4px 0 #007AFF, 12px 4px 0 #fff, 16px 4px 0 #007AFF, 20px 4px 0 #fff, 24px 4px 0 #007AFF, 28px 4px 0 #007AFF,
+    8px 8px 0 #007AFF, 12px 8px 0 #007AFF, 16px 8px 0 #007AFF, 20px 8px 0 #007AFF, 24px 8px 0 #007AFF,
+    8px 16px 0 #0055CC, 12px 16px 0 #0055CC, 16px 16px 0 #0055CC, 20px 16px 0 #0055CC, 24px 16px 0 #0055CC,
+    4px 20px 0 #0055CC, 8px 20px 0 #0066DD, 12px 20px 0 #0055CC, 16px 20px 0 #0055CC, 20px 20px 0 #0055CC, 24px 20px 0 #0066DD, 28px 20px 0 #0055CC,
+    8px 24px 0 #0055CC, 12px 24px 0 #0055CC, 16px 24px 0 #0055CC, 20px 24px 0 #0055CC, 24px 24px 0 #0055CC,
+    8px 28px 0 #0055CC, 12px 28px 0 #0055CC, 16px 28px 0 #0055CC, 20px 28px 0 #0055CC, 24px 28px 0 #0055CC;
+}
+.fd-pixel-agent[data-agent="sms"] .fd-px-legs { background: #003D99; }
+.fd-pixel-agent[data-agent="sms"] .fd-agent-badge { background: #007AFF; border-color: #007AFF; }
+
+/* Instagram — pink */
+.fd-pixel-agent[data-agent="instagram"] .fd-px-char {
+  box-shadow:
+    8px 0 0 #E1306C, 12px 0 0 #E1306C, 16px 0 0 #E1306C, 20px 0 0 #E1306C, 24px 0 0 #E1306C,
+    4px 4px 0 #E1306C, 8px 4px 0 #E1306C, 12px 4px 0 #fff, 16px 4px 0 #E1306C, 20px 4px 0 #fff, 24px 4px 0 #E1306C, 28px 4px 0 #E1306C,
+    8px 8px 0 #E1306C, 12px 8px 0 #E1306C, 16px 8px 0 #E1306C, 20px 8px 0 #E1306C, 24px 8px 0 #E1306C,
+    8px 16px 0 #B32058, 12px 16px 0 #B32058, 16px 16px 0 #B32058, 20px 16px 0 #B32058, 24px 16px 0 #B32058,
+    4px 20px 0 #B32058, 8px 20px 0 #C92868, 12px 20px 0 #B32058, 16px 20px 0 #B32058, 20px 20px 0 #B32058, 24px 20px 0 #C92868, 28px 20px 0 #B32058,
+    8px 24px 0 #B32058, 12px 24px 0 #B32058, 16px 24px 0 #B32058, 20px 24px 0 #B32058, 24px 24px 0 #B32058,
+    8px 28px 0 #B32058, 12px 28px 0 #B32058, 16px 28px 0 #B32058, 20px 28px 0 #B32058, 24px 28px 0 #B32058;
+}
+.fd-pixel-agent[data-agent="instagram"] .fd-px-legs { background: #8A1A48; }
+.fd-pixel-agent[data-agent="instagram"] .fd-agent-badge { background: #E1306C; border-color: #E1306C; }
+
+/* Booking — amber */
+.fd-pixel-agent[data-agent="booking"] .fd-px-char {
+  box-shadow:
+    8px 0 0 #F5A623, 12px 0 0 #F5A623, 16px 0 0 #F5A623, 20px 0 0 #F5A623, 24px 0 0 #F5A623,
+    4px 4px 0 #F5A623, 8px 4px 0 #F5A623, 12px 4px 0 #fff, 16px 4px 0 #F5A623, 20px 4px 0 #fff, 24px 4px 0 #F5A623, 28px 4px 0 #F5A623,
+    8px 8px 0 #F5A623, 12px 8px 0 #F5A623, 16px 8px 0 #F5A623, 20px 8px 0 #F5A623, 24px 8px 0 #F5A623,
+    8px 16px 0 #C4851C, 12px 16px 0 #C4851C, 16px 16px 0 #C4851C, 20px 16px 0 #C4851C, 24px 16px 0 #C4851C,
+    4px 20px 0 #C4851C, 8px 20px 0 #D99520, 12px 20px 0 #C4851C, 16px 20px 0 #C4851C, 20px 20px 0 #C4851C, 24px 20px 0 #D99520, 28px 20px 0 #C4851C,
+    8px 24px 0 #C4851C, 12px 24px 0 #C4851C, 16px 24px 0 #C4851C, 20px 24px 0 #C4851C, 24px 24px 0 #C4851C,
+    8px 28px 0 #C4851C, 12px 28px 0 #C4851C, 16px 28px 0 #C4851C, 20px 28px 0 #C4851C, 24px 28px 0 #C4851C;
+}
+.fd-pixel-agent[data-agent="booking"] .fd-px-legs { background: #9A6A16; }
+.fd-pixel-agent[data-agent="booking"] .fd-agent-badge { background: #F5A623; border-color: #F5A623; color: #000; }
+
+/* Review — purple */
+.fd-pixel-agent[data-agent="review"] .fd-px-char {
+  box-shadow:
+    8px 0 0 #8B5CF6, 12px 0 0 #8B5CF6, 16px 0 0 #8B5CF6, 20px 0 0 #8B5CF6, 24px 0 0 #8B5CF6,
+    4px 4px 0 #8B5CF6, 8px 4px 0 #8B5CF6, 12px 4px 0 #fff, 16px 4px 0 #8B5CF6, 20px 4px 0 #fff, 24px 4px 0 #8B5CF6, 28px 4px 0 #8B5CF6,
+    8px 8px 0 #8B5CF6, 12px 8px 0 #8B5CF6, 16px 8px 0 #8B5CF6, 20px 8px 0 #8B5CF6, 24px 8px 0 #8B5CF6,
+    8px 16px 0 #6D3FCC, 12px 16px 0 #6D3FCC, 16px 16px 0 #6D3FCC, 20px 16px 0 #6D3FCC, 24px 16px 0 #6D3FCC,
+    4px 20px 0 #6D3FCC, 8px 20px 0 #7A4DE0, 12px 20px 0 #6D3FCC, 16px 20px 0 #6D3FCC, 20px 20px 0 #6D3FCC, 24px 20px 0 #7A4DE0, 28px 20px 0 #6D3FCC,
+    8px 24px 0 #6D3FCC, 12px 24px 0 #6D3FCC, 16px 24px 0 #6D3FCC, 20px 24px 0 #6D3FCC, 24px 24px 0 #6D3FCC,
+    8px 28px 0 #6D3FCC, 12px 28px 0 #6D3FCC, 16px 28px 0 #6D3FCC, 20px 28px 0 #6D3FCC, 24px 28px 0 #6D3FCC;
+}
+.fd-pixel-agent[data-agent="review"] .fd-px-legs { background: #5530A8; }
+.fd-pixel-agent[data-agent="review"] .fd-agent-badge { background: #8B5CF6; border-color: #8B5CF6; }
+
+/* Active agent glow ring */
+.fd-pixel-agent.active {
+  filter: drop-shadow(0 0 8px rgba(200,255,0,0.3));
+}
+.fd-pixel-agent.active .fd-agent-badge {
+  outline: 2px solid var(--lime);
+  outline-offset: 2px;
+}
 
 /* Instruction hint */
 .fd-hint {
@@ -1224,27 +1341,52 @@ nav {
   50% { opacity: 1; }
 }
 
-/* ── Try Live CTA ── */
+/* ── Try Live Demo Button ── */
 .fd-try-live {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 14px 28px;
-  background: var(--lime);
-  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 18px 36px;
+  background: var(--dark);
+  color: var(--lime);
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  border: none;
+  border: 2px solid var(--lime);
   cursor: pointer;
   font-weight: 700;
-  transition: transform 0.2s ease;
-  animation: try-live-pulse 2.5s ease-in-out infinite;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
-.fd-try-live:hover { transform: scale(1.04); }
-@keyframes try-live-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200,255,0,0.3); }
-  50% { box-shadow: 0 0 20px 6px rgba(200,255,0,0.15); }
+.fd-try-live::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lime);
+  transform: translateX(-101%);
+  transition: transform 0.35s ease;
+  z-index: 0;
+}
+.fd-try-live:hover::before { transform: translateX(0); }
+.fd-try-live:hover { color: var(--dark); }
+.fd-try-live span { position: relative; z-index: 1; }
+.fd-try-live-dot {
+  width: 10px; height: 10px;
+  background: var(--lime);
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  animation: live-dot-pulse 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.fd-try-live:hover .fd-try-live-dot { background: var(--dark); }
+@keyframes live-dot-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(200,255,0,0.4); }
+  50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(200,255,0,0); }
 }
 
 /* ── Mobile agent nav (hidden at desktop) ── */
@@ -1465,15 +1607,16 @@ nav {
 
 /* ── Responsive ── */
 @media (max-width: 960px) {
-  .fd-reveal { padding: 80px 24px; }
+  .fd-reveal { padding: 60px 24px; }
   .fd-container { grid-template-columns: 1fr; gap: 36px; }
-  .fd-pixel-scene { transform: scale(0.8); }
+  .fd-pixel-scene { transform: scale(0.75); }
+  .fd-pixel-agents { gap: 16px; }
   .fd-chat-frame { max-width: 340px; height: 480px; }
 }
 @media (max-width: 480px) {
   #ai-demos { min-height: auto; }
   .fd-doors { display: none; }
-  .fd-reveal { opacity: 1 !important; }
+  .fd-reveal { opacity: 1 !important; padding: 40px 16px; }
   .fd-scene-wrap { display: none; }
   .fd-agent-mobile-nav { display: flex; }
   .fd-chat-frame { max-width: 100%; height: 440px; border-radius: 20px; }
@@ -2476,34 +2619,44 @@ nav {
         </div>
         <div class="fd-pixel-agents">
           <div class="fd-pixel-agent active" data-agent="chatbot">
-            <div class="fd-px-head"></div>
-            <div class="fd-px-body"></div>
+            <div class="fd-px-sprite">
+              <div class="fd-px-char"></div>
+              <div class="fd-px-legs"></div>
+            </div>
             <div class="fd-px-shadow"></div>
-            <span class="fd-agent-name">Chatbot</span>
+            <div class="fd-agent-badge">Chatbot</div>
           </div>
           <div class="fd-pixel-agent" data-agent="sms">
-            <div class="fd-px-head"></div>
-            <div class="fd-px-body"></div>
+            <div class="fd-px-sprite">
+              <div class="fd-px-char"></div>
+              <div class="fd-px-legs"></div>
+            </div>
             <div class="fd-px-shadow"></div>
-            <span class="fd-agent-name">SMS</span>
+            <div class="fd-agent-badge">SMS</div>
           </div>
           <div class="fd-pixel-agent" data-agent="instagram">
-            <div class="fd-px-head"></div>
-            <div class="fd-px-body"></div>
+            <div class="fd-px-sprite">
+              <div class="fd-px-char"></div>
+              <div class="fd-px-legs"></div>
+            </div>
             <div class="fd-px-shadow"></div>
-            <span class="fd-agent-name">Instagram</span>
+            <div class="fd-agent-badge">Instagram</div>
           </div>
           <div class="fd-pixel-agent" data-agent="booking">
-            <div class="fd-px-head"></div>
-            <div class="fd-px-body"></div>
+            <div class="fd-px-sprite">
+              <div class="fd-px-char"></div>
+              <div class="fd-px-legs"></div>
+            </div>
             <div class="fd-px-shadow"></div>
-            <span class="fd-agent-name">Booking</span>
+            <div class="fd-agent-badge">Booking</div>
           </div>
           <div class="fd-pixel-agent" data-agent="review">
-            <div class="fd-px-head"></div>
-            <div class="fd-px-body"></div>
+            <div class="fd-px-sprite">
+              <div class="fd-px-char"></div>
+              <div class="fd-px-legs"></div>
+            </div>
             <div class="fd-px-shadow"></div>
-            <span class="fd-agent-name">Review</span>
+            <div class="fd-agent-badge">Review</div>
           </div>
         </div>
         <div class="fd-hint"><span>Click an agent to see how it handles real conversations</span></div>
@@ -2597,7 +2750,10 @@ nav {
           </div>
         </div>
 
-        <button class="fd-try-live" onclick="document.querySelector('.adc-toggle')?.click()">Try the AI Live →</button>
+        <button class="fd-try-live" onclick="document.querySelector('.adc-toggle')?.click()">
+          <div class="fd-try-live-dot"></div>
+          <span>Talk to the AI Live</span>
+        </button>
       </div>
     </div>
   </div>
