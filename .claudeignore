@@ -1,0 +1,6 @@
+.vercel/
+.DS_Store
+*.png
+*.jpg
+*.ico
+n8n-*.json
