@@ -1055,107 +1055,32 @@ nav {
   position: relative;
   image-rendering: pixelated;
   -ms-interpolation-mode: nearest-neighbor;
-  width: 400px;
-  height: 300px;
+  width: 520px;
+  height: 280px;
 }
 
-/* Pixel desk */
-.fd-px-desk {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 220px;
-  height: 60px;
-  background: #1a1a1a;
-  border: 3px solid #2a2a2a;
-}
-.fd-px-desk::before {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 8%; width: 84%; height: 3px;
-  background: var(--lime); opacity: 0.5;
-}
-/* Desk legs */
-.fd-px-desk::after {
-  content: '';
-  position: absolute;
-  bottom: -16px; left: 12px;
-  width: 12px; height: 16px;
-  background: #141414;
-  box-shadow: 184px 0 0 #141414;
-}
-/* Monitor */
-.fd-px-monitor {
-  position: absolute;
-  bottom: 90px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
-  height: 36px;
-  background: #111;
-  border: 3px solid #333;
-}
-.fd-px-monitor::before {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  background: rgba(200,255,0,0.12);
-}
-.fd-px-monitor::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 10px;
-  background: #222;
-}
-/* Keyboard */
-.fd-px-keyboard {
-  position: absolute;
-  bottom: 82px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 10px;
-  background: #1e1e1e;
-  border: 2px solid #2a2a2a;
-}
-/* Coffee mug */
-.fd-px-mug {
-  position: absolute;
-  bottom: 82px;
-  right: 56px;
-  width: 12px;
-  height: 14px;
-  background: var(--lime);
-  opacity: 0.35;
-}
-.fd-px-mug::after {
-  content: '';
-  position: absolute;
-  right: -5px; top: 3px;
-  width: 5px; height: 8px;
-  border: 2px solid var(--lime);
-  border-left: none;
-  opacity: 0.35;
-}
-
-/* ── Pixel Agents (positioned around desk in scene) ── */
+/* ── Pixel Agents ── */
 .fd-pixel-agent {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, filter 0.3s ease;
   z-index: 3;
+  animation: px-bob 1.2s ease-in-out infinite;
 }
-.fd-pixel-agent:hover { transform: translateY(-3px); }
+.fd-pixel-agent:nth-child(2) { animation-delay: 0.2s; }
+.fd-pixel-agent:nth-child(3) { animation-delay: 0.4s; }
+.fd-pixel-agent:nth-child(4) { animation-delay: 0.6s; }
+.fd-pixel-agent:nth-child(5) { animation-delay: 0.8s; }
+@keyframes px-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.fd-pixel-agent:hover { animation-play-state: paused; transform: translateY(-4px); }
 
-/* Nametag badge — floats above character */
+/* Nametag badge */
 .fd-agent-badge {
   padding: 3px 8px;
   font-family: 'Space Mono', monospace;
@@ -1179,145 +1104,27 @@ nav {
   border-top-color: inherit;
 }
 
-/* Character body — built with stacked divs */
-.fd-px-sprite {
-  width: 32px;
-  height: 48px;
-  position: relative;
+/* Pixel art element (box-shadow rendered by JS) */
+.fd-px-art {
+  width: 3px;
+  height: 3px;
+  overflow: visible;
   image-rendering: pixelated;
 }
 
-/* Hair/hat */
-.fd-px-hair {
-  width: 20px; height: 8px;
-  margin: 0 auto;
-  border-radius: 2px 2px 0 0;
-}
-/* Head/face */
-.fd-px-face {
-  width: 20px; height: 10px;
-  margin: 0 auto;
-  background: #E8B88A;
-  position: relative;
-}
-.fd-px-face::before, .fd-px-face::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  width: 4px; height: 4px;
-  background: #222;
-}
-.fd-px-face::before { left: 4px; }
-.fd-px-face::after  { right: 4px; }
-/* Shirt/torso */
-.fd-px-shirt {
-  width: 24px; height: 14px;
-  margin: 0 auto;
-  position: relative;
-}
-/* Arms */
-.fd-px-shirt::before, .fd-px-shirt::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  width: 4px; height: 10px;
-  border-radius: 0 0 1px 1px;
-}
-.fd-px-shirt::before { left: -4px; animation: px-arm-l 0.6s ease-in-out infinite alternate; }
-.fd-px-shirt::after  { right: -4px; animation: px-arm-r 0.6s ease-in-out infinite alternate; }
-@keyframes px-arm-l {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-8deg); }
-}
-@keyframes px-arm-r {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(8deg); }
-}
-/* Legs */
-.fd-px-legs {
-  display: flex;
-  justify-content: center;
-  gap: 2px;
-  margin: 0 auto;
-  width: 16px;
-}
-.fd-px-leg {
-  width: 6px; height: 10px;
-}
-.fd-px-leg:first-child { animation: px-step-l 0.5s ease-in-out infinite alternate; }
-.fd-px-leg:last-child  { animation: px-step-r 0.5s ease-in-out infinite alternate; }
-@keyframes px-step-l {
-  0% { height: 10px; }
-  100% { height: 7px; margin-top: 3px; }
-}
-@keyframes px-step-r {
-  0% { height: 7px; margin-top: 3px; }
-  100% { height: 10px; margin-top: 0; }
-}
+/* ── Agent positions (2 rows of workstations) ── */
+.fd-pixel-agent[data-agent="sms"]       { left: 20px;  top: 0; }
+.fd-pixel-agent[data-agent="chatbot"]    { left: 50%;   top: 0; transform: translateX(-50%); }
+.fd-pixel-agent[data-agent="instagram"]  { right: 20px; top: 0; }
+.fd-pixel-agent[data-agent="review"]     { left: 100px; top: 140px; }
+.fd-pixel-agent[data-agent="booking"]    { right: 100px; top: 140px; }
 
-/* Shadow under character */
-.fd-px-shadow {
-  width: 26px; height: 6px;
-  background: rgba(0,0,0,0.1);
-  border-radius: 50%;
-  margin: 2px auto 0;
-}
-
-/* Bob animation — staggered per agent */
-.fd-pixel-agent { animation: px-bob 0.8s ease-in-out infinite; }
-.fd-pixel-agent:nth-child(2) { animation-delay: 0.15s; }
-.fd-pixel-agent:nth-child(3) { animation-delay: 0.3s; }
-.fd-pixel-agent:nth-child(4) { animation-delay: 0.45s; }
-.fd-pixel-agent:nth-child(5) { animation-delay: 0.6s; }
-@keyframes px-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-.fd-pixel-agent:hover { animation-play-state: paused; transform: translateY(-5px); }
-
-/* ── Agent positions around desk ── */
-.fd-pixel-agent[data-agent="chatbot"]  { left: 50%; top: 10px; transform: translateX(-50%); z-index: 2; }
-.fd-pixel-agent[data-agent="sms"]      { left: 12px; top: 60px; }
-.fd-pixel-agent[data-agent="review"]   { left: 60px; bottom: 45px; }
-.fd-pixel-agent[data-agent="booking"]  { right: 60px; bottom: 45px; }
-.fd-pixel-agent[data-agent="instagram"]{ right: 12px; top: 60px; }
-
-/* ── Per-agent colors ── */
-/* Chatbot */
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-hair  { background: var(--lime); }
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-shirt { background: #1a1a1a; }
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-shirt::before,
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-shirt::after { background: #1a1a1a; }
-.fd-pixel-agent[data-agent="chatbot"] .fd-px-leg   { background: #111; }
-.fd-pixel-agent[data-agent="chatbot"] .fd-agent-badge { background: var(--dark); border-color: var(--dark); color: var(--lime); }
-/* SMS */
-.fd-pixel-agent[data-agent="sms"] .fd-px-hair  { background: #007AFF; }
-.fd-pixel-agent[data-agent="sms"] .fd-px-shirt { background: #0055CC; }
-.fd-pixel-agent[data-agent="sms"] .fd-px-shirt::before,
-.fd-pixel-agent[data-agent="sms"] .fd-px-shirt::after { background: #0055CC; }
-.fd-pixel-agent[data-agent="sms"] .fd-px-leg   { background: #003D99; }
-.fd-pixel-agent[data-agent="sms"] .fd-agent-badge { background: #007AFF; border-color: #007AFF; }
-/* Instagram */
-.fd-pixel-agent[data-agent="instagram"] .fd-px-hair  { background: #E1306C; }
-.fd-pixel-agent[data-agent="instagram"] .fd-px-shirt { background: #B32058; }
-.fd-pixel-agent[data-agent="instagram"] .fd-px-shirt::before,
-.fd-pixel-agent[data-agent="instagram"] .fd-px-shirt::after { background: #B32058; }
-.fd-pixel-agent[data-agent="instagram"] .fd-px-leg   { background: #8A1A48; }
+/* ── Per-agent badge colors ── */
+.fd-pixel-agent[data-agent="chatbot"] .fd-agent-badge  { background: var(--dark); border-color: var(--dark); color: var(--lime); }
+.fd-pixel-agent[data-agent="sms"] .fd-agent-badge      { background: #007AFF; border-color: #007AFF; }
 .fd-pixel-agent[data-agent="instagram"] .fd-agent-badge { background: #E1306C; border-color: #E1306C; }
-/* Booking */
-.fd-pixel-agent[data-agent="booking"] .fd-px-hair  { background: #F5A623; }
-.fd-pixel-agent[data-agent="booking"] .fd-px-shirt { background: #C4851C; }
-.fd-pixel-agent[data-agent="booking"] .fd-px-shirt::before,
-.fd-pixel-agent[data-agent="booking"] .fd-px-shirt::after { background: #C4851C; }
-.fd-pixel-agent[data-agent="booking"] .fd-px-leg   { background: #9A6A16; }
-.fd-pixel-agent[data-agent="booking"] .fd-agent-badge { background: #F5A623; border-color: #F5A623; color: #000; }
-/* Review */
-.fd-pixel-agent[data-agent="review"] .fd-px-hair  { background: #8B5CF6; }
-.fd-pixel-agent[data-agent="review"] .fd-px-shirt { background: #6D3FCC; }
-.fd-pixel-agent[data-agent="review"] .fd-px-shirt::before,
-.fd-pixel-agent[data-agent="review"] .fd-px-shirt::after { background: #6D3FCC; }
-.fd-pixel-agent[data-agent="review"] .fd-px-leg   { background: #5530A8; }
-.fd-pixel-agent[data-agent="review"] .fd-agent-badge { background: #8B5CF6; border-color: #8B5CF6; }
+.fd-pixel-agent[data-agent="booking"] .fd-agent-badge   { background: #F5A623; border-color: #F5A623; color: #000; }
+.fd-pixel-agent[data-agent="review"] .fd-agent-badge    { background: #8B5CF6; border-color: #8B5CF6; }
 
 /* Active agent highlight */
 .fd-pixel-agent.active {
@@ -2617,60 +2424,25 @@ nav {
       <!-- LEFT: Pixel Desk Scene + Agents -->
       <div class="fd-scene-wrap">
         <div class="fd-pixel-scene">
-          <div class="fd-px-desk"></div>
-          <div class="fd-px-monitor"></div>
-          <div class="fd-px-keyboard"></div>
-          <div class="fd-px-mug"></div>
-          <!-- Agents positioned absolutely around the desk -->
           <div class="fd-pixel-agent active" data-agent="chatbot">
             <div class="fd-agent-badge">Chatbot</div>
-            <div class="fd-px-sprite">
-              <div class="fd-px-hair"></div>
-              <div class="fd-px-face"></div>
-              <div class="fd-px-shirt"></div>
-              <div class="fd-px-legs"><div class="fd-px-leg"></div><div class="fd-px-leg"></div></div>
-            </div>
-            <div class="fd-px-shadow"></div>
+            <div class="fd-px-art"></div>
           </div>
           <div class="fd-pixel-agent" data-agent="sms">
             <div class="fd-agent-badge">SMS</div>
-            <div class="fd-px-sprite">
-              <div class="fd-px-hair"></div>
-              <div class="fd-px-face"></div>
-              <div class="fd-px-shirt"></div>
-              <div class="fd-px-legs"><div class="fd-px-leg"></div><div class="fd-px-leg"></div></div>
-            </div>
-            <div class="fd-px-shadow"></div>
+            <div class="fd-px-art"></div>
           </div>
           <div class="fd-pixel-agent" data-agent="instagram">
             <div class="fd-agent-badge">Instagram</div>
-            <div class="fd-px-sprite">
-              <div class="fd-px-hair"></div>
-              <div class="fd-px-face"></div>
-              <div class="fd-px-shirt"></div>
-              <div class="fd-px-legs"><div class="fd-px-leg"></div><div class="fd-px-leg"></div></div>
-            </div>
-            <div class="fd-px-shadow"></div>
+            <div class="fd-px-art"></div>
           </div>
           <div class="fd-pixel-agent" data-agent="booking">
             <div class="fd-agent-badge">Booking</div>
-            <div class="fd-px-sprite">
-              <div class="fd-px-hair"></div>
-              <div class="fd-px-face"></div>
-              <div class="fd-px-shirt"></div>
-              <div class="fd-px-legs"><div class="fd-px-leg"></div><div class="fd-px-leg"></div></div>
-            </div>
-            <div class="fd-px-shadow"></div>
+            <div class="fd-px-art"></div>
           </div>
           <div class="fd-pixel-agent" data-agent="review">
             <div class="fd-agent-badge">Review</div>
-            <div class="fd-px-sprite">
-              <div class="fd-px-hair"></div>
-              <div class="fd-px-face"></div>
-              <div class="fd-px-shirt"></div>
-              <div class="fd-px-legs"><div class="fd-px-leg"></div><div class="fd-px-leg"></div></div>
-            </div>
-            <div class="fd-px-shadow"></div>
+            <div class="fd-px-art"></div>
           </div>
         </div>
         <div class="fd-hint"><span>Click an agent to see how it handles real conversations</span></div>
@@ -3384,7 +3156,56 @@ function animateFDMessages(frameEl) {
 }
 
 function startAgentIdleAnimation() {
-  // Walking bob handled by CSS px-bob keyframe animation
+  // Bob handled by CSS px-bob keyframe
+}
+
+function renderPixelCharacters() {
+  var PX = 3;
+  // 0=empty 1=hair 2=skin 3=eyes 4=shirt 5=deskDark 6=deskLight 7=monitor 8=screenGlow 9=stand 10=keyboard
+  var T = [
+    [0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+    [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
+    [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
+    [0,0,0,0,2,2,2,2,2,2,0,0,0,0],
+    [0,0,0,0,2,3,2,2,3,2,0,0,0,0],
+    [0,0,0,0,2,2,2,2,2,2,0,0,0,0],
+    [0,0,0,4,4,4,4,4,4,4,4,0,0,0],
+    [0,0,4,4,4,4,4,4,4,4,4,4,0,0],
+    [0,0,0,2,4,4,4,4,4,4,2,0,0,0],
+    [5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+    [6,0,7,7,7,7,0,0,10,10,10,10,0,6],
+    [6,0,7,8,8,7,0,0,0,0,0,0,0,6],
+    [6,0,0,9,9,0,0,0,0,0,0,0,0,6],
+    [5,5,5,5,5,5,5,5,5,5,5,5,5,5],
+    [0,5,5,0,0,0,0,0,0,0,0,5,5,0],
+    [0,5,5,0,0,0,0,0,0,0,0,5,5,0]
+  ];
+  var palettes = {
+    chatbot:   {1:'#C8FF00',4:'#1a1a1a',8:'rgba(200,255,0,0.6)'},
+    sms:       {1:'#007AFF',4:'#0055CC',8:'rgba(0,122,255,0.6)'},
+    instagram: {1:'#E1306C',4:'#B32058',8:'rgba(225,48,108,0.6)'},
+    booking:   {1:'#F5A623',4:'#C4851C',8:'rgba(245,166,35,0.6)'},
+    review:    {1:'#8B5CF6',4:'#6D3FCC',8:'rgba(139,92,246,0.6)'}
+  };
+  var base = {2:'#E8B88A',3:'#222',5:'#5C4833',6:'#8B7355',7:'#333',9:'#555',10:'#666'};
+
+  document.querySelectorAll('.fd-pixel-agent').forEach(function(agent) {
+    var id = agent.dataset.agent;
+    var p = palettes[id] || {};
+    var art = agent.querySelector('.fd-px-art');
+    if (!art) return;
+    var shadows = [];
+    for (var r = 0; r < T.length; r++) {
+      for (var c = 0; c < T[r].length; c++) {
+        var v = T[r][c];
+        if (v === 0) continue;
+        var color = p[v] || base[v];
+        if (!color) continue;
+        shadows.push((c * PX) + 'px ' + (r * PX) + 'px 0 0 ' + color);
+      }
+    }
+    art.style.boxShadow = shadows.join(',');
+  });
 }
 
 function switchToAgent(agentId) {
@@ -3435,6 +3256,7 @@ function showFrame(agentId) {
 }
 
 function initFrontDesk() {
+  renderPixelCharacters();
   // Desktop agent clicks
   document.querySelectorAll('.fd-pixel-agent').forEach(agent => {
     agent.addEventListener('click', () => switchToAgent(agent.dataset.agent));
