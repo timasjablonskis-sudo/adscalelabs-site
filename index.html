@@ -980,10 +980,12 @@ nav {
 .fd-scene-wrap {
   position: relative;
   width: 100%;
-  min-height: 400px;
+  max-width: 520px;
+  min-height: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 .fd-scene {
   position: relative;
@@ -1130,12 +1132,12 @@ nav {
 .fd-agent[data-agent="booking"] .fd-agent-icon   { background: #F5A623; color: #fff; }
 .fd-agent[data-agent="review"] .fd-agent-icon    { background: #8B5CF6; color: #fff; }
 
-/* Agent positions around the desk */
-.fd-agent[data-agent="chatbot"]  { left: 50%; top: 8%; transform: translateX(-50%); }
-.fd-agent[data-agent="sms"]      { left: 2%; top: 25%; }
-.fd-agent[data-agent="instagram"]{ right: 2%; top: 25%; left: auto; }
-.fd-agent[data-agent="booking"]  { right: 12%; bottom: 12%; left: auto; top: auto; }
-.fd-agent[data-agent="review"]   { left: 12%; bottom: 12%; top: auto; }
+/* Agent positions — tight ring around the desk */
+.fd-agent[data-agent="chatbot"]  { left: 50%; top: 6%; transform: translateX(-50%); }
+.fd-agent[data-agent="sms"]      { left: 10%; top: 28%; }
+.fd-agent[data-agent="instagram"]{ right: 10%; top: 28%; left: auto; }
+.fd-agent[data-agent="booking"]  { right: 20%; bottom: 10%; left: auto; top: auto; }
+.fd-agent[data-agent="review"]   { left: 20%; bottom: 10%; top: auto; }
 
 /* Instruction hint */
 .fd-hint {
